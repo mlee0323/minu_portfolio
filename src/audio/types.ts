@@ -2,6 +2,10 @@ export type AudioProviderKind = "local" | "soundcloud" | "spotify"
 
 export type PlaybackStatus = "idle" | "loading" | "playing" | "paused" | "ended" | "error"
 
+export type AudioReleaseType = "single" | "ep" | "album" | "playlist"
+
+export type SoundCloudVisibility = "public" | "private-link"
+
 export type AudioProviderEvent =
   | "idle"
   | "ready"
@@ -21,6 +25,26 @@ export type AudioTrack = {
   readonly durationMs?: number
   readonly localAudioUrl?: string
   readonly soundCloudUrl?: string
+  readonly soundCloudPlaylistUrl?: string
+  readonly playlistIndex?: number
+  readonly releaseId?: string
+  readonly releaseTitle?: string
+  readonly trackNumber?: number
+  readonly visibility?: SoundCloudVisibility
+  readonly description?: string
+}
+
+export type AudioRelease = {
+  readonly id: string
+  readonly title: string
+  readonly artist: string
+  readonly type: AudioReleaseType
+  readonly provider: AudioProviderKind
+  readonly artworkUrl: string
+  readonly tracks: readonly AudioTrack[]
+  readonly year?: string
+  readonly soundCloudPlaylistUrl?: string
+  readonly visibility?: SoundCloudVisibility
   readonly description?: string
 }
 

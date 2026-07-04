@@ -11,6 +11,7 @@ export function NowPlayingBar() {
   const canPause = playback.status === "playing" || playback.status === "loading"
   const meterMax = Math.max(playback.durationMs, 1)
   const meterValue = Math.min(playback.positionMs, meterMax)
+  const sourceLabel = [track?.artist, track?.releaseTitle ?? playback.provider].filter(Boolean)
 
   if (track === null) {
     return null
@@ -23,7 +24,7 @@ export function NowPlayingBar() {
         <div>
           <p className="now-playing__label">Now Playing</p>
           <h2>{track.title}</h2>
-          <p>{`${track.artist} · ${playback.provider}`}</p>
+          <p>{sourceLabel.join(" · ")}</p>
         </div>
       </div>
 

@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react"
 import { useAudioManager } from "../audio/AudioManagerProvider"
 import type { AudioTrack } from "../audio/types"
 import { useSoundCloud } from "../hooks/useSoundCloud"
-import { buildSoundCloudEmbedUrl } from "../lib/soundcloud"
+import { buildSoundCloudEmbedUrl, getSoundCloudPlaybackUrl } from "../lib/soundcloud"
 import { formatDuration } from "../lib/time"
 import { TrackArtwork } from "./TrackArtwork"
 
@@ -16,7 +16,8 @@ export function SoundCloudPlayer({ initialTrack }: SoundCloudPlayerProps) {
   const manager = useAudioManager()
   const { provider, state } = useSoundCloud(iframeRef, initialTrack)
   const currentTrack = state.currentTrack ?? initialTrack
-  const embedUrl = buildSoundCloudEmbedUrl(initialTrack.soundCloudUrl ?? "", {
+  const initialPlaybackUrl = getSoundCloudPlaybackUrl(initialTrack)
+  const embedUrl = buildSoundCloudEmbedUrl(initialPlaybackUrl ?? "", {
     auto_play: false,
     buying: false,
     sharing: false,
@@ -25,6 +26,9 @@ export function SoundCloudPlayer({ initialTrack }: SoundCloudPlayerProps) {
     show_playcount: false,
     show_user: true,
     single_active: true,
+    ...(initialTrack.soundCloudPlaylistUrl === undefined || initialTrack.playlistIndex === undefined
+      ? {}
+      : { start_track: initialTrack.playlistIndex }),
   })
 
   useEffect(() => manager.register(provider), [manager, provider])
@@ -36,8 +40,8 @@ export function SoundCloudPlayer({ initialTrack }: SoundCloudPlayerProps) {
   return (
     <section className="section-panel widget-section" aria-label="SoundCloud Widget Player">
       <div className="section-heading">
-        <h2>Designed to deliver.</h2>
-        <p>Official SoundCloud Embed Player, synchronized through the Widget API.</p>
+        <h2>Embedded listening.</h2>
+        <p>Selected releases stay close to the room records.</p>
       </div>
 
       <div className="widget-console">

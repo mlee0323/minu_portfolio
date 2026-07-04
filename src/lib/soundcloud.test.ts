@@ -1,6 +1,7 @@
 import type { AudioTrack } from "../audio/types"
 import {
   buildSoundCloudEmbedUrl,
+  getSoundCloudPlaybackUrl,
   isAllowedSoundCloudTrackUrl,
   normalizeSoundCloudSound,
 } from "./soundcloud"
@@ -38,12 +39,29 @@ describe("SoundCloud utilities", () => {
 
   it("rejects non-SoundCloud track URLs before embedding", () => {
     expect(isAllowedSoundCloudTrackUrl("https://soundcloud.com/archive/track")).toBe(true)
+    expect(
+      isAllowedSoundCloudTrackUrl(
+        "https://soundcloud.com/archive/private-track?secret_token=s-private123",
+      ),
+    ).toBe(true)
+    expect(isAllowedSoundCloudTrackUrl("https://soundcloud.com/archive/sets/release")).toBe(true)
     expect(isAllowedSoundCloudTrackUrl("http://soundcloud.com/archive/track")).toBe(false)
     expect(isAllowedSoundCloudTrackUrl("https://w.soundcloud.com/player/")).toBe(false)
     expect(isAllowedSoundCloudTrackUrl("https://example.com/archive/track")).toBe(false)
     expect(() => buildSoundCloudEmbedUrl("https://example.com/archive/track")).toThrow(
       "Unsafe SoundCloud URL was blocked",
     )
+  })
+
+  it("prefers SoundCloud playlist URLs when a track has a release index", () => {
+    const playlistTrack: AudioTrack = {
+      ...fallbackTrack,
+      soundCloudPlaylistUrl: "https://soundcloud.com/archive/sets/release",
+      playlistIndex: 3,
+    }
+
+    expect(getSoundCloudPlaybackUrl(playlistTrack)).toBe(playlistTrack.soundCloudPlaylistUrl)
+    expect(getSoundCloudPlaybackUrl(fallbackTrack)).toBe(fallbackTrack.soundCloudUrl)
   })
 
   it("normalizes Widget sound metadata while preserving safe fallbacks", () => {

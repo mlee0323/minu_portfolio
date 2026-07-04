@@ -3,7 +3,7 @@ import { SoundCloudTrackUrlError } from "../audio/audioErrors"
 import type { AudioPlaybackState, AudioProvider, AudioTrack } from "../audio/types"
 import { idlePlaybackState } from "../audio/types"
 import {
-  isAllowedSoundCloudTrackUrl,
+  getSoundCloudPlaybackUrl,
   loadSoundCloudWidgetScript,
   normalizeSoundCloudSound,
   type SoundCloudGlobal,
@@ -63,15 +63,21 @@ class SoundCloudWidgetStore implements AudioProvider {
   }
 
   async play(track: AudioTrack): Promise<void> {
-    if (track.soundCloudUrl === undefined) {
+    const playbackUrl = getSoundCloudPlaybackUrl(track)
+
+    if (track.soundCloudUrl === undefined && track.soundCloudPlaylistUrl === undefined) {
       throw new SoundCloudTrackUrlError(track.id)
     }
 
-    if (!isAllowedSoundCloudTrackUrl(track.soundCloudUrl)) {
+    if (playbackUrl === null) {
       throw new SoundCloudTrackUrlError(track.id, "invalid")
     }
 
-    const shouldLoadTrack = this.snapshot.currentTrack?.id !== track.id
+    const isSameTrack =
+      this.snapshot.currentTrack?.id === track.id ||
+      (track.soundCloudUrl !== undefined &&
+        this.snapshot.currentTrack?.soundCloudUrl === track.soundCloudUrl)
+    const shouldLoadTrack = !isSameTrack
     this.pendingTrack = track
     this.setSnapshot({
       ...this.snapshot,
@@ -95,7 +101,7 @@ class SoundCloudWidgetStore implements AudioProvider {
       return
     }
 
-    widget.load(track.soundCloudUrl, {
+    widget.load(playbackUrl, {
       auto_play: true,
       buying: false,
       sharing: false,
@@ -104,6 +110,9 @@ class SoundCloudWidgetStore implements AudioProvider {
       show_playcount: false,
       show_user: true,
       single_active: true,
+      ...(track.soundCloudPlaylistUrl === undefined || track.playlistIndex === undefined
+        ? {}
+        : { start_track: track.playlistIndex }),
       callback: () => {
         widget.play()
         this.refreshCurrentSound("trackchange")

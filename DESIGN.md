@@ -1,10 +1,10 @@
-# Minu Audio Archive Design System
+# Minu Spatial Sound Portfolio Design System
 
 ## 1. Atmosphere & Identity
 
-The app is a responsive editorial audio archive. The supplied PDF reference defines the visual contract: warm off-white page, black poster panels, oversized lowercase wordmark, hairline dividers, compact media rows, and generous vertical rhythm.
+The site is a mobile-first one-page portfolio for a spatial music composer and sound producer. The primary feeling is a black-box exhibition opening: sound first, image second, then slow scroll-based discovery.
 
-The functional contract remains audio-first: local tracks, SoundCloud Widget playback, and future providers all share one manager so only one source can play at a time.
+The functional contract remains provider-based audio. Local works, SoundCloud Widget playback, and future providers share one Audio Manager so only one source is active at a time.
 
 ## 2. Color
 
@@ -12,27 +12,24 @@ The functional contract remains audio-first: local tracks, SoundCloud Widget pla
 
 | Role | Token | Value | Usage |
 | --- | --- | --- | --- |
-| Page | `--color-page` | `#f7f6f2` | Warm editorial background |
-| Page/soft | `--color-page-soft` | `#ffffff` | Embedded white surfaces and iframes |
-| Panel | `--color-panel` | `#1f1b1a` | Hero mark panel, widget panel, footer, now playing |
-| Panel/strong | `--color-panel-strong` | `#ffffff` | Archive rows and neutral tiles |
-| Control | `--color-control` | `#ffffff` | Secondary buttons |
-| Control/hover | `--color-control-hover` | `#efede7` | Hovered neutral controls |
-| Text | `--color-text` | `#1f1b1a` | Primary text |
-| Inverse text | `--color-inverse` | `#ffffff` | Text on black panels |
-| Muted text | `--color-muted` | `#5f5a55` | Body copy and secondary metadata |
-| Subtle text | `--color-subtle` | `#8a847c` | Durations and quiet labels |
-| Line | `--color-line` | `#d5d0c8` | Hairline section dividers |
-| Accent | `--color-accent` | `#1f1b1a` | Active play controls |
-| Accent ink | `--color-accent-ink` | `#ffffff` | Text/icons inside active controls |
+| Black | `--color-panel` | `#201e1c` | Intro blackout, hero overlay, archive surface, now-playing |
+| White | `--color-page` | `#f5f5f5` | Page background and text surfaces |
+| White/soft | `--color-page-soft` | `#f5f5f5` | Iframes, controls, bright panels |
+| Text | `--color-text` | `#201e1c` | Primary text on white |
+| Inverse text | `--color-inverse` | `#f5f5f5` | Text on black |
+| Muted text | `--color-muted` | `#68625d` | Body copy and secondary metadata |
+| Subtle text | `--color-subtle` | `#918b84` | Durations and quiet labels |
+| Line | `--color-line` | `#d8d6d1` | Hairline dividers |
+| Signal accent | `--color-accent` | `#d8ff3f` | Play, active state, scroll signal, focused interaction |
+| Accent ink | `--color-accent-ink` | `#201e1c` | Text/icons inside accent controls |
 | Status/warm | `--color-amber` | `#b67b00` | Ended status |
 | Status/error | `--color-danger` | `#ad2f22` | Playback errors |
 
 ### Rules
 
-- The page is light, but audio consoles are black.
-- Color comes mainly from track artwork; interface chrome stays restrained.
-- Accent is functional only: play, current source, progress, focus, and active state.
+- Black and white dominate every viewport.
+- Accent is a signal only: play, current work, focus, link hover, or active source.
+- Artwork can carry texture, but the interface must not become colorful.
 
 ## 3. Typography
 
@@ -40,126 +37,118 @@ The functional contract remains audio-first: local tracks, SoundCloud Widget pla
 
 | Level | Size | Weight | Line Height | Usage |
 | --- | --- | --- | --- | --- |
-| Wordmark/mobile | `clamp(5.8rem, 28vw, 8.4rem)` | 500 | 0.85 | Mobile `minu` mark |
-| Wordmark/desktop | `clamp(8.2rem, 12vw, 12.8rem)` | 500 | 0.85 | Desktop `minu` mark |
-| Hero/mobile | `clamp(2.5rem, 15vw, 3.45rem)` | 650 | 0.98 | Mobile hero statement |
-| Hero/desktop | `clamp(4rem, 6.5vw, 7rem)` | 650 | 0.98 | Desktop hero statement |
-| Section/mobile | `clamp(3.4rem, 17vw, 5.9rem)` | 430 | 0.86 | Section headings |
-| Section/desktop | `clamp(5rem, 7vw, 7.2rem)` | 430 | 0.86 | Desktop section headings |
-| Body | `0.9rem` to `1rem` | 650 | 1.28 to 1.34 | Editorial copy |
-| Caption | `0.66rem` to `0.78rem` | 800 to 900 | 1.2 | Kicker, badges, status |
+| Hero/mobile | `clamp(3.8rem, 18vw, 7.8rem)` | 850 | 0.86 | Typed statement |
+| Hero/desktop | `clamp(3.8rem, 18vw, 7.8rem)` | 850 | 0.86 | Full-bleed hero statement |
+| Section/mobile | `clamp(3.6rem, 16vw, 8.4rem)` | 820 | 0.86 | Works, Archive, Index headings |
+| Work title | `clamp(2rem, 10vw, 4.5rem)` | 820 | 0.9 | Main work panels |
+| Body | `0.86rem` to `1rem` | 420 to 560 | 1.32 to 1.55 | Captions and editorial copy |
+| Caption | `0.66rem` to `0.78rem` | 850 to 900 | 1.2 | Kicker, badges, status |
 
 ### Font Stack
 
 - Primary: `Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`
-- Letter spacing stays `0` for all visible text.
+- One sans-serif family only.
+- Letter spacing stays `0`; hierarchy comes from weight and size contrast.
 
 ## 4. Spacing & Layout
 
 ### Base Unit
 
-All spacing derives from a 4px rhythm, with expressive editorial gaps for section cadence.
+Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like quiet.
 
-| Token/Pattern | Value | Usage |
+| Pattern | Value | Usage |
 | --- | --- | --- |
-| Mobile shell | `min(344px, calc(100% - 28px))` | Phone-width reference column |
-| Small phone shell | `min(100% - 20px, 344px)` | 320-560px guard |
-| Tablet shell | `min(480px, calc(100% - 48px))` | Larger single column |
-| Desktop shell | `min(1160px, calc(100% - 72px))` | Two-column editorial layout |
-| Hero gap/mobile | `42px` | Reference-like vertical rhythm |
-| Hero gap/desktop | `54px` | Split hero spacing |
-| Content gap | `58px` | Main column and section spacing |
-| Desktop section gap | `96px` to `112px` | Large page rhythm |
+| Mobile section padding | `84px 16px` | Works, Archive, Index |
+| Desktop section padding | `112px 48px` | Wider scan paths |
+| Hero | `100dvh` | First full viewport after intro |
+| Works panel | `74dvh` | Scroll-triggered image/video records |
+| Desktop content max | `1120px` | Text and work stage |
 | Bottom player | `88px` to `104px` | Fixed Now Playing clearance |
 
 ### Breakpoints
 
-- `max-width: 560px`: phone layout, compact shell, short widget frame.
-- `640px to 859px`: tablet layout, wider single column while retaining the PDF-like vertical rhythm.
-- `min-width: 860px`: desktop layout, hero and main content become asymmetric two-column grids.
+- `max-width: 560px`: QR/mobile exhibition entry.
+- `min-width: 768px`: sticky Works now-playing column and Archive/Widget split.
+- `min-width: 860px`: existing desktop shell compatibility and larger player sizing.
 
 ## 5. Components
 
-### Editorial Hero
+### Blackout Intro
 
-- **Structure**: black wordmark panel plus editorial copy panel.
-- **Mobile**: stacked column, reference-like masthead card.
-- **Desktop**: two columns, large black mark panel left, statement and controls right.
-- **States**: local audio button text switches to `Playing Local`.
+- **Structure**: full-screen black overlay, centered waveform signal, `Tap to start`.
+- **Interaction**: tap requests the local intro sound, waits around 2.4 seconds, then fades to Hero.
+- **Accessibility**: semantic button with clear start label.
 
-### Pill Button
+### Site Nav
 
-- **Structure**: semantic `button` or `a` with Lucide icon and label.
-- **Variants**: accent, neutral, ghost.
-- **Shape**: full pill radius.
-- **States**: hover changes color and lifts by 1px, active provider changes copy/state, disabled lowers opacity.
-- **Accessibility**: visible label or `aria-label`.
+- **Structure**: fixed compact brand plus anchor links.
+- **Interaction**: anchor scroll to Works, Archive, Index.
+- **Style**: blend over black/white surfaces without adding a heavy header block.
 
-### Icon Button
+### Spatial Hero
 
-- **Structure**: circular semantic `button` with Lucide icon.
-- **Usage**: compact play/pause controls in work tiles, widget, and now-playing.
-- **States**: same hover/focus/disabled behavior as pill buttons.
+- **Structure**: full-bleed muted looping video with poster fallback, black overlay, large typed statement.
+- **Interaction**: sound on/off button routes through the shared Audio Manager.
+- **States**: accent button marks the action; typed letters animate only through opacity/transform.
 
-### Track Artwork
+### Main Works Scroll
 
-- **Structure**: real image with stable square or fixed aspect sizing.
-- **Sizes**: small row artwork, medium widget artwork, large future hero artwork.
-- **Rules**: no placeholder-only artwork for configured tracks.
+- **Structure**: four tall work panels with image/video records and overlaid captions.
+- **Interaction**: Intersection Observer detects the centered work and updates sticky Now Playing text plus active border.
+- **Audio**: active work can request local provider playback after the intro tap. Crossfade remains a V2 Web Audio extension point.
+- **Caption**: Korean closing caption frames the website as a trace of the installation, not the work itself.
 
-### Work Tile
+### Archive Carousel
 
-- **Structure**: artwork, title, description, duration, play button.
-- **Mobile/tablet**: two media tiles inside the column.
-- **Desktop**: larger images inside the left content column.
-- **States**: current local source marks the tile with current styling.
+- **Structure**: horizontal swipe carousel of SoundCloud releases/playlists.
+- **Interaction**: release and track buttons route to the SoundCloud provider using the official Widget API.
+- **Data**: edit `archiveReleases`; `archiveTracks` remains the flattened compatibility output.
 
 ### SoundCloud Widget Panel
 
-- **Structure**: black editorial panel, Widget API metadata, play/pause/status controls, official iframe.
-- **Rules**: official SoundCloud embed iframe is always rendered; REST metadata never drives playback.
-- **Responsive**: iframe height grows from phone to desktop.
+- **Structure**: official SoundCloud iframe plus synchronized Widget metadata.
+- **Rules**: REST metadata never drives playback. Private items require SoundCloud secret share URLs.
 
-### Archive Row/Card
+### Index & Contact
 
-- **Mobile/tablet**: compact stacked list rows with artwork, title, artist, and play pill.
-- **Desktop**: three-column card row under the Archive heading.
-- **States**: current SoundCloud track switches button to `Current`.
+- **Structure**: neutral list/table mode for curators and collaborators.
+- **Style**: no expressive imagery, no color beyond text and hairlines.
 
 ### Now Playing Bar
 
-- **Structure**: fixed bottom console with artwork, current track, source, status, pause, and progress.
-- **Mobile/tablet**: centered compact dock, progress on its own row.
-- **Desktop**: wider dock with identity, meter, and controls in one grid.
-- **Accessibility**: `aria-live="polite"` announces track changes.
+- **Structure**: fixed bottom console with artwork, source, status, pause, and progress.
+- **Accessibility**: `aria-live="polite"` announces source changes.
 
 ## 6. Motion & Interaction
 
 | Type | Duration | Easing | Usage |
 | --- | --- | --- | --- |
-| Micro | `140ms` to `160ms` | `ease` / `ease-out` | Button and row hover |
-| Progress | Native React state updates | Width transition only | Playback progress |
+| Intro fade | `900ms`, delayed | `ease` | Blackout to Hero |
+| Type-in | `520ms` per letter | `ease` | Hero statement rhythm |
+| Micro | `140ms` to `160ms` | `ease-out` | Buttons, rows, panel active states |
+| Progress | Native React updates | Width transition only | Playback progress |
 
-- Only `transform`, color, opacity, and progress width should animate.
+- Only `transform`, color, opacity, and progress width animate.
 - No decorative motion without state or affordance.
-- `prefers-reduced-motion: reduce` disables non-essential transitions.
+- `prefers-reduced-motion: reduce` disables non-essential animation.
 
 ## 7. Depth & Surface
 
 ### Strategy
 
-The reference is mostly flat editorial print logic. Depth is minimal and functional.
+The surface behaves like a black-box exhibition document: flat, quiet, high contrast.
 
 | Level | Treatment | Usage |
 | --- | --- | --- |
-| Base | Warm off-white | Page |
-| Black panel | Solid `--color-panel` | Hero, widget, footer, now-playing |
-| Hairline | `1px solid var(--color-line)` | Section dividers and archive rows |
-| Artwork lift | `--shadow-panel` | Track images only |
+| Blackout | Solid black | Intro and archive surface |
+| Full-bleed media | Grayscale image/video | Hero and main works |
+| Hairline | `1px solid var(--color-line)` | Dividers and information rows |
+| Signal | Accent border or fill | Current source and play states |
 | Player lift | `0 18px 40px rgb(31 27 26 / 22%)` | Persistent now-playing dock |
 
 ### Anti-patterns
 
+- No colorful gradients, orbs, blobs, or decorative SVG hero art.
 - No nested cards inside cards.
-- No decorative gradients, orbs, blobs, or SVG hero illustrations.
-- No one-hue purple/blue SaaS palette.
+- No emoji icons in UI; use Lucide icons.
+- No visible explanatory tutorial copy except required action hints like `Tap to start` and `Swipe to explore`.

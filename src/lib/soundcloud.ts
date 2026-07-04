@@ -40,6 +40,10 @@ export interface SoundCloudWidget {
   load(url: string, options?: SoundCloudLoadOptions): void
   play(): void
   pause(): void
+  next(): void
+  prev(): void
+  skip(soundIndex: number): void
+  getSounds(callback: (sounds: readonly unknown[]) => void): void
   getDuration(callback: (durationMs: number) => void): void
   getPosition(callback: (positionMs: number) => void): void
   getCurrentSound(callback: (sound: unknown) => void): void
@@ -141,6 +145,16 @@ export function isAllowedSoundCloudTrackUrl(trackUrl: string): boolean {
     }
     throw error
   }
+}
+
+export function getSoundCloudPlaybackUrl(track: AudioTrack): string | null {
+  const soundCloudUrl = track.soundCloudPlaylistUrl ?? track.soundCloudUrl
+
+  if (soundCloudUrl === undefined || !isAllowedSoundCloudTrackUrl(soundCloudUrl)) {
+    return null
+  }
+
+  return soundCloudUrl
 }
 
 function isAllowedSoundCloudArtworkUrl(artworkUrl: string): boolean {

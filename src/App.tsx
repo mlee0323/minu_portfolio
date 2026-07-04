@@ -1,13 +1,18 @@
+import { useState } from "react"
 import { AudioManagerProvider } from "./audio/AudioManagerProvider"
 import { Archive } from "./components/Archive"
 import { Hero } from "./components/Hero"
+import { IndexContact } from "./components/IndexContact"
+import { IntroOverlay } from "./components/IntroOverlay"
 import { LocalAudioBridge } from "./components/LocalAudioBridge"
 import { MainWorks } from "./components/MainWorks"
 import { NowPlayingBar } from "./components/NowPlayingBar"
+import { SiteNav } from "./components/SiteNav"
 import { SoundCloudPlayer } from "./components/SoundCloudPlayer"
 import { archiveTracks } from "./data/archiveTracks"
 
 export function App() {
+  const [experienceStarted, setExperienceStarted] = useState(false)
   const initialSoundCloudTrack = archiveTracks[0]
 
   if (initialSoundCloudTrack === undefined) {
@@ -25,24 +30,16 @@ export function App() {
   return (
     <AudioManagerProvider>
       <LocalAudioBridge />
-      <main className="app-shell">
-        <Hero />
-        <div className="content-grid">
-          <MainWorks />
+      {!experienceStarted ? <IntroOverlay onComplete={() => setExperienceStarted(true)} /> : null}
+      <SiteNav />
+      <main className={experienceStarted ? "app-shell is-started" : "app-shell"}>
+        <Hero experienceStarted={experienceStarted} />
+        <MainWorks experienceStarted={experienceStarted} />
+        <div className="archive-sound-grid">
+          <Archive />
           <SoundCloudPlayer initialTrack={initialSoundCloudTrack} />
         </div>
-        <Archive />
-        <footer className="site-footer">
-          <div>
-            <p>Contact</p>
-            <a href="mailto:hello@minu.audio">hello@minu.audio</a>
-          </div>
-          <nav aria-label="Footer navigation">
-            <a href="#main-works">Works</a>
-            <a href="#archive">Archive</a>
-          </nav>
-          <strong>minu</strong>
-        </footer>
+        <IndexContact />
       </main>
       <NowPlayingBar />
     </AudioManagerProvider>

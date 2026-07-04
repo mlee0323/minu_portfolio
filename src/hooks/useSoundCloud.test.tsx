@@ -43,8 +43,28 @@ const nextTrack: AudioTrack = {
   soundCloudUrl: "https://soundcloud.com/example/next",
 }
 
+const playlistTrack: AudioTrack = {
+  id: "archive-playlist-track",
+  title: "Playlist Track",
+  artist: "Playlist Artist",
+  provider: "soundcloud",
+  artworkUrl: "https://example.com/playlist.jpg",
+  durationMs: 3000,
+  soundCloudUrl: "https://soundcloud.com/example/playlist-track",
+  soundCloudPlaylistUrl: "https://soundcloud.com/example/sets/release",
+  playlistIndex: 3,
+  releaseId: "release-example",
+  releaseTitle: "Release Example",
+  trackNumber: 4,
+}
+
+type WidgetLoadCall = {
+  readonly url: string
+  readonly options?: SoundCloudLoadOptions
+}
+
 class FakeSoundCloudWidget implements SoundCloudWidget {
-  readonly loadCalls: string[] = []
+  readonly loadCalls: WidgetLoadCall[] = []
   playCalls = 0
   private readonly listeners = new Map<string, SoundCloudWidgetListener[]>()
   private readonly soundsByUrl = new Map<string, unknown>()
@@ -78,10 +98,15 @@ class FakeSoundCloudWidget implements SoundCloudWidget {
   }
 
   load(url: string, options?: SoundCloudLoadOptions): void {
-    this.loadCalls.push(url)
-    this.currentIndex += 1
+    this.loadCalls.push(options === undefined ? { url } : { url, options })
+    this.currentIndex = options?.start_track ?? this.currentIndex + 1
     this.currentSound = this.soundsByUrl.get(url) ?? this.currentSound
-    this.durationMs = url === nextTrack.soundCloudUrl ? 2000 : this.durationMs
+    if (url === nextTrack.soundCloudUrl) {
+      this.durationMs = 2000
+    }
+    if (url === playlistTrack.soundCloudPlaylistUrl) {
+      this.durationMs = 3000
+    }
     options?.callback?.()
   }
 
@@ -92,6 +117,22 @@ class FakeSoundCloudWidget implements SoundCloudWidget {
 
   pause(): void {
     this.emit(widgetEvents.PAUSE)
+  }
+
+  next(): void {
+    this.currentIndex += 1
+  }
+
+  prev(): void {
+    this.currentIndex = Math.max(this.currentIndex - 1, 0)
+  }
+
+  skip(soundIndex: number): void {
+    this.currentIndex = soundIndex
+  }
+
+  getSounds(callback: (sounds: readonly unknown[]) => void): void {
+    callback([])
   }
 
   getDuration(callback: (durationMs: number) => void): void {
@@ -210,7 +251,11 @@ describe("useSoundCloud", () => {
       await getProvider(provider).play(nextTrack)
     })
 
-    expect(widget.loadCalls).toEqual([nextTrack.soundCloudUrl])
+    expect(widget.loadCalls).toEqual([
+      expect.objectContaining({
+        url: nextTrack.soundCloudUrl,
+      }),
+    ])
     expect(widget.playCalls).toBeGreaterThan(0)
     await waitFor(() => {
       expect(screen.getByTestId("title")).toHaveTextContent("Next Widget Title")
@@ -241,6 +286,49 @@ describe("useSoundCloud", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("status")).toHaveTextContent("ended")
+    })
+  })
+
+  it("loads playlist-backed tracks with a SoundCloud start_track index", async () => {
+    const widget = new FakeSoundCloudWidget()
+    let provider: AudioProvider | null = null
+
+    widget.setSoundForUrl(playlistTrack.soundCloudPlaylistUrl ?? "", {
+      id: 303,
+      title: "Playlist Widget Title",
+      permalink_url: playlistTrack.soundCloudUrl,
+      artwork_url: playlistTrack.artworkUrl,
+      duration: 3000,
+      user: {
+        username: "Playlist Widget Artist",
+      },
+    })
+    installSoundCloudGlobal(widget)
+    render(
+      <Harness
+        exposeProvider={(nextProvider) => {
+          provider = nextProvider
+        }}
+      />,
+    )
+
+    await waitFor(() => expect(provider).not.toBeNull())
+
+    await act(async () => {
+      await getProvider(provider).play(playlistTrack)
+    })
+
+    expect(widget.loadCalls).toEqual([
+      expect.objectContaining({
+        url: playlistTrack.soundCloudPlaylistUrl,
+        options: expect.objectContaining({
+          start_track: playlistTrack.playlistIndex,
+        }),
+      }),
+    ])
+    await waitFor(() => {
+      expect(screen.getByTestId("title")).toHaveTextContent("Playlist Widget Title")
+      expect(screen.getByTestId("status")).toHaveTextContent("playing")
     })
   })
 })
