@@ -1,6 +1,5 @@
 import { AudioWaveform, MoveDown } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { useAudioManager, useAudioPlayback } from "../audio/AudioManagerProvider"
 import { mainWorks, mainWorksClosingCaption } from "../data/siteContent"
 import { formatDuration } from "../lib/time"
 
@@ -9,9 +8,6 @@ type MainWorksProps = {
 }
 
 export function MainWorks({ experienceStarted }: MainWorksProps) {
-  const manager = useAudioManager()
-  const playback = useAudioPlayback()
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [activeWorkId, setActiveWorkId] = useState(mainWorks[0]?.id ?? "")
   const activeWorkIdRef = useRef(activeWorkId)
   const cardRefs = useRef(new Map<string, HTMLElement>())
@@ -46,10 +42,6 @@ export function MainWorks({ experienceStarted }: MainWorksProps) {
 
         activeWorkIdRef.current = nextWork.id
         setActiveWorkId(nextWork.id)
-        setErrorMessage(null)
-        void manager.play({ provider: "local", track: nextWork.track }).catch((error: unknown) => {
-          setErrorMessage(error instanceof Error ? error.message : "Could not start local audio")
-        })
       },
       {
         root: null,
@@ -63,22 +55,17 @@ export function MainWorks({ experienceStarted }: MainWorksProps) {
     }
 
     return () => observer.disconnect()
-  }, [experienceStarted, manager])
+  }, [experienceStarted])
 
   const activeWork = mainWorks.find((work) => work.id === activeWorkId) ?? mainWorks[0]
 
   return (
     <section className="section-panel works-section" id="main-works">
-      <div className="section-heading">
-        <h2>Works</h2>
-        <p>Four installation records arranged as a slow vertical listening path.</p>
-      </div>
-
       <div className="works-stage">
         <aside className="works-now-playing" aria-live="polite">
           <span>
             <AudioWaveform size={15} />
-            Now Playing
+            Current Work
           </span>
           <strong>{activeWork?.track.title ?? "Field Study"}</strong>
           <p>{activeWork?.medium ?? "installation sound"}</p>
@@ -86,8 +73,7 @@ export function MainWorks({ experienceStarted }: MainWorksProps) {
 
         <div className="work-scroll-list">
           {mainWorks.map((work, workIndex) => {
-            const isCurrent =
-              playback.currentTrack?.id === work.track.id || activeWorkId === work.id
+            const isCurrent = activeWorkId === work.id
 
             return (
               <div className="work-image-group" key={work.id}>
@@ -146,7 +132,6 @@ export function MainWorks({ experienceStarted }: MainWorksProps) {
         <MoveDown size={15} />
         {mainWorksClosingCaption}
       </p>
-      {errorMessage !== null ? <p className="inline-error">{errorMessage}</p> : null}
     </section>
   )
 }

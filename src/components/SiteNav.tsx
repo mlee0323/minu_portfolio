@@ -4,7 +4,7 @@ import { navItems } from "../data/siteContent"
 export function SiteNav() {
   return (
     <header className="site-nav">
-      <a className="site-nav__brand" href="#hero" aria-label="Go to hero">
+      <a className="site-nav__brand" href="#main-works" aria-label="Go to works">
         <AudioWaveform size={16} />
         minu
       </a>

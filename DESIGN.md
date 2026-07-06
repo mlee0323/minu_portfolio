@@ -2,7 +2,7 @@
 
 ## 1. Atmosphere & Identity
 
-The site is a mobile-first one-page portfolio for a spatial music composer and sound producer. The primary feeling is a black-box exhibition opening: sound first, image second, then slow scroll-based discovery.
+The site is a mobile-first one-page portfolio for a spatial music composer and sound producer. The primary feeling is a black-box exhibition opening: sound first, then direct scroll-based discovery through Works.
 
 The functional contract remains provider-based audio. Local works, SoundCloud Widget playback, and future providers share one Audio Manager so only one source is active at a time.
 
@@ -13,7 +13,7 @@ The functional contract remains provider-based audio. Local works, SoundCloud Wi
 | Role | Token | Value | Usage |
 | --- | --- | --- | --- |
 | Blackout | `--color-blackout` | `#050505` | Deep image wells and first-visit intro darkness |
-| Black | `--color-panel` | `#201e1c` | Intro blackout, hero overlay, archive surface, now-playing |
+| Black | `--color-panel` | `#201e1c` | Intro blackout, works surface, archive surface, now-playing |
 | White | `--color-page` | `#f5f5f5` | Page background and text surfaces |
 | White/soft | `--color-page-soft` | `#f5f5f5` | Iframes, controls, bright panels |
 | Text | `--color-text` | `#201e1c` | Primary text on white |
@@ -38,8 +38,6 @@ The functional contract remains provider-based audio. Local works, SoundCloud Wi
 
 | Level | Size | Weight | Line Height | Usage |
 | --- | --- | --- | --- | --- |
-| Hero/mobile | `clamp(3.8rem, 18vw, 7.8rem)` | 850 | 0.96 | Typed statement |
-| Hero/desktop | `clamp(3.8rem, 18vw, 7.8rem)` | 850 | 0.96 | Full-bleed hero statement |
 | Section/mobile | `clamp(3.6rem, 16vw, 8.4rem)` | 820 | 0.86 | Works, Archive, Index headings |
 | Work title | `clamp(2rem, 10vw, 4.5rem)` | 820 | 0.9 | Main work panels |
 | Body | `0.86rem` to `1rem` | 420 to 560 | 1.32 to 1.55 | Captions and editorial copy |
@@ -61,7 +59,7 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 | --- | --- | --- |
 | Mobile section padding | `84px 16px` | Works, Archive, Index |
 | Desktop section padding | `112px 48px` | Wider scan paths |
-| Hero | `100dvh` | First full viewport after intro |
+| Entry Works | `auto` | First viewport after intro; no separate hero section |
 | Works image stack | data `aspectRatio` + `scale` | Scroll-triggered installation fragments |
 | Desktop content max | `1120px` | Text and work stage |
 | Bottom player | `88px` to `104px` | Fixed Now Playing clearance |
@@ -76,10 +74,10 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 
 ### Blackout Intro
 
-- **Structure**: first-visit full-screen black overlay with only three small centered dots at entry.
+- **Structure**: testing-phase full-screen black overlay with only three small centered dots at entry.
 - **Timing**: dots begin subtle movement after 5 seconds; `Tap to start` appears after 8 seconds.
-- **Interaction**: tap requests the local intro sound, briefly shows `headphones recommended`, then fades to Hero after about 2.4 seconds.
-- **Persistence**: `localStorage` plus a non-sensitive cookie marker hide the intro for returning visitors; clearing site data shows it again.
+- **Interaction**: tap requests the local intro sound, briefly shows `headphones recommended`, then fades directly to Works after about 2.4 seconds.
+- **Persistence**: disabled during testing so every reload shows the intro; `src/lib/introStorage.ts` remains available for the later returning-visitor behavior.
 - **Accessibility**: semantic button with clear start label, keyboard activation, and reduced-motion support.
 
 ### Site Nav
@@ -88,18 +86,13 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 - **Interaction**: anchor scroll to Works, Archive, Index.
 - **Style**: blend over black/white surfaces without adding a heavy header block.
 
-### Spatial Hero
-
-- **Structure**: full-bleed supplied installation image with black overlay and large typed statement. A video can be restored through `heroContent.videoUrl` when a real optimized loop exists.
-- **Interaction**: sound on/off button routes through the shared Audio Manager.
-- **States**: accent button marks the action; typed letters animate only through opacity/transform.
-
 ### Main Works Scroll
 
 - **Structure**: black-background, asymmetric image stack using supplied installation images. Recent/current fragments are larger; secondary fragments are smaller and offset left/right.
+- **Entry**: Works is the first visible section after the intro; no standalone hero page and no Works title/subtitle block.
 - **Data**: image source, natural dimensions, `aspectRatio`, `objectPosition`, `align`, and `scale` live in `src/data/siteContent.ts` so crop and placement changes do not require component rewrites.
-- **Interaction**: Intersection Observer detects the centered image fragment and updates sticky Now Playing text plus active border.
-- **Audio**: active work can request local provider playback after the intro tap. Crossfade remains a V2 Web Audio extension point.
+- **Interaction**: Intersection Observer detects the centered image fragment and updates sticky Current Work text plus active border.
+- **Audio**: the entry local sound remains fixed while scrolling Works during this prototype phase. Scroll-triggered audio switching and crossfade remain V2 Web Audio extension points.
 - **Caption**: Korean closing caption frames the website as a trace of the installation, not the work itself.
 
 ### Archive Carousel
@@ -131,8 +124,7 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 | Type | Duration | Easing | Usage |
 | --- | --- | --- | --- |
 | Intro dots | `2800ms` loop after delay | `ease-in-out` | Idle state signal after 5 seconds |
-| Intro fade | `900ms`, delayed | `ease` | Blackout to Hero |
-| Type-in | `520ms` per letter | `ease` | Hero statement rhythm |
+| Intro fade | `900ms`, delayed | `ease` | Blackout to Works |
 | Micro | `140ms` to `160ms` | `ease-out` | Buttons, rows, panel active states |
 | Progress | Native React updates | Width transition only | Playback progress |
 
@@ -149,14 +141,14 @@ The surface behaves like a black-box exhibition document: flat, quiet, high cont
 | Level | Treatment | Usage |
 | --- | --- | --- |
 | Blackout | Solid black | Intro and archive surface |
-| Full-bleed media | Grayscale image/video | Hero and main works |
+| Full-bleed media | Grayscale image/video | Main works |
 | Hairline | `1px solid var(--color-line)` | Dividers and information rows |
 | Signal | Accent border or fill | Current source and play states |
 | Player lift | `0 18px 40px rgb(31 27 26 / 22%)` | Persistent now-playing dock |
 
 ### Anti-patterns
 
-- No colorful gradients, orbs, blobs, or decorative SVG hero art.
+- No colorful gradients, orbs, blobs, or decorative SVG art.
 - No nested cards inside cards.
 - No emoji icons in UI; use Lucide icons.
 - No visible explanatory tutorial copy except required action hints like `Tap to start` and `Swipe to explore`.

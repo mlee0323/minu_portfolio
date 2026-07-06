@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { AudioManagerProvider } from "./audio/AudioManagerProvider"
 import { Archive } from "./components/Archive"
-import { Hero } from "./components/Hero"
 import { IndexContact } from "./components/IndexContact"
 import { IntroOverlay } from "./components/IntroOverlay"
 import { LocalAudioBridge } from "./components/LocalAudioBridge"
@@ -10,10 +9,9 @@ import { NowPlayingBar } from "./components/NowPlayingBar"
 import { SiteNav } from "./components/SiteNav"
 import { SoundCloudPlayer } from "./components/SoundCloudPlayer"
 import { archiveTracks } from "./data/archiveTracks"
-import { hasSeenIntro, markIntroSeen } from "./lib/introStorage"
 
 export function App() {
-  const [experienceStarted, setExperienceStarted] = useState(() => hasSeenIntro())
+  const [experienceStarted, setExperienceStarted] = useState(false)
   const initialSoundCloudTrack = archiveTracks[0]
 
   if (initialSoundCloudTrack === undefined) {
@@ -29,7 +27,6 @@ export function App() {
   }
 
   const completeIntro = () => {
-    markIntroSeen()
     setExperienceStarted(true)
   }
 
@@ -39,7 +36,6 @@ export function App() {
       {!experienceStarted ? <IntroOverlay onComplete={completeIntro} /> : null}
       <SiteNav />
       <main className={experienceStarted ? "app-shell is-started" : "app-shell"}>
-        <Hero experienceStarted={experienceStarted} />
         <MainWorks experienceStarted={experienceStarted} />
         <div className="archive-sound-grid">
           <Archive />
