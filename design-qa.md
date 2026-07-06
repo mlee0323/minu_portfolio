@@ -2,50 +2,49 @@
 
 ## Source Visual Truth
 
-- Reference crop: `tmp/pdfs/reference-column.png`
-- Original PDF: `/Users/ms/Downloads/1개의 스크린샷.pdf`
-- Design direction: warm off-white editorial page, black wordmark panels, oversized lowercase type, compact media lists, and hairline dividers.
+- Annotated direction screenshot: `/var/folders/hv/0h12c6j51lxcczqm2lc3mj740000gn/T/TemporaryItems/NSIRD_screencaptureui_rC3Hx0/Screenshot 2026-07-06 at 2.25.45 PM.png`
+- Supplied work images: `/Users/ms/Library/Mobile Documents/com~apple~CloudDocs/카카오톡/Huang/스크린샷 2026-07-05 오전 *.png`
+- Design direction: first-visit blackout intro with minimal dot signal, supplied installation imagery, black-background Works stack, and neutral Index table.
 
 ## Responsive Evidence
 
-Fresh captures from `http://127.0.0.1:5173/`:
+Fresh captures from `http://127.0.0.1:5174/`:
 
 | Viewport | Evidence | Result |
 | --- | --- | --- |
-| 375 x 812 | `responsive-qa-mobile-375.png` | Passed: reference-like single column, no clipped text or overlapping controls |
-| 768 x 900 | `responsive-qa-tablet-768.png` | Passed: wider single column, preserved vertical rhythm, no widget/archive overflow |
-| 1280 x 900 | `responsive-qa-desktop-1280.png` | Passed: desktop split hero, two-column main content, three-column archive, full-width footer |
-
-## Responsive Metrics
-
-Playwright DOM checks:
-
-| Viewport | Shell width | Now Playing width | Horizontal overflow |
-| --- | --- | --- | --- |
-| 375 | `340px` | `340px` | No |
-| 768 | `480px` | `480px` | No |
-| 1280 | `1160px` | `760px` | No |
+| 375 x 812 | `qa-update-intro-locked2-375.png` | Passed: blackout intro has no scrollbar, shows minimal dots and delayed prompt state |
+| 375 x 812 | `qa-update-mobile-loaded3-375.png` | Passed: supplied images render, Works stack stays within viewport, Index helper text removed |
+| 768 x 900 | `qa-update-tablet-768-final.png` | Passed: two-column Works rhythm holds, no CJK clipping, no horizontal UI overlap |
+| 1280 x 900 | `qa-update-desktop-1280-final.png` | Passed: desktop hero, Works stack, Archive/Widget split, and Index table remain stable |
 
 ## Interaction Evidence
 
-- Local source: Hero/Main Works buttons route through `AudioManagerProvider` and update the fixed Now Playing dock.
-- SoundCloud source: Archive play buttons route through the SoundCloud provider and mark the active archive row as `Current`.
-- Mutual exclusion: starting any new provider requests the manager to pause the previous active provider before playback.
-- Active SoundCloud capture: `responsive-qa-soundcloud-current-375.png` shows the Archive row set to `Current` and the Now Playing dock set to `Flickermood · soundcloud`.
-- Headless browser note: SoundCloud may report `paused` after a click because third-party iframe autoplay can be blocked in this QA environment. The provider switch, current track, row state, and dock state were still verified.
+- First-visit intro persistence: clearing `localStorage` and the `minu_intro_seen` cookie shows the intro again.
+- Returning visitor path: opening a new tab after completing intro skips the intro and lands on the main page.
+- Intro timing: `src/data/siteContent.ts` sets dot motion after 5 seconds, `Tap to start` after 8 seconds, and post-tap confirmation fade after 2.4 seconds.
+- Audio playback output was intentionally not verified, per user request. The UI click path was used only to observe intro transition state.
 
 ## Findings
 
 - No actionable P0/P1/P2 findings remain.
-- Independent visual QA subagents were not spawned because the available multi-agent tool is restricted to user-explicit delegation requests in this environment. Fresh Playwright captures were used instead.
+- Independent visual QA subagents were not spawned because the available multi-agent tool is restricted to user-explicit delegation requests in this environment. Fresh Playwright captures and static verification were used instead.
 
 ## Required Fidelity Surfaces
 
-- Fonts and typography: Passed. The implementation uses oversized editorial sans type with normal letter spacing.
-- Spacing and layout rhythm: Passed. Mobile keeps the narrow PDF-like column; tablet expands to a wider column; desktop becomes an asymmetric editorial grid.
-- Colors and tokens: Passed. `DESIGN.md` now matches the implemented warm off-white, black, gray linework, and inverse text system.
-- Image quality: Passed. Track artwork uses real configured image assets, not pasted screenshots or placeholder-only blocks.
-- SoundCloud integration surface: Passed. The official iframe remains visible and Widget API state is reflected in React UI.
+- Intro: Passed. `Listening opens before the image` was removed; the first-visit state is minimal and persistent via site data.
+- Works imagery: Passed. The supplied images are copied into `public/images/works`, compressed, and controlled through data-level `aspectRatio`, `objectPosition`, `align`, and `scale`.
+- Image cropping: Passed. Cards use each image's natural aspect ratio so the image top/end is not arbitrarily cut off.
+- Index: Passed. The extra `Index & Contact` label above `Selected work record` was removed.
+- Security/privacy: Passed. The cookie/localStorage marker stores only a non-sensitive first-visit flag.
+
+## Static Verification
+
+- `pnpm run lint`: passed.
+- `pnpm exec tsc --noEmit`: passed.
+- `pnpm run test`: passed, 4 files / 11 tests.
+- `pnpm run build`: passed.
+- `check-no-excuse-rules.ts src`: passed, 29 files.
+- `git diff --check`: passed.
 
 ## Final Result
 

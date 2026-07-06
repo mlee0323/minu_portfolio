@@ -85,37 +85,58 @@ export function MainWorks({ experienceStarted }: MainWorksProps) {
         </aside>
 
         <div className="work-scroll-list">
-          {mainWorks.map((work) => {
+          {mainWorks.map((work, workIndex) => {
             const isCurrent =
               playback.currentTrack?.id === work.track.id || activeWorkId === work.id
 
             return (
-              <article
-                className={isCurrent ? "work-panel is-current" : "work-panel"}
-                data-work-id={work.id}
-                key={work.id}
-                ref={(element) => {
-                  if (element === null) {
-                    cardRefs.current.delete(work.id)
-                    return
-                  }
-                  cardRefs.current.set(work.id, element)
-                }}
-              >
-                <img
-                  src={work.track.artworkUrl}
-                  alt={`${work.track.title} installation record`}
-                  width={960}
-                  height={1280}
-                  loading="lazy"
-                />
-                <div className="work-panel__caption">
-                  <span>{`${work.year} / ${work.medium}`}</span>
-                  <h3>{work.track.title}</h3>
-                  <p>{work.caption}</p>
-                  <small>{`${work.location} / ${formatDuration(work.track.durationMs ?? 0)}`}</small>
-                </div>
-              </article>
+              <div className="work-image-group" key={work.id}>
+                {work.images.map((image, imageIndex) => (
+                  <figure
+                    className={[
+                      "work-panel",
+                      `work-panel--${image.scale}`,
+                      `work-panel--${image.align}`,
+                      isCurrent ? "is-current" : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                    data-work-id={work.id}
+                    key={image.id}
+                    ref={(element) => {
+                      if (element === null) {
+                        cardRefs.current.delete(image.id)
+                        return
+                      }
+                      cardRefs.current.set(image.id, element)
+                    }}
+                    style={{
+                      "--work-aspect": image.aspectRatio,
+                      "--work-position": image.objectPosition,
+                    }}
+                  >
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      width={image.width}
+                      height={image.height}
+                      loading="eager"
+                      fetchPriority={workIndex === 0 && imageIndex === 0 ? "high" : "auto"}
+                      decoding="async"
+                    />
+                    {imageIndex === 0 ? (
+                      <figcaption className="work-panel__caption">
+                        <span>{`${work.year} / ${work.medium}`}</span>
+                        <h3>{work.track.title}</h3>
+                        <p>{work.caption}</p>
+                        <small>{`${work.location} / ${formatDuration(
+                          work.track.durationMs ?? 0,
+                        )}`}</small>
+                      </figcaption>
+                    ) : null}
+                  </figure>
+                ))}
+              </div>
             )
           })}
         </div>

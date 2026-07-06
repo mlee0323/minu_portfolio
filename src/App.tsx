@@ -10,9 +10,10 @@ import { NowPlayingBar } from "./components/NowPlayingBar"
 import { SiteNav } from "./components/SiteNav"
 import { SoundCloudPlayer } from "./components/SoundCloudPlayer"
 import { archiveTracks } from "./data/archiveTracks"
+import { hasSeenIntro, markIntroSeen } from "./lib/introStorage"
 
 export function App() {
-  const [experienceStarted, setExperienceStarted] = useState(false)
+  const [experienceStarted, setExperienceStarted] = useState(() => hasSeenIntro())
   const initialSoundCloudTrack = archiveTracks[0]
 
   if (initialSoundCloudTrack === undefined) {
@@ -27,10 +28,15 @@ export function App() {
     )
   }
 
+  const completeIntro = () => {
+    markIntroSeen()
+    setExperienceStarted(true)
+  }
+
   return (
     <AudioManagerProvider>
       <LocalAudioBridge />
-      {!experienceStarted ? <IntroOverlay onComplete={() => setExperienceStarted(true)} /> : null}
+      {!experienceStarted ? <IntroOverlay onComplete={completeIntro} /> : null}
       <SiteNav />
       <main className={experienceStarted ? "app-shell is-started" : "app-shell"}>
         <Hero experienceStarted={experienceStarted} />

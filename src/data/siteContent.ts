@@ -8,6 +8,19 @@ export type MainWork = {
   readonly medium: string
   readonly location: string
   readonly caption: string
+  readonly images: readonly WorkImage[]
+}
+
+export type WorkImage = {
+  readonly id: string
+  readonly src: string
+  readonly alt: string
+  readonly width: number
+  readonly height: number
+  readonly aspectRatio: string
+  readonly objectPosition: string
+  readonly align: "left" | "center" | "right"
+  readonly scale: "hero" | "large" | "medium" | "small"
 }
 
 export type IndexItem = {
@@ -41,8 +54,10 @@ function getLocalTrack(trackIndex: number): AudioTrack {
 
 export const introContent = {
   prompt: "Tap to start",
-  label: "listening opens before the image",
-  delayMs: 2400,
+  confirmationLabel: "headphones recommended",
+  motionDelayMs: 5000,
+  promptDelayMs: 8000,
+  confirmationDelayMs: 2400,
 } as const
 
 export const navItems = [
@@ -55,8 +70,8 @@ export const heroContent = {
   kicker: "Headphones recommended",
   statement: "space is scored before it is seen.",
   body: "A portfolio for spatial music, installation sound, and production work that treats listening as the first room of the exhibition.",
-  posterUrl: "https://picsum.photos/seed/minu-spatial-sound-hero/1200/1600",
-  videoUrl: "/video/space-sound-loop.mp4",
+  posterUrl: "/images/works/eye-stroll-lamps-02.jpg",
+  videoUrl: null,
 } as const
 
 export const mainWorks: readonly MainWork[] = [
@@ -64,33 +79,140 @@ export const mainWorks: readonly MainWork[] = [
     id: "work-field-study",
     track: getLocalTrack(0),
     year: "2025",
-    medium: "installation sound",
-    location: "black-box room",
-    caption: "A slow sound bed composed for a dark room before the first image appears.",
+    medium: "size variable / astronomical telescope / mirror / other items",
+    location: "installation view",
+    caption: "A room where seeing is delayed, redirected, and scored as a listening path.",
+    images: [
+      {
+        id: "eye-stroll-telescope",
+        src: "/images/works/eye-stroll-telescope.jpg",
+        alt: "An Eye Stroll installation with a telescope facing a small circular wall object",
+        width: 1113,
+        height: 787,
+        aspectRatio: "1113 / 787",
+        objectPosition: "center",
+        align: "center",
+        scale: "hero",
+      },
+      {
+        id: "eye-stroll-room-wide",
+        src: "/images/works/eye-stroll-room-wide.jpg",
+        alt: "Wide exhibition room with suspended and freestanding installation objects",
+        width: 1116,
+        height: 498,
+        aspectRatio: "1116 / 498",
+        objectPosition: "center",
+        align: "right",
+        scale: "large",
+      },
+      {
+        id: "eye-stroll-viewer",
+        src: "/images/works/eye-stroll-viewer.jpg",
+        alt: "Viewer looking toward a small eye aperture in a white panel",
+        width: 378,
+        height: 245,
+        aspectRatio: "378 / 245",
+        objectPosition: "center",
+        align: "left",
+        scale: "medium",
+      },
+    ],
   },
   {
     id: "work-signal-room",
     track: getLocalTrack(1),
     year: "2025",
-    medium: "interactive media",
-    location: "motion-responsive corridor",
-    caption: "A responsive loop that shifts attention as a visitor crosses the room.",
+    medium: "light object / reflected shadow",
+    location: "black-box room",
+    caption: "Two small lamps and their shadows turn the room into a measured interval.",
+    images: [
+      {
+        id: "eye-stroll-lamps-01",
+        src: "/images/works/eye-stroll-lamps-01.jpg",
+        alt: "Two triangular lamp forms installed on a rail in a dark room",
+        width: 570,
+        height: 615,
+        aspectRatio: "570 / 615",
+        objectPosition: "center",
+        align: "left",
+        scale: "large",
+      },
+      {
+        id: "eye-stroll-lamps-02",
+        src: "/images/works/eye-stroll-lamps-02.jpg",
+        alt: "Close view of white and black triangular lamp forms with shadows",
+        width: 556,
+        height: 752,
+        aspectRatio: "556 / 752",
+        objectPosition: "center",
+        align: "right",
+        scale: "medium",
+      },
+    ],
   },
   {
     id: "work-threshold-study",
     track: getLocalTrack(2),
     year: "2024",
-    medium: "spatial composition",
-    location: "entry threshold",
-    caption: "A suspended tone for the second before the installation becomes visible.",
+    medium: "aperture / mirror / gaze",
+    location: "white panel",
+    caption: "A small eye becomes a room-scale signal when the body moves closer.",
+    images: [
+      {
+        id: "eye-stroll-eye-close",
+        src: "/images/works/eye-stroll-eye-close.jpg",
+        alt: "Close view of an eye seen through a small circular aperture",
+        width: 557,
+        height: 785,
+        aspectRatio: "557 / 785",
+        objectPosition: "center",
+        align: "center",
+        scale: "medium",
+      },
+      {
+        id: "eye-stroll-monitor-room",
+        src: "/images/works/eye-stroll-monitor-room.jpg",
+        alt: "Dark room with monitor, rail, and projected light",
+        width: 556,
+        height: 565,
+        aspectRatio: "556 / 565",
+        objectPosition: "center",
+        align: "left",
+        scale: "small",
+      },
+    ],
   },
   {
     id: "work-afterimage-hall",
     track: getLocalTrack(3),
     year: "2024",
-    medium: "sound directing",
-    location: "projection hall",
-    caption: "Residual harmonics designed to remain after the viewer leaves the image.",
+    medium: "object / camera / projection",
+    location: "installation frame",
+    caption: "Objects, lens, and projected shadow hold the afterimage as a spatial score.",
+    images: [
+      {
+        id: "eye-stroll-tower",
+        src: "/images/works/eye-stroll-tower.jpg",
+        alt: "Tall wooden installation object with a circular shadow form",
+        width: 556,
+        height: 747,
+        aspectRatio: "556 / 747",
+        objectPosition: "center",
+        align: "center",
+        scale: "medium",
+      },
+      {
+        id: "eye-stroll-camera-installation",
+        src: "/images/works/eye-stroll-camera-installation.jpg",
+        alt: "Camera tripod and framed suspended object installation in a gallery",
+        width: 1113,
+        height: 558,
+        aspectRatio: "1113 / 558",
+        objectPosition: "center",
+        align: "right",
+        scale: "large",
+      },
+    ],
   },
 ] as const
 

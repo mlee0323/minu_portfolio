@@ -1,0 +1,106 @@
+:root {
+  --release-card-gap: 18px;
+  --release-card-min: 320px;
+  --release-card-max: 430px;
+  --release-track-row-height: 54px;
+  --release-visible-track-count: 5;
+  --release-scroll-thumb: color-mix(in srgb, var(--color-inverse) 34%, transparent);
+}
+
+.release-carousel {
+  gap: var(--release-card-gap);
+  scroll-padding-left: 16px;
+}
+
+.archive-sound-grid > .archive-section {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.release-card {
+  flex-basis: min(82vw, 360px);
+}
+
+.release-track-list {
+  max-height: calc((var(--release-track-row-height) * var(--release-visible-track-count)) + 1px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+  scroll-padding-block: 8px;
+  scrollbar-color: var(--release-scroll-thumb) transparent;
+  scrollbar-width: thin;
+}
+
+.release-track-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.release-track-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.release-track-list::-webkit-scrollbar-thumb {
+  border-radius: var(--radius-control);
+  background: var(--release-scroll-thumb);
+}
+
+.release-track-row {
+  min-height: var(--release-track-row-height);
+}
+
+.now-playing__error {
+  grid-column: 1 / -1;
+  margin: -2px 0 0;
+  color: var(--color-accent);
+  font-size: 0.72rem;
+  font-weight: 760;
+  line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+  .archive-sound-grid .release-carousel {
+    padding-right: 0;
+    padding-left: 0;
+    scroll-padding-left: 0;
+  }
+
+  .release-card {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    flex-basis: min(
+      var(--release-card-max),
+      max(var(--release-card-min), calc((100% - var(--release-card-gap)) / 2))
+    );
+  }
+
+  .archive-sound-grid .release-card__cover {
+    grid-row: auto;
+  }
+
+  .archive-sound-grid .release-card__head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .archive-sound-grid .release-card__head h3 {
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .archive-sound-grid .release-track-list {
+    grid-column: auto;
+    align-self: start;
+  }
+}
+
+@media (min-width: 1180px) {
+  .release-carousel {
+    max-width: calc((var(--release-card-max) * 3) + (var(--release-card-gap) * 2));
+  }
+
+  .release-card {
+    flex-basis: min(
+      var(--release-card-max),
+      max(var(--release-card-min), calc((100% - (var(--release-card-gap) * 2)) / 3))
+    );
+  }
+}

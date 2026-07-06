@@ -4,7 +4,6 @@ export function IndexContact() {
   return (
     <section className="index-section" id="index">
       <div className="index-section__heading">
-        <p className="section-kicker">Index & Contact</p>
         <h2>Selected work record</h2>
       </div>
 

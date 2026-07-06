@@ -2,6 +2,7 @@ import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { App } from "./App"
 import "./styles/index.css"
+import "./styles/audioSurfaces.css"
 
 const enableReactDevTools =
   import.meta.env.DEV && import.meta.env.VITE_ENABLE_REACT_DEVTOOLS === "1"

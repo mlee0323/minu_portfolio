@@ -82,9 +82,20 @@ export function Hero({ experienceStarted }: HeroProps) {
   return (
     <section className={experienceStarted ? "hero-section is-revealed" : "hero-section"} id="hero">
       <div className="hero-visual">
-        <video autoPlay loop muted playsInline poster={heroContent.posterUrl} preload="none">
-          <source src={heroContent.videoUrl} type="video/mp4" />
-        </video>
+        {heroContent.videoUrl === null ? (
+          <img
+            src={heroContent.posterUrl}
+            alt=""
+            width={556}
+            height={752}
+            fetchPriority="high"
+            decoding="async"
+          />
+        ) : (
+          <video autoPlay loop muted playsInline poster={heroContent.posterUrl} preload="none">
+            <source src={heroContent.videoUrl} type="video/mp4" />
+          </video>
+        )}
         <div className="hero-visual__shade" />
         <span className="hero-visual__mark">space+sound</span>
       </div>

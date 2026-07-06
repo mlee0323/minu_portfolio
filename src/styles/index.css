@@ -8,6 +8,7 @@
   text-rendering: optimizeLegibility;
   --color-page: #f5f5f5;
   --color-page-soft: #f5f5f5;
+  --color-blackout: #050505;
   --color-panel: #201e1c;
   --color-panel-strong: #f5f5f5;
   --color-control: #f5f5f5;
@@ -41,6 +42,13 @@ body {
   margin: 0;
   background: var(--color-page);
   overflow-x: hidden;
+}
+
+html.is-intro-active,
+body.is-intro-active,
+html:has(.intro-overlay),
+body:has(.intro-overlay) {
+  overflow: hidden;
 }
 
 button,
@@ -1121,6 +1129,17 @@ img {
   }
 }
 
+@keyframes intro-dots-drift {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(8px);
+  }
+}
+
 .app-shell {
   width: 100%;
   padding: 0 0 calc(var(--bottom-player-height) + 64px);
@@ -1165,39 +1184,93 @@ img {
   display: grid;
   place-items: center;
   align-content: center;
-  gap: 14px;
+  gap: 22px;
   width: 100%;
   min-height: 100dvh;
+  border: 0;
   background: var(--color-panel);
   color: var(--color-inverse);
-  transition: opacity 900ms ease 1400ms;
+  transition: opacity 900ms ease 1500ms;
 }
 
-.intro-overlay.is-exiting {
+.intro-overlay--confirming {
   opacity: 0;
   pointer-events: none;
 }
 
-.intro-overlay__signal {
-  display: grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  color: var(--color-accent);
+.intro-overlay__dots {
+  display: inline-grid;
+  grid-template-columns: repeat(3, 4px);
+  gap: 7px;
+  align-items: center;
+  justify-content: center;
+  color: rgb(245 245 245 / 78%);
+  transition:
+    gap 1200ms ease,
+    opacity 500ms ease,
+    transform 1200ms ease;
+}
+
+.intro-overlay__dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: translateY(0);
+}
+
+.intro-overlay--restless .intro-overlay__dots,
+.intro-overlay--prompt .intro-overlay__dots {
+  gap: 11px;
+  color: rgb(245 245 245 / 88%);
+  animation: intro-dots-drift 2800ms ease-in-out infinite;
+}
+
+.intro-overlay--confirming .intro-overlay__dots {
+  opacity: 0;
+  transform: translateY(-4px);
 }
 
 .intro-overlay__prompt {
+  opacity: 0;
+  transform: translateY(4px);
   font-size: 0.86rem;
   font-weight: 850;
   text-transform: uppercase;
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease;
 }
 
-.intro-overlay__label {
-  color: rgb(245 245 245 / 62%);
+.intro-overlay--prompt .intro-overlay__prompt {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.intro-overlay__headphones {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  color: rgb(245 245 245 / 72%);
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: lowercase;
+  transform: translate(-50%, calc(-50% + 8px));
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease;
+  white-space: nowrap;
+}
+
+.intro-overlay--confirming .intro-overlay__prompt {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.intro-overlay--confirming .intro-overlay__headphones {
+  opacity: 1;
+  transform: translate(-50%, -50%);
 }
 
 .hero-section {
@@ -1217,7 +1290,8 @@ img {
   background: var(--color-panel);
 }
 
-.hero-visual video {
+.hero-visual video,
+.hero-visual img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1313,7 +1387,20 @@ img {
 }
 
 .works-section {
-  background: var(--color-page);
+  background: var(--color-panel);
+  color: var(--color-inverse);
+}
+
+.works-section .section-heading {
+  border-color: rgb(245 245 245 / 30%);
+}
+
+.works-section .section-heading h2 {
+  color: var(--color-inverse);
+}
+
+.works-section .section-heading p {
+  color: rgb(245 245 245 / 62%);
 }
 
 .section-heading {
@@ -1358,10 +1445,11 @@ img {
   display: grid;
   gap: 4px;
   margin-bottom: 24px;
-  border: 1px solid var(--color-text);
-  background: var(--color-panel);
+  border: 1px solid rgb(245 245 245 / 28%);
+  background: rgb(0 0 0 / 62%);
   color: var(--color-inverse);
   padding: 14px;
+  backdrop-filter: blur(10px);
 }
 
 .works-now-playing span {
@@ -1387,15 +1475,25 @@ img {
 
 .work-scroll-list {
   display: grid;
-  gap: 44px;
+  gap: 34px;
+  min-width: 0;
+}
+
+.work-image-group {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
 }
 
 .work-panel {
   position: relative;
-  min-height: 74dvh;
+  width: min(100%, 520px);
+  min-height: 0;
+  aspect-ratio: var(--work-aspect, 1);
   overflow: hidden;
-  border: 1px solid var(--color-line);
-  background: var(--color-panel);
+  margin: 0;
+  border: 1px solid rgb(245 245 245 / 12%);
+  background: var(--color-blackout);
   transition:
     border-color 160ms ease,
     transform 160ms ease;
@@ -1405,11 +1503,40 @@ img {
   border-color: var(--color-accent);
 }
 
+.work-panel--hero {
+  width: min(100%, 680px);
+}
+
+.work-panel--large {
+  width: min(92%, 620px);
+}
+
+.work-panel--medium {
+  width: min(72%, 430px);
+}
+
+.work-panel--small {
+  width: min(55%, 330px);
+}
+
+.work-panel--left {
+  justify-self: start;
+}
+
+.work-panel--center {
+  justify-self: center;
+}
+
+.work-panel--right {
+  justify-self: end;
+}
+
 .work-panel img {
   width: 100%;
-  height: 74dvh;
+  height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.08);
+  object-position: var(--work-position, center);
+  filter: grayscale(0.16) contrast(1.02) brightness(1.14);
 }
 
 .work-panel__caption {
@@ -1419,9 +1546,14 @@ img {
   left: 0;
   display: grid;
   gap: 7px;
-  background: linear-gradient(180deg, transparent, rgb(32 30 28 / 88%) 20%);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgb(32 30 28 / 8%) 26%,
+    rgb(32 30 28 / 74%) 100%
+  );
   color: var(--color-inverse);
-  padding: 72px 16px 18px;
+  padding: 56px 16px 18px;
 }
 
 .work-panel__caption span,
@@ -1453,9 +1585,9 @@ img {
   align-items: start;
   width: min(760px, calc(100% - 32px));
   margin: 36px auto 0;
-  border-top: 1px solid var(--color-text);
+  border-top: 1px solid rgb(245 245 245 / 28%);
   padding-top: 18px;
-  color: var(--color-muted);
+  color: rgb(245 245 245 / 56%);
   font-size: 0.86rem;
   font-weight: 520;
   line-height: 1.55;
@@ -1654,7 +1786,7 @@ img {
   }
 
   .work-scroll-list {
-    gap: 72px;
+    gap: 48px;
   }
 
   .work-panel__caption h3 {
@@ -1704,6 +1836,9 @@ img {
 
 @media (prefers-reduced-motion: reduce) {
   .intro-overlay,
+  .intro-overlay__dots,
+  .intro-overlay__prompt,
+  .intro-overlay__headphones,
   .typing-letter,
   .work-panel,
   .pill-button,
