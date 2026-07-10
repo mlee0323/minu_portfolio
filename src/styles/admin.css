@@ -489,11 +489,12 @@
 }
 
 .admin-canvas-element {
-  border: 1px solid transparent;
+  border: 0;
 }
 
 .admin-canvas-element.is-selected {
-  border-color: var(--color-accent);
+  outline: 1px solid var(--color-accent);
+  outline-offset: -1px;
 }
 
 .admin-canvas-media,
@@ -506,10 +507,11 @@
   cursor: move;
 }
 
+.admin-canvas-media {
+  padding: 0;
+}
+
 .admin-canvas-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   pointer-events: none;
   user-select: none;
 }

@@ -97,6 +97,11 @@
     max-width: calc((var(--release-card-max) * 3) + (var(--release-card-gap) * 2));
   }
 
+  .archive-sound-grid .release-carousel--compact {
+    justify-content: center;
+    margin-inline: auto;
+  }
+
   .release-card {
     flex-basis: min(
       var(--release-card-max),

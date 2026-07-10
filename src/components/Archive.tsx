@@ -39,6 +39,8 @@ export function Archive({ releases }: ArchiveProps) {
   const manager = useAudioManager()
   const playback = useAudioPlayback()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const carouselClassName =
+    releases.length <= 3 ? "release-carousel release-carousel--compact" : "release-carousel"
 
   const playTrack = (track: AudioTrack) => {
     setErrorMessage(null)
@@ -63,7 +65,7 @@ export function Archive({ releases }: ArchiveProps) {
         </a>
       </div>
 
-      <ul className="release-carousel" aria-label="Sound archive carousel">
+      <ul className={carouselClassName} aria-label="Sound archive carousel">
         {releases.map((release) => {
           const firstTrack = release.tracks[0]
           const coverTrack = getReleaseCoverTrack(release)

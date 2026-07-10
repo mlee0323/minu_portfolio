@@ -22,19 +22,20 @@ function requireFirstImage(): AdminWorkImage {
 }
 
 describe("adminCanvas", () => {
-  it("creates one responsive image layout from seeded works", () => {
+  it("uses the public 390px artwork geometry in both admin previews", () => {
+    // Given
     const image = requireFirstImage()
     const canvas = createSeedAdminContent().works[0]?.canvas
 
-    expect(canvas).toEqual(createDefaultWorkCanvas())
-    expect(image.layout.width).toBeGreaterThan(0)
-    expect(image.layout.height).toBeGreaterThan(0)
-
+    // When
     const mobileRect = getViewportRectForLayout(image.layout, "mobile")
     const desktopRect = getViewportRectForLayout(image.layout, "desktop")
 
-    expect(desktopRect.width).toBeGreaterThan(mobileRect.width)
-    expect(desktopRect.y).toBe(mobileRect.y)
+    // Then
+    expect(canvas).toEqual(createDefaultWorkCanvas())
+    expect(image.layout.width).toBeGreaterThan(0)
+    expect(image.layout.height).toBeGreaterThan(0)
+    expect(desktopRect).toEqual(mobileRect)
   })
 
   it("clamps canvas rectangles inside the selected viewport", () => {

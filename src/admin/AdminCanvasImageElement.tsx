@@ -92,6 +92,7 @@ export function AdminCanvasImageElement({
         onKeyDown={(event) => handleSelectableKey(event, element, onSelectElement)}
       >
         <img
+          className="work-canvas-image"
           src={image.src}
           alt={image.alt}
           draggable={false}

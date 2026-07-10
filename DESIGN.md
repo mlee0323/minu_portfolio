@@ -121,6 +121,7 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 - **Structure**: horizontal swipe carousel of SoundCloud releases/playlists.
 - **Album density**: each release card shows five track rows at a time; longer albums scroll inside the card instead of stretching the section.
 - **Responsive count**: the carousel shows one album on mobile, up to two on constrained tablet/desktop columns, and never more than three visible albums on wide screens.
+- **Wide-screen alignment**: groups of one to three releases center as a finite collection at `1180px` and above; four or more releases stay left-anchored and horizontally scrollable.
 - **Interaction**: release and track buttons route to the SoundCloud provider using the official Widget API.
 - **Data**: edit `archiveReleases`; `archiveTracks` remains the flattened compatibility output.
 
@@ -134,6 +135,7 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 
 - **Structure**: neutral list/table mode for curators and collaborators; no extra explanatory label beside the heading.
 - **Style**: no expressive imagery, no color beyond text and hairlines.
+- **Closing rhythm**: the footer keeps only compact optical breathing room before the fixed player clearance; section and shell padding must not stack into a second empty band.
 
 ### Now Playing Bar
 
@@ -145,7 +147,7 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 
 - **Structure**: `/admin` lazy-loads a separate editing shell so the public portfolio does not load admin UI code during normal visits.
 - **Current data mode**: saving validates and writes the draft to browser `localStorage`, which updates the public site in the same browser. Authenticated production save also publishes the generated content file, so other visitors receive the change after deployment.
-- **Works editor**: desktop-only Canva-lite workflow with a left asset/upload panel, Mobile/Web preview toggle, fit-to-screen draggable canvas, one responsive work height control, one mobile-first responsive layout per image/text element, deletable work records, directly editable text blocks with a mouse drag handle, and a right inspector for work and element settings.
+- **Works editor**: desktop-only Canva-lite workflow with a left asset/upload panel, Mobile/Web preview toggle, fit-to-screen draggable canvas, one responsive work height control, one mobile-first responsive layout per image/text element, deletable work records, directly editable text blocks with a mouse drag handle, and a right inspector for work and element settings. Both preview modes use the public site's canonical 390px artwork column and identical image crop rules; Web changes the frame treatment, not the composition.
 - **Archive and Index editing**: release/track records, text records, and contact links use dense form panels rather than portfolio-style media layouts.
 - **Target viewport**: desktop editing only. Small screens keep a basic fallback layout, but QA and future admin design decisions target computer-sized screens.
 - **Guardrails**: allowed layout values, canvas dimensions, canvas rectangles, text styles, status values, release types, and visibility values are schema-validated before a draft can be saved.

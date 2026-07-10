@@ -173,7 +173,7 @@ select {
   background: var(--color-blackout);
 }
 
-.public-work-image img {
+.work-canvas-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -285,6 +285,7 @@ select {
       transparent calc(50% + 1px)
     ),
     var(--color-page);
+  padding-bottom: 24px;
 }
 
 .index-row {
@@ -324,6 +325,10 @@ select {
 
   .archive-sound-grid > .archive-section {
     padding-right: 48px;
+  }
+
+  .index-section {
+    padding-bottom: 32px;
   }
 }
 

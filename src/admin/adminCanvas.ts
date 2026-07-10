@@ -15,7 +15,7 @@ export type CanvasDimensions = {
 
 export const adminCanvasDimensions: Record<AdminCanvasViewport, CanvasDimensions> = {
   mobile: { width: 390, height: 720 },
-  desktop: { width: 760, height: 520 },
+  desktop: { width: 390, height: 720 },
 }
 
 export const adminCanvasHeightLimits = {

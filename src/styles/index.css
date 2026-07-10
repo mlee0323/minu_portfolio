@@ -1023,7 +1023,7 @@ img {
 
 .app-shell {
   width: 100%;
-  padding: 0 0 calc(var(--bottom-player-height) + 64px);
+  padding: 0 0 calc(var(--bottom-player-height) + 24px);
 }
 
 .site-nav {

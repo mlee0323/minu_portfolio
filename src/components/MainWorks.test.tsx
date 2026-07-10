@@ -21,6 +21,7 @@ describe("MainWorks", () => {
       height: `${String((240 / 720) * 100)}%`,
     })
     expect(firstCanvas).toHaveStyle({ aspectRatio: "390 / 720" })
+    expect(firstImage).toHaveClass("work-canvas-image")
     expect(screen.queryByText("Current Work")).not.toBeInTheDocument()
     expect(document.querySelector("figcaption")).not.toBeInTheDocument()
     expect(document.querySelector(".is-current")).not.toBeInTheDocument()

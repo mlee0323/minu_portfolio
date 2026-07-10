@@ -52,6 +52,7 @@ export function MainWorks({ works }: MainWorksProps) {
                   style={imageStyleFor(work, image)}
                 >
                   <img
+                    className="work-canvas-image"
                     src={image.src}
                     alt={image.alt}
                     width={image.width}
