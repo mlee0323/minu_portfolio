@@ -3,6 +3,11 @@
   "buildCommand": "pnpm run build",
   "framework": "vite",
   "outputDirectory": "dist",
+  "functions": {
+    "api/admin/*.ts": {
+      "includeFiles": "src/**"
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",
