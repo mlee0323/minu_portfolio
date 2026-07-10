@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { useAudioManager } from "../audio/AudioManagerProvider"
-import { localTracks } from "../data/localTracks"
+import { mainWorks } from "../data/publishedSiteContent"
 import { introContent } from "../data/siteContent"
 
 type IntroOverlayProps = {
@@ -13,7 +13,7 @@ export function IntroOverlay({ onComplete }: IntroOverlayProps) {
   const manager = useAudioManager()
   const [phase, setPhase] = useState<IntroPhase>("silent")
   const timersRef = useRef<number[]>([])
-  const introTrack = localTracks[0]
+  const introTrack = mainWorks[0]?.track
 
   useEffect(() => {
     document.documentElement.classList.add("is-intro-active")
@@ -45,13 +45,15 @@ export function IntroOverlay({ onComplete }: IntroOverlayProps) {
     setPhase("confirming")
 
     if (introTrack !== undefined) {
-      void manager.play({ provider: "local", track: introTrack }).catch((error: unknown) => {
-        if (error instanceof Error) {
-          return
-        }
+      void manager
+        .play({ provider: introTrack.provider, track: introTrack })
+        .catch((error: unknown) => {
+          if (error instanceof Error) {
+            return
+          }
 
-        throw error
-      })
+          throw error
+        })
     }
 
     timersRef.current.push(window.setTimeout(onComplete, introContent.confirmationDelayMs))

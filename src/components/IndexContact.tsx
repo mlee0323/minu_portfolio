@@ -1,4 +1,4 @@
-import { contactLinks, indexItems } from "../data/siteContent"
+import { contactLinks, indexItems } from "../data/publishedSiteContent"
 
 export function IndexContact() {
   return (
@@ -24,6 +24,11 @@ export function IndexContact() {
           </a>
         ))}
       </div>
+
+      <footer className="index-footer">
+        <span>Minu spatial sound</span>
+        <span>Portfolio / selected records</span>
+      </footer>
     </section>
   )
 }

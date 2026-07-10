@@ -1,0 +1,408 @@
+.admin-shell {
+  background:
+    radial-gradient(circle at 60% -10%, rgb(255 255 255 / 78%), transparent 34rem),
+    var(--color-page);
+}
+
+.admin-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  min-height: 108px;
+  border: 0;
+  background: rgb(241 240 235 / 88%);
+  box-shadow:
+    0 1px 0 var(--color-line),
+    0 18px 42px -36px rgb(25 25 22 / 44%);
+  padding: 16px clamp(16px, 3vw, 40px);
+  backdrop-filter: blur(22px) saturate(1.1);
+}
+
+.admin-topbar__route {
+  align-content: center;
+}
+
+.admin-topbar strong {
+  font-size: clamp(2.4rem, 5vw, 5rem);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+}
+
+.admin-topbar span,
+.admin-panel__head span,
+.admin-status,
+.admin-list-row span,
+.admin-field span,
+.admin-check span,
+.admin-asset-section > span,
+.admin-asset-section__head span,
+.admin-preview-toolbar p,
+.admin-inspector p,
+.admin-inspector-section > span {
+  font-family: var(--font-mono);
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-brand {
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: var(--radius-control);
+  background: var(--color-page-soft);
+  box-shadow: var(--shadow-ring);
+  font-size: 0.78rem;
+  font-weight: 580;
+  transition:
+    background-color 180ms var(--ease-studio),
+    transform 180ms var(--ease-studio);
+}
+
+.admin-brand:hover {
+  background: var(--color-control-hover);
+  transform: translateX(-2px);
+}
+
+.admin-actions {
+  justify-content: flex-end;
+}
+
+.admin-actions .pill-button {
+  min-height: 40px;
+  border: 0;
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-ring);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.admin-actions .pill-button--accent {
+  box-shadow:
+    0 0 0 1px rgb(25 25 22 / 82%),
+    0 12px 26px -18px rgb(25 25 22 / 72%);
+}
+
+.admin-layout {
+  width: min(1800px, calc(100% - 24px));
+  gap: 20px;
+  padding: 24px 0 88px;
+}
+
+.admin-sidebar {
+  gap: 4px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--color-panel);
+  box-shadow: var(--shadow-dark);
+  padding: 6px;
+}
+
+.admin-sidebar button {
+  position: relative;
+  min-height: 42px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: rgb(248 247 242 / 62%);
+  padding: 0 12px 0 30px;
+  font-size: 0.78rem;
+  font-weight: 560;
+  text-align: left;
+  transition:
+    background-color 180ms var(--ease-studio),
+    color 180ms var(--ease-studio);
+}
+
+.admin-sidebar button::before {
+  position: absolute;
+  left: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: currentColor;
+  content: "";
+}
+
+.admin-sidebar button:hover {
+  background: rgb(248 247 242 / 7%);
+  color: var(--color-inverse);
+}
+
+.admin-sidebar button.is-active {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+}
+
+.admin-content {
+  gap: 18px;
+}
+
+.admin-status--rail {
+  min-height: 40px;
+  border-radius: 8px;
+  background: var(--color-page-soft);
+  box-shadow: var(--shadow-ring);
+  padding: 0 14px;
+}
+
+.admin-dashboard article,
+.admin-panel,
+.admin-subpanel,
+.admin-asset-panel,
+.admin-preview-workspace,
+.admin-inspector {
+  border: 0;
+  border-radius: var(--radius-card);
+  background: var(--color-page-soft);
+  box-shadow: var(--shadow-card);
+}
+
+.admin-dashboard {
+  gap: 16px;
+}
+
+.admin-dashboard article {
+  min-height: 196px;
+  align-content: space-between;
+  padding: 20px;
+}
+
+.admin-dashboard article:first-child {
+  background: var(--color-panel);
+  color: var(--color-inverse);
+  box-shadow: var(--shadow-dark);
+}
+
+.admin-dashboard article:first-child p,
+.admin-dashboard article:first-child span {
+  color: rgb(248 247 242 / 62%);
+}
+
+.admin-dashboard p,
+.admin-status,
+.admin-upload-dropzone span {
+  overflow-wrap: break-word;
+  word-break: keep-all;
+  text-wrap: pretty;
+}
+
+.admin-dashboard strong {
+  font-size: clamp(2.5rem, 4vw, 4.5rem);
+  font-weight: 590;
+  letter-spacing: -0.055em;
+}
+
+.admin-panel {
+  padding: clamp(16px, 2vw, 28px);
+}
+
+.admin-panel h2 {
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+}
+
+.admin-list-row,
+.admin-work-row,
+.admin-asset-thumb {
+  border: 0;
+  border-radius: 7px;
+  background: var(--color-page-soft);
+  box-shadow: var(--shadow-ring);
+  transition:
+    background-color 180ms var(--ease-studio),
+    color 180ms var(--ease-studio),
+    transform 180ms var(--ease-studio);
+}
+
+.admin-list-row:hover,
+.admin-work-row:hover,
+.admin-asset-thumb:hover {
+  background: var(--color-control-hover);
+  transform: translateY(-1px);
+}
+
+.admin-list-row.is-active,
+.admin-work-row.is-active,
+.admin-asset-thumb.is-selected {
+  background: var(--color-panel);
+  color: var(--color-inverse);
+  box-shadow: 0 0 0 1px var(--color-panel);
+}
+
+.admin-field input,
+.admin-field textarea,
+.admin-field select {
+  min-height: 42px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--color-page-soft);
+  box-shadow:
+    var(--shadow-ring),
+    inset 0 1px 0 rgb(255 255 255 / 76%);
+  padding: 10px 12px;
+  transition:
+    box-shadow 180ms var(--ease-studio),
+    background-color 180ms var(--ease-studio);
+}
+
+.admin-field input:hover,
+.admin-field textarea:hover,
+.admin-field select:hover {
+  background: color-mix(in srgb, var(--color-page-soft) 40%, white);
+}
+
+.admin-field input:focus,
+.admin-field textarea:focus,
+.admin-field select:focus {
+  outline: 0;
+  box-shadow:
+    0 0 0 2px var(--color-focus),
+    0 0 0 5px var(--color-accent-soft);
+}
+
+.admin-upload-dropzone {
+  border: 0;
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 8px, rgb(25 25 22 / 3%) 8px 9px),
+    var(--color-page);
+  box-shadow: inset 0 0 0 1px var(--color-line-strong);
+  transition:
+    background-color 180ms var(--ease-studio),
+    box-shadow 180ms var(--ease-studio);
+}
+
+.admin-upload-dropzone:hover {
+  background-color: var(--color-accent-soft);
+  box-shadow: inset 0 0 0 1px var(--color-focus);
+}
+
+.admin-preview-workspace {
+  background: var(--color-control-hover);
+  padding: 16px;
+}
+
+.admin-preview-toolbar {
+  min-height: 46px;
+  padding-inline: 4px;
+}
+
+.segmented-control {
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-page-soft);
+  box-shadow: var(--shadow-ring);
+}
+
+.segmented-control button {
+  border-radius: 5px;
+  font-weight: 580;
+}
+
+.segmented-control button.is-active {
+  background: var(--color-panel);
+}
+
+.admin-canvas-frame {
+  overflow: hidden;
+  padding: 0;
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgb(25 25 22 / 5%) 1px, transparent 1px),
+    linear-gradient(rgb(25 25 22 / 5%) 1px, transparent 1px),
+    color-mix(in srgb, var(--color-page) 70%, var(--color-line));
+  background-size: 24px 24px;
+  box-shadow: inset var(--shadow-ring);
+}
+
+.admin-canvas {
+  border: 0;
+  box-shadow:
+    0 0 0 1px rgb(25 25 22 / 30%),
+    0 34px 72px -28px rgb(25 25 22 / 48%);
+}
+
+.admin-inspector {
+  align-self: start;
+}
+
+.admin-inspector-section {
+  border-color: var(--color-line);
+}
+
+.admin-canvas-drag-handle {
+  border: 0;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px rgb(25 25 22 / 70%);
+}
+
+@media (min-width: 760px) {
+  .admin-layout {
+    grid-template-columns: 176px minmax(0, 1fr);
+  }
+
+  .admin-sidebar {
+    top: 132px;
+  }
+}
+
+@media (min-width: 760px) and (max-width: 1119px) {
+  .admin-track-row,
+  .admin-index-row,
+  .admin-contact-row {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .admin-track-row .icon-button,
+  .admin-index-row .icon-button,
+  .admin-contact-row .icon-button {
+    justify-self: start;
+  }
+}
+
+@media (min-width: 1180px) {
+  .admin-works-builder {
+    grid-template-columns: minmax(240px, 272px) minmax(0, 1fr) minmax(232px, 272px);
+    gap: 18px;
+  }
+
+  .admin-asset-panel,
+  .admin-inspector {
+    position: sticky;
+    top: 132px;
+    max-height: calc(100dvh - 152px);
+    overflow: auto;
+  }
+}
+
+@media (max-width: 759px) {
+  .admin-topbar {
+    grid-template-columns: minmax(0, 1fr) max-content;
+    align-items: end;
+    min-height: auto;
+  }
+
+  .admin-topbar__route {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+
+  .admin-brand {
+    grid-column: 1;
+  }
+
+  .admin-actions {
+    grid-column: 2;
+  }
+
+  .admin-sidebar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .admin-sidebar button {
+    min-width: 0;
+  }
+}

@@ -1,8 +1,17 @@
 # Minu Spatial Sound Portfolio Design System
 
+Reference direction: the media-led asymmetry surfaced by Lazyweb portfolio references,
+combined with the typographic compression and multi-layer edge treatment documented in
+the Vercel design reference. The result must remain Minu's own black-box exhibition and
+studio tool, not a branded clone.
+
 ## 1. Atmosphere & Identity
 
-The site is a mobile-first one-page portfolio for a spatial music composer and sound producer. The primary feeling is a black-box exhibition opening: sound first, then direct scroll-based discovery through Works.
+The site is a mobile-first one-page portfolio for a spatial music composer and sound producer. The primary feeling is a black-box exhibition opening: sound first, then direct scroll-based discovery through Works. The paired admin surface is the control room behind that exhibition: pale mineral surfaces, precise dark chrome, and a single acid signal color.
+
+The memorable moment is the transition from the near-black entry into a tall, irregular
+sequence of luminous work plates. The admin echoes that same material language without
+copying the public composition: artwork remains dimensional while controls stay quiet.
 
 The functional contract remains provider-based audio. Local works, SoundCloud Widget playback, and future providers share one Audio Manager so only one source is active at a time.
 
@@ -12,25 +21,31 @@ The functional contract remains provider-based audio. Local works, SoundCloud Wi
 
 | Role | Token | Value | Usage |
 | --- | --- | --- | --- |
-| Blackout | `--color-blackout` | `#050505` | Deep image wells and first-visit intro darkness |
-| Black | `--color-panel` | `#201e1c` | Intro blackout, works surface, archive surface, now-playing |
-| White | `--color-page` | `#f5f5f5` | Page background and text surfaces |
-| White/soft | `--color-page-soft` | `#f5f5f5` | Iframes, controls, bright panels |
-| Text | `--color-text` | `#201e1c` | Primary text on white |
-| Inverse text | `--color-inverse` | `#f5f5f5` | Text on black |
-| Muted text | `--color-muted` | `#68625d` | Body copy and secondary metadata |
-| Subtle text | `--color-subtle` | `#918b84` | Durations and quiet labels |
-| Line | `--color-line` | `#d8d6d1` | Hairline dividers |
-| Signal accent | `--color-accent` | `#d8ff3f` | Play, active state, scroll signal, focused interaction |
-| Accent ink | `--color-accent-ink` | `#201e1c` | Text/icons inside accent controls |
-| Status/warm | `--color-amber` | `#b67b00` | Ended status |
-| Status/error | `--color-danger` | `#ad2f22` | Playback errors |
+| Blackout | `--color-blackout` | `#070706` | Deep image wells and first-visit intro darkness |
+| Black | `--color-panel` | `#191916` | Works, archive, now-playing, selected admin chrome |
+| Elevated black | `--color-panel-elevated` | `#23231f` | Layered dark controls and canvas surround |
+| Mineral page | `--color-page` | `#f1f0eb` | Page and admin workspace background |
+| Paper surface | `--color-page-soft` | `#faf9f5` | Inputs, admin panels, readable information surfaces |
+| Text | `--color-text` | `#191916` | Primary text on mineral surfaces |
+| Inverse text | `--color-inverse` | `#f8f7f2` | Text on black |
+| Muted text | `--color-muted` | `#716f66` | Body copy and secondary metadata |
+| Subtle text | `--color-subtle` | `#99968c` | Durations and quiet labels |
+| Line | `--color-line` | `#d9d6cc` | Hairline dividers and ring shadows |
+| Strong line | `--color-line-strong` | `#b9b5a9` | Emphasized control boundaries |
+| Signal accent | `--color-accent` | `#c8e33d` | Play, publish, current work, selected element |
+| Accent soft | `--color-accent-soft` | `#eef4c8` | Quiet selected and focus-adjacent surfaces |
+| Accent ink | `--color-accent-ink` | `#191916` | Text/icons inside accent controls |
+| Focus | `--color-focus` | `#6e7a22` | Keyboard focus rings in the accent hue |
+| Status/warm | `--color-amber` | `#a56f12` | Ended status |
+| Status/error | `--color-danger` | `#b23d34` | Playback and form errors |
 
 ### Rules
 
-- Black and white dominate every viewport.
+- Warm black and mineral white dominate every viewport.
 - Accent is a signal only: play, current work, focus, link hover, or active source.
 - Artwork can carry texture, but the interface must not become colorful.
+- Cards use a shadow-as-border stack instead of heavy outlines: ring, 2px ambient lift,
+  and a distant tinted shadow. Dark surfaces use the inverse version of the same stack.
 
 ## 3. Typography
 
@@ -38,16 +53,20 @@ The functional contract remains provider-based audio. Local works, SoundCloud Wi
 
 | Level | Size | Weight | Line Height | Usage |
 | --- | --- | --- | --- | --- |
-| Section/mobile | `clamp(3.6rem, 16vw, 8.4rem)` | 820 | 0.86 | Works, Archive, Index headings |
-| Work title | `clamp(2rem, 10vw, 4.5rem)` | 820 | 0.9 | Main work panels |
-| Body | `0.86rem` to `1rem` | 420 to 560 | 1.32 to 1.55 | Captions and editorial copy |
-| Caption | `0.66rem` to `0.78rem` | 850 to 900 | 1.2 | Kicker, badges, status |
+| Section/mobile | `clamp(3.4rem, 15vw, 8rem)` | 560–620 | 0.86 | Works, Archive, Index headings |
+| Work title | `clamp(2.1rem, 9vw, 4.8rem)` | 580 | 0.88 | Main work panels |
+| Admin title | `clamp(2.25rem, 5vw, 5.5rem)` | 600 | 0.86 | Current admin section |
+| Body | `0.86rem` to `1rem` | 420 to 520 | 1.42 to 1.62 | Captions and editorial copy |
+| UI | `0.75rem` to `0.875rem` | 500 to 600 | 1.2 to 1.45 | Buttons, fields, navigation |
+| Mono caption | `0.66rem` to `0.75rem` | 520 to 600 | 1.2 | Time, count, status, coordinates |
 
 ### Font Stack
 
-- Primary: `Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`
-- One sans-serif family only.
-- Letter spacing stays `0`; hierarchy comes from weight and size contrast.
+- Primary: `"Geist Variable", ui-sans-serif, system-ui, sans-serif`.
+- Technical: `"Geist Mono Variable", ui-monospace, SFMono-Regular, monospace`.
+- Display tracking tightens from `-0.035em` to `-0.06em`; body tracking stays neutral.
+- Numbers, durations, status, counts, and canvas measurements use the technical face with tabular figures.
+- Korean body copy uses `word-break: keep-all` and balanced wrapping to avoid particle and clause orphans.
 
 ## 4. Spacing & Layout
 
@@ -61,7 +80,8 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 | Desktop section padding | `112px 48px` | Wider scan paths |
 | Entry Works | `auto` | First viewport after intro; no separate hero section |
 | Works image stack | data `aspectRatio` + `scale` | Scroll-triggered installation fragments |
-| Desktop content max | `1120px` | Text and work stage |
+| Desktop content max | `1280px` | Text and work stage |
+| Admin content max | `1800px` | Full editing workspace |
 | Bottom player | `88px` to `104px` | Fixed Now Playing clearance |
 
 ### Breakpoints
@@ -69,6 +89,7 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 - `max-width: 560px`: QR/mobile exhibition entry.
 - `min-width: 768px`: sticky Works now-playing column and Archive/Widget split.
 - `min-width: 860px`: existing desktop shell compatibility and larger player sizing.
+- `min-width: 1180px`: full three-zone admin editor and expanded public media stage.
 
 ## 5. Components
 
@@ -119,17 +140,38 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 - **Interaction**: clicking the control or pressing Space toggles the current active source; paused tracks resume through the same provider interface.
 - **Accessibility**: `aria-live="polite"` announces source changes.
 
+### Admin Console
+
+- **Structure**: `/admin` lazy-loads a separate editing shell so the public portfolio does not load admin UI code during normal visits.
+- **Current data mode**: V1 saves a validated local draft in browser `localStorage`; the public site still reads the hardcoded data files until the Supabase backend is connected.
+- **Works editor**: desktop-only Canva-lite workflow with a left asset/upload panel, Mobile/Web preview toggle, fit-to-screen draggable canvas, one responsive work height control, one mobile-first responsive layout per image/text element, deletable work records, directly editable text blocks with a mouse drag handle, and a right inspector for work and element settings.
+- **Archive and Index editing**: release/track records, text records, and contact links use dense form panels rather than portfolio-style media layouts.
+- **Target viewport**: desktop editing only. Small screens keep a basic fallback layout, but QA and future admin design decisions target computer-sized screens.
+- **Guardrails**: allowed layout values, canvas dimensions, canvas rectangles, text styles, status values, release types, and visibility values are schema-validated before a draft can be saved.
+
+### Shared Surface Primitives
+
+- **Studio navigation**: compact rectangular navigation with a visible current state, no pill-only sidebar. Hover lifts contrast; active uses dark fill; focus uses a 2px accent-hue ring.
+- **Media plate**: image-first black surface with a ring shadow, small controlled radius, caption scrim, and an acid current-state edge. Hover affects only actionable or scroll-targeted media.
+- **Control button**: 6px radius, 40px minimum target, 500–600 weight. Primary is dark or acid depending on action risk; tertiary is text-led. Hover changes material, active translates 1px, focus is always visible, disabled reduces contrast without removing the label.
+- **Information panel**: paper surface with ring + ambient + distant shadow. Nested regions separate with hairlines, not additional floating cards.
+- **Field surface**: paper input with shadow-ring boundary, dark text, explicit hover/focus/error/disabled states, and an adjacent label rather than placeholder-only identification.
+- **Metric slate**: dark summary surface with mono figures, a quiet descriptor, and no decorative chart. It supports default, hover-link, loading skeleton, and empty copy states.
+- **Status rail**: persistent, non-modal draft/publish feedback placed beside the primary content; `aria-live` messages do not move the surrounding layout.
+- **Empty and loading states**: skeletons match the panel geometry; empty states explain the first valid action. Errors remain inline and name the failed operation.
+
 ## 6. Motion & Interaction
 
 | Type | Duration | Easing | Usage |
 | --- | --- | --- | --- |
 | Intro dots | `2800ms` loop after delay | `ease-in-out` | Idle state signal after 5 seconds |
 | Intro fade | `900ms`, delayed | `ease` | Blackout to Works |
-| Micro | `140ms` to `160ms` | `ease-out` | Buttons, rows, panel active states |
+| Micro | `160ms` to `220ms` | `cubic-bezier(.22,1,.36,1)` | Buttons, rows, panel active states |
 | Progress | Native React updates | Width transition only | Playback progress |
 
 - Only `transform`, color, opacity, and progress width animate.
-- No decorative motion without state or affordance.
+- No decorative motion without state or affordance. Public work plates may reveal once as
+  they enter the reading flow; admin motion is limited to selection, resize, publish, and navigation feedback.
 - `prefers-reduced-motion: reduce` disables non-essential animation.
 
 ## 7. Depth & Surface
@@ -142,13 +184,17 @@ The surface behaves like a black-box exhibition document: flat, quiet, high cont
 | --- | --- | --- |
 | Blackout | Solid black | Intro and archive surface |
 | Full-bleed media | Grayscale image/video | Main works |
+| Ring | `0 0 0 1px rgb(25 25 22 / 9%)` | Boundaries without changing box geometry |
+| Raised paper | ring + `0 2px 2px rgb(25 25 22 / 4%)` + `0 18px 44px -28px rgb(25 25 22 / 32%)` | Admin panels and player shell |
 | Hairline | `1px solid var(--color-line)` | Dividers and information rows |
 | Signal | Accent border or fill | Current source and play states |
-| Player lift | `0 18px 40px rgb(31 27 26 / 22%)` | Persistent now-playing dock |
+| Player lift | inverse ring + `0 22px 60px rgb(7 7 6 / 36%)` | Persistent now-playing dock |
 
 ### Anti-patterns
 
 - No colorful gradients, orbs, blobs, or decorative SVG art.
-- No nested cards inside cards.
+- No nested card stacks; nested information uses dividers inside one material surface.
 - No emoji icons in UI; use Lucide icons.
 - No visible explanatory tutorial copy except required action hints like `Tap to start` and `Swipe to explore`.
+- No full-pill primary buttons or capsule-only navigation.
+- No raw Inter fallback when Geist assets are available.
