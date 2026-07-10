@@ -16,7 +16,7 @@ const putBlobResultSchema = z.object({
   etag: z.string().min(1),
 })
 
-const handleUploadBodySchema = z.union([
+const handleUploadBodySchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("blob.generate-client-token"),
     payload: z.object({
@@ -32,15 +32,38 @@ const handleUploadBodySchema = z.union([
       tokenPayload: z.string().nullable().optional(),
     }),
   }),
-]) satisfies z.ZodType<HandleUploadBody>
+])
 
-const allowedContentTypes = [
+const allowedContentTypes: string[] = [
   "image/jpeg",
   "image/png",
   "image/webp",
   "image/gif",
   "video/mp4",
-] as const
+]
+
+function parseHandleUploadBody(body: unknown): HandleUploadBody {
+  const parsed = handleUploadBodySchema.parse(body)
+
+  if (parsed.type === "blob.generate-client-token") {
+    return {
+      type: parsed.type,
+      payload: {
+        pathname: parsed.payload.pathname,
+        multipart: parsed.payload.multipart,
+        clientPayload: parsed.payload.clientPayload,
+      },
+    }
+  }
+
+  return {
+    type: parsed.type,
+    payload: {
+      blob: parsed.payload.blob,
+      tokenPayload: parsed.payload.tokenPayload ?? null,
+    },
+  }
+}
 
 function sendJson(response: VercelResponse, status: number, body: Record<string, unknown>): void {
   response.setHeader("Cache-Control", "no-store")
@@ -56,7 +79,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
 
   try {
     const session = await verifyAdminRequest(request.headers, process.env)
-    const body = handleUploadBodySchema.parse(request.body)
+    const body = parseHandleUploadBody(request.body)
     const result = await handleUpload({
       request,
       body,
