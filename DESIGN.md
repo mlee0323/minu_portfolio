@@ -42,7 +42,7 @@ The functional contract remains provider-based audio. Local works, SoundCloud Wi
 ### Rules
 
 - Warm black and mineral white dominate every viewport.
-- Accent is a signal only: play, current work, focus, link hover, or active source.
+- Accent is a signal only: play, focus, link hover, or an active audio source.
 - Artwork can carry texture, but the interface must not become colorful.
 - Cards use a shadow-as-border stack instead of heavy outlines: ring, 2px ambient lift,
   and a distant tinted shadow. Dark surfaces use the inverse version of the same stack.
@@ -87,7 +87,7 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 ### Breakpoints
 
 - `max-width: 560px`: QR/mobile exhibition entry.
-- `min-width: 768px`: sticky Works now-playing column and Archive/Widget split.
+- `min-width: 768px`: wider archive cards and index rows; the public Works canvas remains mobile-sized.
 - `min-width: 860px`: existing desktop shell compatibility and larger player sizing.
 - `min-width: 1180px`: full three-zone admin editor and expanded public media stage.
 
@@ -109,12 +109,12 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 
 ### Main Works Scroll
 
-- **Structure**: black-background, asymmetric image stack using supplied installation images. Recent/current fragments are larger; secondary fragments are smaller and offset left/right.
+- **Structure**: image-only black-background sequence rendered from the same 390px logical canvas and element rectangles as the Admin Mobile Preview.
 - **Entry**: Works is the first visible section after the intro; no standalone hero page and no Works title/subtitle block.
-- **Data**: image source, natural dimensions, `aspectRatio`, `objectPosition`, `align`, and `scale` live in `src/data/siteContent.ts` so crop and placement changes do not require component rewrites.
-- **Interaction**: Intersection Observer detects the centered image fragment and updates sticky Current Work text plus active border.
+- **Data**: the public page reads validated Admin draft content from the same browser when present, otherwise it reads the generated published content. Work canvas height and each image `layout` rectangle are the canonical public placement values.
+- **Responsive rule**: the public canvas scales proportionally down from 390px on narrow screens and stays centered at 390px on wider screens. Desktop never switches Works to a separate composition.
+- **Interaction**: Works has no current-work label, caption overlay, closing caption, or active-image highlight. Images remain the only visible content.
 - **Audio**: the entry local sound remains fixed while scrolling Works during this prototype phase. Scroll-triggered audio switching and crossfade remain V2 Web Audio extension points.
-- **Caption**: Korean closing caption frames the website as a trace of the installation, not the work itself.
 
 ### Archive Carousel
 
@@ -124,9 +124,10 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 - **Interaction**: release and track buttons route to the SoundCloud provider using the official Widget API.
 - **Data**: edit `archiveReleases`; `archiveTracks` remains the flattened compatibility output.
 
-### SoundCloud Widget Panel
+### SoundCloud Transport Host
 
-- **Structure**: official SoundCloud iframe plus synchronized Widget metadata.
+- **Structure**: an off-screen official SoundCloud iframe keeps Widget API playback available to Archive & Sound and the fixed Now Playing bar.
+- **Visibility**: no separate `Embedded listening` panel or duplicate transport controls are visible on the page.
 - **Rules**: REST metadata never drives playback. Private items require SoundCloud secret share URLs.
 
 ### Index & Contact
@@ -143,7 +144,7 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 ### Admin Console
 
 - **Structure**: `/admin` lazy-loads a separate editing shell so the public portfolio does not load admin UI code during normal visits.
-- **Current data mode**: V1 saves a validated local draft in browser `localStorage`; the public site still reads the hardcoded data files until the Supabase backend is connected.
+- **Current data mode**: saving validates and writes the draft to browser `localStorage`, which updates the public site in the same browser. Authenticated production save also publishes the generated content file, so other visitors receive the change after deployment.
 - **Works editor**: desktop-only Canva-lite workflow with a left asset/upload panel, Mobile/Web preview toggle, fit-to-screen draggable canvas, one responsive work height control, one mobile-first responsive layout per image/text element, deletable work records, directly editable text blocks with a mouse drag handle, and a right inspector for work and element settings.
 - **Archive and Index editing**: release/track records, text records, and contact links use dense form panels rather than portfolio-style media layouts.
 - **Target viewport**: desktop editing only. Small screens keep a basic fallback layout, but QA and future admin design decisions target computer-sized screens.
@@ -152,7 +153,7 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 ### Shared Surface Primitives
 
 - **Studio navigation**: compact rectangular navigation with a visible current state, no pill-only sidebar. Hover lifts contrast; active uses dark fill; focus uses a 2px accent-hue ring.
-- **Media plate**: image-first black surface with a ring shadow, small controlled radius, caption scrim, and an acid current-state edge. Hover affects only actionable or scroll-targeted media.
+- **Media plate**: image-only black surface positioned by the Admin Mobile canvas rectangle. Public work media has no caption scrim, hover treatment, or current-state edge.
 - **Control button**: 6px radius, 40px minimum target, 500–600 weight. Primary is dark or acid depending on action risk; tertiary is text-led. Hover changes material, active translates 1px, focus is always visible, disabled reduces contrast without removing the label.
 - **Information panel**: paper surface with ring + ambient + distant shadow. Nested regions separate with hairlines, not additional floating cards.
 - **Field surface**: paper input with shadow-ring boundary, dark text, explicit hover/focus/error/disabled states, and an adjacent label rather than placeholder-only identification.

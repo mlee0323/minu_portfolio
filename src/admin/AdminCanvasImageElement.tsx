@@ -91,7 +91,12 @@ export function AdminCanvasImageElement({
         tabIndex={0}
         onKeyDown={(event) => handleSelectableKey(event, element, onSelectElement)}
       >
-        <img src={image.src} alt={image.alt} draggable={false} />
+        <img
+          src={image.src}
+          alt={image.alt}
+          draggable={false}
+          style={{ objectPosition: image.objectPosition }}
+        />
       </button>
     </Rnd>
   )

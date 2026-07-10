@@ -1,20 +1,19 @@
 import { useEffect, useRef, useState } from "react"
 import { useAudioManager } from "../audio/AudioManagerProvider"
-import { mainWorks } from "../data/publishedSiteContent"
+import type { AudioTrack } from "../audio/types"
 import { introContent } from "../data/siteContent"
 
 type IntroOverlayProps = {
+  readonly introTrack: AudioTrack | undefined
   readonly onComplete: () => void
 }
 
 type IntroPhase = "silent" | "restless" | "prompt" | "confirming"
 
-export function IntroOverlay({ onComplete }: IntroOverlayProps) {
+export function IntroOverlay({ introTrack, onComplete }: IntroOverlayProps) {
   const manager = useAudioManager()
   const [phase, setPhase] = useState<IntroPhase>("silent")
   const timersRef = useRef<number[]>([])
-  const introTrack = mainWorks[0]?.track
-
   useEffect(() => {
     document.documentElement.classList.add("is-intro-active")
     document.body.classList.add("is-intro-active")

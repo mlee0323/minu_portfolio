@@ -1,6 +1,11 @@
-import { contactLinks, indexItems } from "../data/publishedSiteContent"
+import type { ContactLink, IndexItem } from "../data/siteContent"
 
-export function IndexContact() {
+type IndexContactProps = {
+  readonly contactLinks: readonly ContactLink[]
+  readonly indexItems: readonly IndexItem[]
+}
+
+export function IndexContact({ contactLinks, indexItems }: IndexContactProps) {
   return (
     <section className="index-section" id="index">
       <div className="index-section__heading">

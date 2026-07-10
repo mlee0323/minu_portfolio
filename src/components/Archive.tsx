@@ -2,9 +2,12 @@ import { ArrowUpRight, Disc3, ListMusic, Play, Radio } from "lucide-react"
 import { useState } from "react"
 import { useAudioManager, useAudioPlayback } from "../audio/AudioManagerProvider"
 import type { AudioRelease, AudioTrack } from "../audio/types"
-import { archiveReleases } from "../data/publishedSiteContent"
 import { formatDuration } from "../lib/time"
 import { TrackArtwork } from "./TrackArtwork"
+
+type ArchiveProps = {
+  readonly releases: readonly AudioRelease[]
+}
 
 function getReleaseCoverTrack(release: AudioRelease): AudioTrack {
   const firstTrack = release.tracks[0]
@@ -32,7 +35,7 @@ function isCurrentTrack(currentTrack: AudioTrack | null, track: AudioTrack): boo
   )
 }
 
-export function Archive() {
+export function Archive({ releases }: ArchiveProps) {
   const manager = useAudioManager()
   const playback = useAudioPlayback()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -61,7 +64,7 @@ export function Archive() {
       </div>
 
       <ul className="release-carousel" aria-label="Sound archive carousel">
-        {archiveReleases.map((release) => {
+        {releases.map((release) => {
           const firstTrack = release.tracks[0]
           const coverTrack = getReleaseCoverTrack(release)
           const isCurrentRelease =

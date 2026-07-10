@@ -2,6 +2,9 @@ import type {
   AdminArchiveRelease,
   AdminArchiveTrack,
   AdminAudioTrack,
+  AdminContactLink,
+  AdminContent,
+  AdminIndexItem,
   AdminWork,
   AdminWorkImage,
 } from "../admin/adminTypes"
@@ -122,31 +125,60 @@ function toAudioRelease(release: AdminArchiveRelease): AudioRelease {
   }
 }
 
-export const mainWorks: readonly MainWork[] = sortByOrder(
-  publishedAdminContent.works.filter((work) => work.status === "published"),
-).map(toMainWork)
+export type PublishedSiteContent = {
+  readonly works: readonly AdminWork[]
+  readonly mainWorks: readonly MainWork[]
+  readonly archiveReleases: readonly AudioRelease[]
+  readonly archiveTracks: readonly AudioTrack[]
+  readonly indexItems: readonly IndexItem[]
+  readonly contactLinks: readonly ContactLink[]
+}
 
-export const archiveReleases: readonly AudioRelease[] = sortByOrder(
-  publishedAdminContent.archiveReleases.filter((release) => release.status === "published"),
-).map(toAudioRelease)
+function toIndexItem(item: AdminIndexItem): IndexItem {
+  return {
+    year: item.year,
+    title: item.title,
+    role: item.role,
+  }
+}
 
-export const archiveTracks: readonly AudioTrack[] = archiveReleases.flatMap(
-  (release) => release.tracks,
-)
+function toContactLink(link: AdminContactLink): ContactLink {
+  return {
+    label: link.label,
+    href: link.href,
+  }
+}
 
-export const indexItems: readonly IndexItem[] = sortByOrder(
-  publishedAdminContent.indexItems.filter((item) => item.status === "published"),
-).map((item) => ({
-  year: item.year,
-  title: item.title,
-  role: item.role,
-}))
+export function createPublishedSiteContent(content: AdminContent): PublishedSiteContent {
+  const works = sortByOrder(content.works.filter((work) => work.status === "published"))
+  const archiveReleases = sortByOrder(
+    content.archiveReleases.filter((release) => release.status === "published"),
+  ).map(toAudioRelease)
 
-export const contactLinks: readonly ContactLink[] = sortByOrder(
-  publishedAdminContent.contactLinks,
-).map((link) => ({
-  label: link.label,
-  href: link.href,
-}))
+  return {
+    works,
+    mainWorks: works.map(toMainWork),
+    archiveReleases,
+    archiveTracks: archiveReleases.flatMap((release) => release.tracks),
+    indexItems: sortByOrder(content.indexItems.filter((item) => item.status === "published")).map(
+      toIndexItem,
+    ),
+    contactLinks: sortByOrder(content.contactLinks).map(toContactLink),
+  }
+}
+
+const builtPublishedSiteContent = createPublishedSiteContent(publishedAdminContent)
+
+export const publishedWorks = builtPublishedSiteContent.works
+
+export const mainWorks = builtPublishedSiteContent.mainWorks
+
+export const archiveReleases = builtPublishedSiteContent.archiveReleases
+
+export const archiveTracks = builtPublishedSiteContent.archiveTracks
+
+export const indexItems = builtPublishedSiteContent.indexItems
+
+export const contactLinks = builtPublishedSiteContent.contactLinks
 
 export { mainWorksClosingCaption }

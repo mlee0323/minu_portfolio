@@ -2,13 +2,14 @@
 
 ## 1. Decision
 
-Keep the public portfolio exactly as it works today for now. The admin work starts as a separate design track and later replaces the hardcoded content files with database-backed content.
+The current V1 uses a hybrid content flow: validated Admin drafts update the public site in the same browser immediately, while authenticated production saves publish the generated content file and trigger the normal Vercel deployment path.
 
 Current source of truth:
 
-- Main Works: `src/data/siteContent.ts`
-- Local audio: `src/data/localTracks.ts`
-- Archive releases: `src/data/archiveTracks.ts`
+- Published content: `src/data/publishedContent.ts`
+- Same-browser draft: `minu-admin-content:v1` in `localStorage`
+- Public mapping: `src/data/publishedSiteContent.ts`
+- Runtime draft subscription: `src/data/runtimeSiteContent.ts`
 - Media files: `public/images`, `public/audio`
 
 Future source of truth:
@@ -22,11 +23,11 @@ Implemented V1 source of truth:
 
 - `/admin` is available as a separate local draft editor.
 - Drafts are validated with Zod and saved to browser `localStorage`.
-- The public portfolio intentionally does not read the local admin draft yet.
-- Supabase Auth, Postgres, Storage, preview, and publish are the next backend phase.
+- The public portfolio reads the validated local Admin draft when one exists and filters out records whose status is `draft`.
+- Authenticated production saves publish `src/data/publishedContent.ts`; a database-backed content source remains an optional later phase.
 - Admin UX is desktop-focused; phone editing is not a release requirement.
 - Main Works editing uses a Canva-lite builder: left asset upload/add panel, Mobile/Web preview canvas, fit-to-screen zooming, draggable/resizable image and text elements, direct text editing on the canvas, text movement handles, and an inspector for work and element settings.
-- Image and text layout data is stored once per element as a mobile-first responsive layout. Mobile/Web previews are derived from that same layout, so non-developers never edit separate breakpoint positions. Each work stores one responsive canvas height so a single work can become a longer vertical composition without splitting it into multiple works.
+- Image and text layout data is stored once per element as a mobile-first responsive layout. Mobile/Web Admin previews are derived from that same layout, while the public Works section always uses the Mobile preview geometry. Each work stores one responsive canvas height so a single work can become a longer vertical composition without splitting it into multiple works.
 
 ## 2. Goals
 
@@ -152,7 +153,6 @@ Preview:
 - One responsive canvas height control
 - One shared responsive image/text layout across both previews
 - Direct text editing and typography controls
-- Current Work label preview
 - Now Playing preview metadata only
 
 Guardrails:
@@ -225,23 +225,21 @@ Contact fields:
 - URL
 - Sort order
 
-## 6. Public Site Behavior After Admin Migration
+## 6. Public Site Behavior
 
 The public site should preserve the current component contract:
 
-- `MainWorks` still receives a list of work records.
+- `MainWorks` receives published Admin work records and renders only their images on the 390px mobile canvas.
 - `Archive` still receives a list of release records with nested tracks.
 - `NowPlayingBar` still uses the provider-based audio interface.
 - SoundCloud playback still uses Widget API.
 - The intro still starts the fixed entry local audio until a later spec changes it.
 
-Data loading options:
+Implemented loading path:
 
-1. Build-time fetch from Supabase for fastest static pages.
-2. Runtime fetch from Supabase for near-instant admin updates.
-3. Hybrid: build-time public data plus an admin-triggered Vercel redeploy.
-
-Recommended V1: runtime fetch with simple loading and error states. Move to build-time later if performance demands it.
+1. Use a validated local Admin draft when present so same-browser preview is immediate.
+2. Fall back to generated published content.
+3. On authenticated production save, publish the generated content file for the next Vercel deployment.
 
 ## 7. Database Model
 
@@ -555,12 +553,12 @@ Suggested migration order:
 
 - Should admin login use password or magic link?
 - Should uploaded audio be local-only, or should the admin also support SoundCloud for Works?
-- Should drafts have a full preview URL that does not affect the public site?
+- Should a future multi-user editor add a shareable preview URL separate from the same-browser draft preview?
 - Should old media files be retained after records are deleted?
 - Should V1 allow multiple admins, or only one owner account?
 
-## 15. First Build Recommendation
+## 15. Historical Supabase Recommendation
 
-Start with Phase 1 and Phase 2 only.
+The section below is retained as a future database-migration option, not the current implementation path.
 
 Do not migrate the public site immediately. Build the admin against Supabase, seed the current content, and verify that a non-developer can create a realistic Main Work draft. Once that flow feels good, switch the public Works section to Supabase behind a feature flag.
