@@ -2,7 +2,7 @@ import { ArrowUpRight, Disc3, ListMusic, Play, Radio } from "lucide-react"
 import { useState } from "react"
 import { useAudioManager, useAudioPlayback } from "../audio/AudioManagerProvider"
 import type { AudioRelease, AudioTrack } from "../audio/types"
-import { archiveReleases } from "../data/archiveTracks"
+import { archiveReleases } from "../data/publishedSiteContent"
 import { formatDuration } from "../lib/time"
 import { TrackArtwork } from "./TrackArtwork"
 

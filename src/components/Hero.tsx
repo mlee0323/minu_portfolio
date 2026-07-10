@@ -1,7 +1,8 @@
 import { Headphones, Volume2, VolumeX } from "lucide-react"
 import { useState } from "react"
 import { useAudioManager, useAudioPlayback } from "../audio/AudioManagerProvider"
-import { heroContent, mainWorks } from "../data/siteContent"
+import { mainWorks } from "../data/publishedSiteContent"
+import { heroContent } from "../data/siteContent"
 
 type HeroProps = {
   readonly experienceStarted: boolean
@@ -74,9 +75,11 @@ export function Hero({ experienceStarted }: HeroProps) {
       return
     }
 
-    void manager.play({ provider: "local", track: heroTrack }).catch((error: unknown) => {
-      setErrorMessage(error instanceof Error ? error.message : "Could not start local audio")
-    })
+    void manager
+      .play({ provider: heroTrack.provider, track: heroTrack })
+      .catch((error: unknown) => {
+        setErrorMessage(error instanceof Error ? error.message : "Could not start local audio")
+      })
   }
 
   return (

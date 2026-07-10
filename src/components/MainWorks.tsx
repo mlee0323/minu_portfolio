@@ -1,6 +1,6 @@
 import { AudioWaveform, MoveDown } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { mainWorks, mainWorksClosingCaption } from "../data/siteContent"
+import { mainWorks, mainWorksClosingCaption } from "../data/publishedSiteContent"
 import { formatDuration } from "../lib/time"
 
 type MainWorksProps = {

@@ -9,11 +9,11 @@ const contentSecurityPolicy = [
   "form-action 'none'",
   "script-src 'self' https://w.soundcloud.com",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://picsum.photos https://fastly.picsum.photos https://*.sndcdn.com",
-  "media-src 'self' blob: data:",
+  "img-src 'self' data: blob: https://picsum.photos https://fastly.picsum.photos https://*.sndcdn.com https://*.blob.vercel-storage.com",
+  "media-src 'self' blob: data: https://*.blob.vercel-storage.com",
   "frame-src https://w.soundcloud.com",
   "child-src https://w.soundcloud.com",
-  "connect-src 'self' http://127.0.0.1:* ws://127.0.0.1:* http://localhost:* ws://localhost:* https://api.soundcloud.com https://*.soundcloud.com https://*.sndcdn.com",
+  "connect-src 'self' http://127.0.0.1:* ws://127.0.0.1:* http://localhost:* ws://localhost:* https://api.soundcloud.com https://*.soundcloud.com https://*.sndcdn.com https://blob.vercel-storage.com https://*.blob.vercel-storage.com",
   "font-src 'self' data:",
   "manifest-src 'self'",
 ].join("; ")
@@ -53,7 +53,10 @@ const contentSecurityPolicyMetaPlugin = {
   },
 } satisfies Plugin
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  define: {
+    "process.env.NODE_ENV": JSON.stringify(mode === "production" ? "production" : "development"),
+  },
   plugins: [react(), contentSecurityPolicyMetaPlugin],
   preview: {
     headers: securityHeaders,
@@ -61,4 +64,4 @@ export default defineConfig({
   server: {
     headers: developmentSecurityHeaders,
   },
-})
+}))

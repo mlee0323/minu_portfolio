@@ -1264,13 +1264,16 @@ img {
 }
 
 .intro-overlay--confirming .intro-overlay__prompt {
+  visibility: hidden;
   opacity: 0;
   transform: translateY(-4px);
+  transition: none;
 }
 
 .intro-overlay--confirming .intro-overlay__headphones {
   opacity: 1;
   transform: translate(-50%, -50%);
+  transition-delay: 160ms;
 }
 
 .hero-section {
