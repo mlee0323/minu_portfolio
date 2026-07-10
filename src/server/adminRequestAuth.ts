@@ -5,7 +5,7 @@ import {
   cloudflareAccessJwtHeader,
   readCloudflareAccessConfig,
   verifyCloudflareAccessJwt,
-} from "./cloudflareAccess"
+} from "./cloudflareAccess.ts"
 
 export type AdminRequestSession = {
   readonly email: string

@@ -81,13 +81,13 @@ export function AdminCanvasTextElement({
   return (
     <Rnd
       bounds="parent"
-      cancel={selected ? ".admin-canvas-copy-input" : undefined}
+      {...(selected ? { cancel: ".admin-canvas-copy-input" } : {})}
       className={
         selected
           ? "admin-canvas-element admin-canvas-text is-selected"
           : "admin-canvas-element admin-canvas-text"
       }
-      dragHandleClassName={selected ? "admin-canvas-drag-handle" : undefined}
+      {...(selected ? { dragHandleClassName: "admin-canvas-drag-handle" } : {})}
       position={{ x: rect.x, y: rect.y }}
       scale={canvasScale}
       size={{ width: rect.width, height: rect.height }}

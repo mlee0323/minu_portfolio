@@ -6,14 +6,14 @@ import {
   cloudflareAccessJwtHeader,
   readCloudflareAccessConfig,
   verifyCloudflareAccessJwt,
-} from "../../src/server/cloudflareAccess"
+} from "../../src/server/cloudflareAccess.ts"
 
 function headerValue(value: string | readonly string[] | undefined): string {
   if (Array.isArray(value)) {
     return value[0] ?? ""
   }
 
-  return value ?? ""
+  return typeof value === "string" ? value : ""
 }
 
 function sendJson(

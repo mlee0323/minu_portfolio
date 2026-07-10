@@ -59,15 +59,15 @@ export function readGitHubPublishConfig(
 ): GitHubPublishConfig {
   return {
     ...splitRepository(requiredEnv("GITHUB_REPOSITORY", env)),
-    branch: env.GITHUB_BRANCH?.trim() || "main",
-    path: env.GITHUB_PUBLISHED_CONTENT_PATH?.trim() || defaultPath,
+    branch: env["GITHUB_BRANCH"]?.trim() || "main",
+    path: env["GITHUB_PUBLISHED_CONTENT_PATH"]?.trim() || defaultPath,
     token: requiredEnv("GITHUB_CONTENTS_TOKEN", env),
   }
 }
 
 function createGitHubClient(config: GitHubPublishConfig): typeof ky {
   return ky.create({
-    prefixUrl: "https://api.github.com",
+    prefix: "https://api.github.com",
     headers: {
       Accept: "application/vnd.github+json",
       Authorization: `Bearer ${config.token}`,

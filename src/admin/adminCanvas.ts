@@ -8,10 +8,15 @@ import type {
   ImageScale,
 } from "./adminTypes"
 
-export const adminCanvasDimensions = {
+export type CanvasDimensions = {
+  readonly width: number
+  readonly height: number
+}
+
+export const adminCanvasDimensions: Record<AdminCanvasViewport, CanvasDimensions> = {
   mobile: { width: 390, height: 720 },
   desktop: { width: 760, height: 520 },
-} as const
+}
 
 export const adminCanvasHeightLimits = {
   min: 520,
@@ -39,10 +44,7 @@ function layoutScaleFor(viewport: AdminCanvasViewport): number {
   return canvasWidthFor(viewport) / adminCanvasLayoutBaseWidth
 }
 
-function baseDimensionsFor(height: number): {
-  readonly width: number
-  readonly height: number
-} {
+function baseDimensionsFor(height: number): CanvasDimensions {
   return {
     width: adminCanvasLayoutBaseWidth,
     height: clampCanvasHeight(height),
@@ -71,10 +73,7 @@ export function updateWorkCanvasHeight(height: number): AdminWorkCanvas {
 export function getWorkCanvasDimensions(
   work: AdminWork,
   viewport: AdminCanvasViewport,
-): {
-  readonly width: number
-  readonly height: number
-} {
+): CanvasDimensions {
   return {
     width: canvasWidthFor(viewport),
     height: clampCanvasHeight(work.canvas.height),

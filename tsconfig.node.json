@@ -19,11 +19,13 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
     "types": ["node"],
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true
   },
-  "include": ["vite.config.ts", "vitest.config.ts", "api/**/*.ts", "src/server/**/*.ts"]
+  "include": ["vite.config.ts", "vitest.config.ts", "api/**/*.ts", "src/server/**/*.ts"],
+  "exclude": ["**/*.test.ts", "**/*.test.tsx"]
 }

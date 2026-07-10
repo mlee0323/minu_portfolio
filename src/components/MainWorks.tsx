@@ -1,10 +1,26 @@
 import { AudioWaveform, MoveDown } from "lucide-react"
+import type { CSSProperties } from "react"
 import { useEffect, useRef, useState } from "react"
 import { mainWorks, mainWorksClosingCaption } from "../data/publishedSiteContent"
 import { formatDuration } from "../lib/time"
 
 type MainWorksProps = {
   readonly experienceStarted: boolean
+}
+
+type WorkPanelStyle = CSSProperties & {
+  readonly "--work-aspect": string
+  readonly "--work-position": string
+}
+
+function workPanelStyleFor(image: {
+  readonly aspectRatio: string
+  readonly objectPosition: string
+}): WorkPanelStyle {
+  return {
+    "--work-aspect": image.aspectRatio,
+    "--work-position": image.objectPosition,
+  }
 }
 
 export function MainWorks({ experienceStarted }: MainWorksProps) {
@@ -96,10 +112,7 @@ export function MainWorks({ experienceStarted }: MainWorksProps) {
                       }
                       cardRefs.current.set(image.id, element)
                     }}
-                    style={{
-                      "--work-aspect": image.aspectRatio,
-                      "--work-position": image.objectPosition,
-                    }}
+                    style={workPanelStyleFor(image)}
                   >
                     <img
                       src={image.src}

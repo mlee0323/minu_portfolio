@@ -5,7 +5,7 @@ import {
   messageForAdminRequestError,
   statusForAdminRequestError,
   verifyAdminRequest,
-} from "../../src/server/adminRequestAuth"
+} from "../../src/server/adminRequestAuth.ts"
 
 const putBlobResultSchema = z.object({
   url: z.string().min(1),

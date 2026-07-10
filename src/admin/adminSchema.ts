@@ -17,7 +17,7 @@ import {
   imageScaleOptions,
   textAlignOptions,
   textWeightOptions,
-} from "./adminTypes"
+} from "./adminTypes.ts"
 
 const providerSchema = z.enum(["local", "soundcloud", "spotify"])
 const statusSchema = z.enum(adminStatusOptions)
@@ -154,34 +154,34 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function canvasHeightFrom(value: unknown): number | null {
-  return isRecord(value) && typeof value.height === "number" ? value.height : null
+  return isRecord(value) && typeof value["height"] === "number" ? value["height"] : null
 }
 
 function rectFrom(value: unknown): AdminCanvasRect | null {
   if (
     !isRecord(value) ||
-    typeof value.x !== "number" ||
-    typeof value.y !== "number" ||
-    typeof value.width !== "number" ||
-    typeof value.height !== "number"
+    typeof value["x"] !== "number" ||
+    typeof value["y"] !== "number" ||
+    typeof value["width"] !== "number" ||
+    typeof value["height"] !== "number"
   ) {
     return null
   }
 
   return {
-    x: value.x,
-    y: value.y,
-    width: value.width,
-    height: value.height,
+    x: value["x"],
+    y: value["y"],
+    width: value["width"],
+    height: value["height"],
   }
 }
 
 function normalizeLegacyWorkCanvas(canvas: unknown): unknown {
-  if (!isRecord(canvas) || typeof canvas.height === "number") {
+  if (!isRecord(canvas) || typeof canvas["height"] === "number") {
     return canvas
   }
 
-  const migratedHeight = canvasHeightFrom(canvas.mobile) ?? canvasHeightFrom(canvas.desktop)
+  const migratedHeight = canvasHeightFrom(canvas["mobile"]) ?? canvasHeightFrom(canvas["desktop"])
 
   return migratedHeight === null ? canvas : { height: migratedHeight }
 }
@@ -191,13 +191,13 @@ function normalizeLegacyLayout(layouts: unknown): AdminCanvasRect | null {
     return null
   }
 
-  const mobile = rectFrom(layouts.mobile)
+  const mobile = rectFrom(layouts["mobile"])
 
   if (mobile !== null) {
     return mobile
   }
 
-  const desktop = rectFrom(layouts.desktop)
+  const desktop = rectFrom(layouts["desktop"])
 
   if (desktop === null) {
     return null
@@ -212,11 +212,11 @@ function normalizeLegacyLayout(layouts: unknown): AdminCanvasRect | null {
 }
 
 function normalizeElementLayout(element: Record<string, unknown>): Record<string, unknown> {
-  if (isRecord(element.layout)) {
+  if (isRecord(element["layout"])) {
     return element
   }
 
-  const layout = normalizeLegacyLayout(element.layouts)
+  const layout = normalizeLegacyLayout(element["layouts"])
 
   return layout === null ? element : { ...element, layout }
 }
@@ -224,26 +224,26 @@ function normalizeElementLayout(element: Record<string, unknown>): Record<string
 function normalizeWork(work: Record<string, unknown>): Record<string, unknown> {
   return {
     ...work,
-    canvas: normalizeLegacyWorkCanvas(work.canvas),
-    images: Array.isArray(work.images)
-      ? work.images.map((image) => (isRecord(image) ? normalizeElementLayout(image) : image))
-      : work.images,
-    textElements: Array.isArray(work.textElements)
-      ? work.textElements.map((textElement) =>
+    canvas: normalizeLegacyWorkCanvas(work["canvas"]),
+    images: Array.isArray(work["images"])
+      ? work["images"].map((image) => (isRecord(image) ? normalizeElementLayout(image) : image))
+      : work["images"],
+    textElements: Array.isArray(work["textElements"])
+      ? work["textElements"].map((textElement) =>
           isRecord(textElement) ? normalizeElementLayout(textElement) : textElement,
         )
-      : work.textElements,
+      : work["textElements"],
   }
 }
 
 function normalizeAdminContentInput(input: unknown): unknown {
-  if (!isRecord(input) || !Array.isArray(input.works)) {
+  if (!isRecord(input) || !Array.isArray(input["works"])) {
     return input
   }
 
   return {
     ...input,
-    works: input.works.map((work) => (isRecord(work) ? normalizeWork(work) : work)),
+    works: input["works"].map((work) => (isRecord(work) ? normalizeWork(work) : work)),
   }
 }
 

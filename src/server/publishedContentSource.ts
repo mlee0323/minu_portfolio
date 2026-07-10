@@ -1,4 +1,4 @@
-import type { AdminContent } from "../admin/adminTypes"
+import type { AdminContent } from "../admin/adminTypes.ts"
 
 export const publishedContentFilePath = "src/data/publishedContent.ts"
 

@@ -20,12 +20,14 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
+    "types": ["vite/client"],
     "noEmit": true,
     "jsx": "react-jsx"
   },
   "include": ["src"],
-  "exclude": ["src/server"]
+  "exclude": ["src/server", "**/*.test.ts", "**/*.test.tsx"]
 }

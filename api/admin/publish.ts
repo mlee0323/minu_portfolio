@@ -1,20 +1,20 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node"
 import { z } from "zod"
-import { AdminContentSchema } from "../../src/admin/adminSchema"
+import { AdminContentSchema } from "../../src/admin/adminSchema.ts"
 import {
   messageForAdminRequestError,
   statusForAdminRequestError,
   verifyAdminRequest,
-} from "../../src/server/adminRequestAuth"
+} from "../../src/server/adminRequestAuth.ts"
 import {
   GitHubPublishConfigError,
   publishFileToGitHub,
   readGitHubPublishConfig,
-} from "../../src/server/githubPublish"
+} from "../../src/server/githubPublish.ts"
 import {
   formatPublishedContentModule,
   publishedContentFilePath,
-} from "../../src/server/publishedContentSource"
+} from "../../src/server/publishedContentSource.ts"
 
 const publishRequestSchema = z.object({
   content: AdminContentSchema,
