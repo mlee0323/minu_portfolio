@@ -62,8 +62,8 @@ export const publishedAdminContent = {
           "scale": "large",
           "sortOrder": 1,
           "layout": {
-            "x": 50,
-            "y": 224,
+            "x": 44,
+            "y": 367,
             "width": 310,
             "height": 138
           }
