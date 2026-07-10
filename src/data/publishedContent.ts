@@ -44,8 +44,8 @@ export const publishedAdminContent = {
           "scale": "hero",
           "sortOrder": 0,
           "layout": {
-            "x": 21,
-            "y": 93,
+            "x": 30,
+            "y": 88,
             "width": 340,
             "height": 240
           }
