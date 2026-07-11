@@ -180,10 +180,10 @@ export const publishedAdminContent = {
           "scale": "medium",
           "sortOrder": 0,
           "layout": {
-            "x": 93,
-            "y": 396,
-            "width": 201,
-            "height": 280
+            "x": 125,
+            "y": 495,
+            "width": 135,
+            "height": 188
           }
         },
         {
