@@ -44,10 +44,10 @@ export const publishedAdminContent = {
           "scale": "hero",
           "sortOrder": 0,
           "layout": {
-            "x": 30,
-            "y": 88,
-            "width": 340,
-            "height": 240
+            "x": 0,
+            "y": 70,
+            "width": 390,
+            "height": 275
           }
         },
         {
@@ -62,10 +62,10 @@ export const publishedAdminContent = {
           "scale": "large",
           "sortOrder": 1,
           "layout": {
-            "x": 44,
-            "y": 367,
-            "width": 310,
-            "height": 138
+            "x": 163,
+            "y": 351,
+            "width": 227,
+            "height": 101
           }
         },
         {
@@ -297,13 +297,13 @@ export const publishedAdminContent = {
   "archiveReleases": [
     {
       "id": "release-soulhack",
-      "title": "Soulhack",
-      "artist": "Forss",
-      "type": "album",
+      "title": "Sidechain",
+      "artist": "L",
+      "type": "single",
       "provider": "soundcloud",
       "artworkUrl": "https://i1.sndcdn.com/artworks-000067273270-uinyvw-t500x500.jpg",
-      "year": "2003",
-      "soundCloudPlaylistUrl": "https://soundcloud.com/forss/sets/soulhack",
+      "year": "2026",
+      "soundCloudPlaylistUrl": "https://soundcloud.com/syawla_nnuu/sidechain-wav?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       "visibility": "public",
       "description": "Album-style SoundCloud set. Each row can start a specific track by index.",
       "status": "published",
@@ -311,14 +311,14 @@ export const publishedAdminContent = {
       "tracks": [
         {
           "id": "archive-soulhack-title-track",
-          "title": "Soulhack",
-          "artist": "Forss",
+          "title": "Sidechain",
+          "artist": "L",
           "artworkUrl": "https://i1.sndcdn.com/artworks-000067273301-we78rq-large.jpg",
           "durationMs": 274459,
           "soundCloudUrl": "https://soundcloud.com/forss/soulhack",
           "soundCloudPlaylistUrl": "https://soundcloud.com/forss/sets/soulhack",
           "playlistIndex": 1,
-          "trackNumber": 2,
+          "trackNumber": 1,
           "visibility": "public",
           "description": "Title cut from the public Soulhack SoundCloud set.",
           "sortOrder": 0
@@ -401,7 +401,7 @@ export const publishedAdminContent = {
   "indexItems": [
     {
       "id": "index-2025-0",
-      "year": "2025",
+      "year": "2026",
       "title": "[전시 프로젝트명]",
       "role": "사운드 디렉팅 / 설치작가 콜라보레이션",
       "status": "published",
