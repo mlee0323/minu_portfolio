@@ -366,7 +366,7 @@ export const publishedAdminContent = {
       "type": "ep",
       "provider": "soundcloud",
       "artworkUrl": "https://i1.sndcdn.com/artworks-000067273270-uinyvw-t500x500.jpg",
-      "year": "2026",
+      "year": "2025",
       "soundCloudPlaylistUrl": "https://soundcloud.com/syawla_nnuu/sets/the-point?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       "visibility": "public",
       "description": "A journey of standing at the threshold of change-\nIn the faint turbulence before transformation,\nwe find direction, move through the tension just before boiling, and finally face ourselves.\nYet the end is not an ending, but an And.\nThrough this flow, the EP unfolds shifting emotions in ambient textures —\ncapturing the quiet movement toward possibility.",
@@ -467,23 +467,23 @@ export const publishedAdminContent = {
   "indexItems": [
     {
       "id": "index-2025-0",
-      "year": "2026",
-      "title": "[전시 프로젝트명]",
-      "role": "사운드 디렉팅 / 설치작가 콜라보레이션",
+      "year": "2025",
+      "title": "The Point - KNU Dept. of Design Convergence Graduation Exhibition",
+      "role": "Sound director ",
       "status": "published",
       "sortOrder": 0
     },
     {
       "id": "index-2024-1",
-      "year": "2024",
-      "title": "[인터랙티브 미디어 프로젝트]",
+      "year": "2025",
+      "title": "Envelope",
       "role": "전체 공간 사운드 디자인 및 오디오 프로듀싱",
       "status": "published",
       "sortOrder": 1
     },
     {
       "id": "index-2024-2",
-      "year": "2024",
+      "year": "2026",
       "title": "site-specific audio study",
       "role": "composition / field recording / mix",
       "status": "published",
