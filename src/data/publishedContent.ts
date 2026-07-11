@@ -45,7 +45,7 @@ export const publishedAdminContent = {
           "sortOrder": 0,
           "layout": {
             "x": 0,
-            "y": 70,
+            "y": 4,
             "width": 390,
             "height": 275
           }
@@ -62,10 +62,10 @@ export const publishedAdminContent = {
           "scale": "large",
           "sortOrder": 1,
           "layout": {
-            "x": 118,
-            "y": 364,
-            "width": 272,
-            "height": 121
+            "x": 0,
+            "y": 319,
+            "width": 390,
+            "height": 173
           }
         },
         {
@@ -80,8 +80,8 @@ export const publishedAdminContent = {
           "scale": "medium",
           "sortOrder": 2,
           "layout": {
-            "x": 65,
-            "y": 518,
+            "x": 70,
+            "y": 533,
             "width": 250,
             "height": 162
           }
@@ -130,8 +130,8 @@ export const publishedAdminContent = {
           "scale": "large",
           "sortOrder": 0,
           "layout": {
-            "x": 24,
-            "y": 56,
+            "x": 40,
+            "y": 61,
             "width": 310,
             "height": 334
           }
@@ -148,8 +148,8 @@ export const publishedAdminContent = {
           "scale": "medium",
           "sortOrder": 1,
           "layout": {
-            "x": 178,
-            "y": 223,
+            "x": 169,
+            "y": 434,
             "width": 178,
             "height": 241
           }
@@ -198,10 +198,10 @@ export const publishedAdminContent = {
           "scale": "medium",
           "sortOrder": 0,
           "layout": {
-            "x": 228,
-            "y": 263,
-            "width": 111,
-            "height": 155
+            "x": 93,
+            "y": 396,
+            "width": 201,
+            "height": 280
           }
         },
         {
@@ -216,10 +216,10 @@ export const publishedAdminContent = {
           "scale": "small",
           "sortOrder": 1,
           "layout": {
-            "x": 44,
-            "y": 263,
-            "width": 153,
-            "height": 155
+            "x": 45,
+            "y": 51,
+            "width": 298,
+            "height": 302
           }
         }
       ],
@@ -266,10 +266,10 @@ export const publishedAdminContent = {
           "scale": "medium",
           "sortOrder": 0,
           "layout": {
-            "x": 68,
-            "y": 97,
-            "width": 250,
-            "height": 336
+            "x": 15,
+            "y": 15,
+            "width": 361,
+            "height": 485
           }
         },
         {
@@ -284,10 +284,10 @@ export const publishedAdminContent = {
           "scale": "large",
           "sortOrder": 1,
           "layout": {
-            "x": 68,
-            "y": 439,
-            "width": 250,
-            "height": 125
+            "x": 16,
+            "y": 499,
+            "width": 359,
+            "height": 180
           }
         }
       ],
