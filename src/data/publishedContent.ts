@@ -18,18 +18,18 @@ export const publishedAdminContent = {
         "height": 720
       },
       "audio": {
-        "id": "archive-soulhack-title-track",
-        "title": "Soulhack",
-        "artist": "Forss",
+        "id": "archive-track-f2d05936-27c4-4748-adea-75ff4d8de2d1",
+        "title": "Sidechain",
+        "artist": "L",
         "provider": "soundcloud",
-        "artworkUrl": "https://i1.sndcdn.com/artworks-000067273301-we78rq-large.jpg",
-        "durationMs": 274459,
+        "artworkUrl": "/images/works/eye-stroll-telescope.jpg",
+        "durationMs": 0,
         "localAudioUrl": "",
-        "soundCloudUrl": "https://soundcloud.com/forss/soulhack",
-        "soundCloudPlaylistUrl": "https://soundcloud.com/forss/sets/soulhack",
-        "playlistIndex": 1,
+        "soundCloudUrl": "https://soundcloud.com/syawla_nnuu/sidechain-wav?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+        "soundCloudPlaylistUrl": "",
+        "playlistIndex": null,
         "visibility": "public",
-        "description": "Title cut from the public Soulhack SoundCloud set."
+        "description": ""
       },
       "images": [
         {
@@ -62,10 +62,10 @@ export const publishedAdminContent = {
           "scale": "large",
           "sortOrder": 1,
           "layout": {
-            "x": 166,
+            "x": 118,
             "y": 364,
-            "width": 224,
-            "height": 100
+            "width": 272,
+            "height": 121
           }
         },
         {
@@ -80,8 +80,8 @@ export const publishedAdminContent = {
           "scale": "medium",
           "sortOrder": 2,
           "layout": {
-            "x": 22,
-            "y": 558,
+            "x": 65,
+            "y": 518,
             "width": 250,
             "height": 162
           }
@@ -148,10 +148,10 @@ export const publishedAdminContent = {
           "scale": "medium",
           "sortOrder": 1,
           "layout": {
-            "x": 116,
-            "y": 188,
-            "width": 250,
-            "height": 338
+            "x": 178,
+            "y": 223,
+            "width": 178,
+            "height": 241
           }
         }
       ],
@@ -198,10 +198,10 @@ export const publishedAdminContent = {
           "scale": "medium",
           "sortOrder": 0,
           "layout": {
-            "x": 70,
-            "y": 56,
-            "width": 250,
-            "height": 352
+            "x": 228,
+            "y": 263,
+            "width": 111,
+            "height": 155
           }
         },
         {
@@ -216,10 +216,10 @@ export const publishedAdminContent = {
           "scale": "small",
           "sortOrder": 1,
           "layout": {
-            "x": 24,
-            "y": 188,
-            "width": 180,
-            "height": 183
+            "x": 44,
+            "y": 263,
+            "width": 153,
+            "height": 155
           }
         }
       ],
@@ -266,8 +266,8 @@ export const publishedAdminContent = {
           "scale": "medium",
           "sortOrder": 0,
           "layout": {
-            "x": 70,
-            "y": 56,
+            "x": 68,
+            "y": 97,
             "width": 250,
             "height": 336
           }
@@ -284,10 +284,10 @@ export const publishedAdminContent = {
           "scale": "large",
           "sortOrder": 1,
           "layout": {
-            "x": 56,
-            "y": 188,
-            "width": 310,
-            "height": 155
+            "x": 68,
+            "y": 439,
+            "width": 250,
+            "height": 125
           }
         }
       ],
