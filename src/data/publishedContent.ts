@@ -249,27 +249,9 @@ export const publishedAdminContent = {
           "sortOrder": 0,
           "layout": {
             "x": 15,
-            "y": 15,
+            "y": 110,
             "width": 361,
             "height": 485
-          }
-        },
-        {
-          "id": "eye-stroll-camera-installation",
-          "src": "/images/works/eye-stroll-camera-installation.jpg",
-          "alt": "Camera tripod and framed suspended object installation in a gallery",
-          "width": 1113,
-          "height": 558,
-          "aspectRatio": "1113 / 558",
-          "objectPosition": "center",
-          "align": "right",
-          "scale": "large",
-          "sortOrder": 1,
-          "layout": {
-            "x": 16,
-            "y": 499,
-            "width": 359,
-            "height": 180
           }
         }
       ],
@@ -320,6 +302,56 @@ export const publishedAdminContent = {
             "y": 223,
             "width": 390,
             "height": 260
+          }
+        }
+      ],
+      "textElements": []
+    },
+    {
+      "id": "work-9e34d837-6592-411b-b264-c97afc0c89cd",
+      "title": "Untitled Work",
+      "artist": "Minu",
+      "year": "",
+      "medium": "",
+      "location": "",
+      "caption": "",
+      "status": "draft",
+      "isEntry": false,
+      "sortOrder": 5,
+      "canvas": {
+        "height": 720
+      },
+      "audio": {
+        "id": "audio-df792746-2e4b-4eff-981f-da5cca71d8b2",
+        "title": "Untitled Work",
+        "artist": "Minu",
+        "provider": "local",
+        "artworkUrl": "",
+        "durationMs": 0,
+        "localAudioUrl": "",
+        "soundCloudUrl": "",
+        "soundCloudPlaylistUrl": "",
+        "playlistIndex": null,
+        "visibility": "public",
+        "description": ""
+      },
+      "images": [
+        {
+          "id": "image-76cfd693-de2b-4129-acb3-f8f9196a414b",
+          "src": "/images/works/eye-stroll-camera-installation.jpg",
+          "alt": "Installation image",
+          "width": 1200,
+          "height": 800,
+          "aspectRatio": "1200 / 800",
+          "objectPosition": "center",
+          "align": "center",
+          "scale": "medium",
+          "sortOrder": 0,
+          "layout": {
+            "x": 68,
+            "y": 260,
+            "width": 250,
+            "height": 167
           }
         }
       ],
