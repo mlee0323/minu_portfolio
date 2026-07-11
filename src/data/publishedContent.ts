@@ -62,10 +62,10 @@ export const publishedAdminContent = {
           "scale": "large",
           "sortOrder": 1,
           "layout": {
-            "x": 0,
-            "y": 351,
-            "width": 390,
-            "height": 174
+            "x": 166,
+            "y": 364,
+            "width": 224,
+            "height": 100
           }
         },
         {
