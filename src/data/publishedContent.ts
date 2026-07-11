@@ -476,16 +476,16 @@ export const publishedAdminContent = {
     {
       "id": "index-2024-1",
       "year": "2025",
-      "title": "Envelope",
-      "role": "전체 공간 사운드 디자인 및 오디오 프로듀싱",
+      "title": "Envelope - Sydney Univ. ADP Gradudation Show ",
+      "role": "Spatial Sound Designer",
       "status": "published",
       "sortOrder": 1
     },
     {
       "id": "index-2024-2",
       "year": "2026",
-      "title": "site-specific audio study",
-      "role": "composition / field recording / mix",
+      "title": "Sidechain - Tama Art University Selected Graduation Exhibition",
+      "role": "Sound Designer",
       "status": "published",
       "sortOrder": 2
     }
