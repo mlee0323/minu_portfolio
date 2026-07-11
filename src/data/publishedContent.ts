@@ -429,15 +429,21 @@ export const publishedAdminContent = {
   "contactLinks": [
     {
       "id": "contact-0",
-      "label": "hello@minu.audio",
-      "href": "mailto:hello@minu.audio",
+      "label": "Email",
+      "href": "llsyawla@gmail.com",
       "sortOrder": 0
     },
     {
       "id": "contact-1",
-      "label": "instagram",
+      "label": "Instagram",
       "href": "https://www.instagram.com/",
       "sortOrder": 1
+    },
+    {
+      "id": "contact-ed69f9a4-bb08-40fd-a9c7-f485ab5f5466",
+      "label": "Souncloud",
+      "href": "https://soundcloud.com/syawla_nnuu",
+      "sortOrder": 2
     }
   ]
 } satisfies AdminContent
