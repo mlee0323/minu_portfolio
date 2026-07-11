@@ -45,7 +45,7 @@ export const publishedAdminContent = {
           "sortOrder": 0,
           "layout": {
             "x": 0,
-            "y": 4,
+            "y": 97,
             "width": 390,
             "height": 275
           }
@@ -63,7 +63,7 @@ export const publishedAdminContent = {
           "sortOrder": 1,
           "layout": {
             "x": 0,
-            "y": 319,
+            "y": 378,
             "width": 390,
             "height": 173
           }
@@ -81,7 +81,7 @@ export const publishedAdminContent = {
           "sortOrder": 2,
           "layout": {
             "x": 70,
-            "y": 533,
+            "y": 558,
             "width": 250,
             "height": 162
           }
