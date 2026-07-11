@@ -45,7 +45,7 @@ export const publishedAdminContent = {
           "sortOrder": 0,
           "layout": {
             "x": 0,
-            "y": 97,
+            "y": 105,
             "width": 390,
             "height": 275
           }
@@ -63,27 +63,9 @@ export const publishedAdminContent = {
           "sortOrder": 1,
           "layout": {
             "x": 0,
-            "y": 378,
+            "y": 454,
             "width": 390,
             "height": 173
-          }
-        },
-        {
-          "id": "eye-stroll-viewer",
-          "src": "/images/works/eye-stroll-viewer.jpg",
-          "alt": "Viewer looking toward a small eye aperture in a white panel",
-          "width": 378,
-          "height": 245,
-          "aspectRatio": "378 / 245",
-          "objectPosition": "center",
-          "align": "left",
-          "scale": "medium",
-          "sortOrder": 2,
-          "layout": {
-            "x": 70,
-            "y": 558,
-            "width": 250,
-            "height": 162
           }
         }
       ],
@@ -288,6 +270,56 @@ export const publishedAdminContent = {
             "y": 499,
             "width": 359,
             "height": 180
+          }
+        }
+      ],
+      "textElements": []
+    },
+    {
+      "id": "work-3f7890b0-d591-4146-a094-4bfb2c928784",
+      "title": "Untitled Work",
+      "artist": "Minu",
+      "year": "",
+      "medium": "",
+      "location": "",
+      "caption": "",
+      "status": "draft",
+      "isEntry": false,
+      "sortOrder": 4,
+      "canvas": {
+        "height": 720
+      },
+      "audio": {
+        "id": "audio-36dc659b-2549-4936-8a3f-3c27f39b6c70",
+        "title": "Untitled Work",
+        "artist": "Minu",
+        "provider": "local",
+        "artworkUrl": "",
+        "durationMs": 0,
+        "localAudioUrl": "",
+        "soundCloudUrl": "",
+        "soundCloudPlaylistUrl": "",
+        "playlistIndex": null,
+        "visibility": "public",
+        "description": ""
+      },
+      "images": [
+        {
+          "id": "image-4ee28ebf-3a11-444f-a70d-4b0888b83517",
+          "src": "/images/works/eye-stroll-viewer.jpg",
+          "alt": "Installation image",
+          "width": 1200,
+          "height": 800,
+          "aspectRatio": "1200 / 800",
+          "objectPosition": "center",
+          "align": "center",
+          "scale": "medium",
+          "sortOrder": 0,
+          "layout": {
+            "x": 0,
+            "y": 223,
+            "width": 390,
+            "height": 260
           }
         }
       ],
