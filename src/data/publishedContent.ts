@@ -112,10 +112,10 @@ export const publishedAdminContent = {
           "scale": "large",
           "sortOrder": 0,
           "layout": {
-            "x": 40,
-            "y": 61,
-            "width": 310,
-            "height": 334
+            "x": 107,
+            "y": 168,
+            "width": 166,
+            "height": 179
           }
         },
         {
@@ -130,10 +130,10 @@ export const publishedAdminContent = {
           "scale": "medium",
           "sortOrder": 1,
           "layout": {
-            "x": 169,
-            "y": 434,
-            "width": 178,
-            "height": 241
+            "x": 108,
+            "y": 356,
+            "width": 236,
+            "height": 320
           }
         }
       ],
