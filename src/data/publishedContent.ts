@@ -468,7 +468,7 @@ export const publishedAdminContent = {
     {
       "id": "index-2025-0",
       "year": "2025",
-      "title": "The Point - Kongju Univ. Dept. of Design Convergence  Graduation Exhibition",
+      "title": "Kongju Univ. Dept. of Design Convergence  Graduation Exhibition",
       "role": "Sound director ",
       "status": "published",
       "sortOrder": 0
@@ -476,7 +476,7 @@ export const publishedAdminContent = {
     {
       "id": "index-2024-1",
       "year": "2025",
-      "title": "Envelope - Sydney Univ. ADP Gradudation Show ",
+      "title": "Sydney Univ.  Master of Architecture ADP Gradudation Show ",
       "role": "Spatial Sound Designer",
       "status": "published",
       "sortOrder": 1
@@ -484,7 +484,7 @@ export const publishedAdminContent = {
     {
       "id": "index-2024-2",
       "year": "2026",
-      "title": "Sidechain - Tama Art Univ. Selected Graduation Exhibition",
+      "title": "Tama Art Univ. Selected Graduation Exhibition",
       "role": "Spatial Sound Designer",
       "status": "published",
       "sortOrder": 2
