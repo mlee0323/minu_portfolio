@@ -468,7 +468,7 @@ export const publishedAdminContent = {
     {
       "id": "index-2025-0",
       "year": "2025",
-      "title": "The Point - KNU Dept. of Design Convergence  Graduation Exhibition",
+      "title": "The Point - Kongju Univ. Dept. of Design Convergence  Graduation Exhibition",
       "role": "Sound director ",
       "status": "published",
       "sortOrder": 0
@@ -484,8 +484,8 @@ export const publishedAdminContent = {
     {
       "id": "index-2024-2",
       "year": "2026",
-      "title": "Sidechain - Tama Art University Selected Graduation Exhibition",
-      "role": "Sound Designer",
+      "title": "Sidechain - Tama Art Univ. Selected Graduation Exhibition",
+      "role": "Spatial Sound Designer",
       "status": "published",
       "sortOrder": 2
     }
