@@ -45,7 +45,7 @@ export const publishedAdminContent = {
           "sortOrder": 0,
           "layout": {
             "x": 0,
-            "y": 105,
+            "y": 390,
             "width": 390,
             "height": 275
           }
@@ -63,7 +63,7 @@ export const publishedAdminContent = {
           "sortOrder": 1,
           "layout": {
             "x": 0,
-            "y": 492,
+            "y": 172,
             "width": 390,
             "height": 173
           }
@@ -505,7 +505,7 @@ export const publishedAdminContent = {
     },
     {
       "id": "contact-ed69f9a4-bb08-40fd-a9c7-f485ab5f5466",
-      "label": "Souncloud",
+      "label": "Soundcloud",
       "href": "https://soundcloud.com/syawla_nnuu",
       "sortOrder": 2
     }
