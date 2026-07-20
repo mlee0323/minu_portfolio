@@ -54,21 +54,34 @@ describe("Archive", () => {
     )
   })
 
-  it("keeps track rows behind the full archive toggle", () => {
+  it("expands all album cards below without exposing track rows", () => {
     // Given
     const release = requireFirstRelease()
-    renderArchive([release])
+    renderArchive(
+      Array.from({ length: 4 }, (_, index) => ({
+        ...release,
+        id: `${release.id}-${String(index)}`,
+        title: `${release.title} ${String(index + 1)}`,
+      })),
+    )
 
     // When
+    const carousel = screen.getByRole("list", { name: "Sound archive carousel" })
     expect(
       screen.queryByRole("button", { name: `Play ${release.tracks[0]?.title} with SoundCloud` }),
     ).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole("button", { name: "View all releases" }))
 
     // Then
+    expect(carousel).toHaveClass("release-carousel--expanded")
+    expect(screen.getByRole("list", { name: "All releases" })).toBe(carousel)
+    expect(screen.getByRole("button", { name: "Hide all" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    )
     expect(
-      screen.getByRole("button", { name: `Play ${release.tracks[0]?.title} with SoundCloud` }),
-    ).toBeInTheDocument()
+      screen.queryByRole("button", { name: `Play ${release.tracks[0]?.title} with SoundCloud` }),
+    ).not.toBeInTheDocument()
   })
 
   it("links each album card to its own detail page and uses the footer SoundCloud account", () => {

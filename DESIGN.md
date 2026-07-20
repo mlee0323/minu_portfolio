@@ -127,8 +127,9 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
   detail page and in the expanded track index.
 - **Album detail**: selecting a jacket or title opens `/archive/:releaseId` with the full track list,
   release description, cover, and SoundCloud destination.
-- **Full view**: the `View all releases` control in the top-right expands every album's track list
-  below the cards without navigating away.
+- **Full view**: the `View all releases` control in the top-right switches the horizontal carousel
+  into a vertical album-card grid below the heading; it never expands track rows. Track playback
+  remains inside each album detail page.
 - **Responsive count**: the carousel shows one album on mobile, up to two on constrained tablet/desktop columns, and never more than three visible albums on wide screens.
 - **Wide-screen alignment**: groups of one to three releases center as a finite collection at `1180px` and above; four or more releases stay left-anchored and horizontally scrollable.
 - **Interaction**: card hover reveals the album destination; listening buttons route to the SoundCloud provider using the official Widget API. `Full archive` points to the same `https://soundcloud.com/syawla_nnuu` account used in the footer.
