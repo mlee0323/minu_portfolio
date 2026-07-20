@@ -1,6 +1,7 @@
-import { lazy, Suspense, useState } from "react"
+import { lazy, Suspense, useEffect, useState } from "react"
 import { AudioManagerProvider } from "./audio/AudioManagerProvider"
 import { Archive } from "./components/Archive"
+import { ArchiveDetail } from "./components/ArchiveDetail"
 import { IndexContact } from "./components/IndexContact"
 import { IntroOverlay } from "./components/IntroOverlay"
 import { LocalAudioBridge } from "./components/LocalAudioBridge"
@@ -17,12 +18,28 @@ const AdminApp = lazy(async () => {
 })
 
 function PublicSite() {
-  const [experienceStarted, setExperienceStarted] = useState(false)
   const siteContent = useRuntimeSiteContent()
+  const [pathname, setPathname] = useState(window.location.pathname)
+  const archiveReleaseId = pathname.match(/^\/archive\/([^/]+)\/?$/)?.[1]
+  const archiveRelease = siteContent.archiveReleases.find(
+    (release) => release.id === archiveReleaseId,
+  )
+  const isArchiveDetail = archiveRelease !== undefined
+  const [experienceStarted, setExperienceStarted] = useState(isArchiveDetail)
   const initialSoundCloudTrack = siteContent.archiveTracks.find(
     (track) => getSoundCloudPlaybackUrl(track) !== null,
   )
   const introTrack = siteContent.mainWorks[0]?.track
+
+  useEffect(() => {
+    const handlePopState = () => setPathname(window.location.pathname)
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
+  }, [])
+
+  useEffect(() => {
+    setExperienceStarted(isArchiveDetail)
+  }, [isArchiveDetail])
 
   return (
     <AudioManagerProvider>
@@ -30,21 +47,35 @@ function PublicSite() {
       {!experienceStarted ? (
         <IntroOverlay introTrack={introTrack} onComplete={() => setExperienceStarted(true)} />
       ) : null}
-      <a className="skip-link" href="#main-works">
-        Skip to works
+      <a className="skip-link" href={isArchiveDetail ? "#archive-detail" : "#main-works"}>
+        {isArchiveDetail ? "Skip to album detail" : "Skip to works"}
       </a>
       <SiteNav />
       <main className={experienceStarted ? "app-shell is-started" : "app-shell"}>
-        <MainWorks works={siteContent.works} />
-        <div className="archive-sound-grid">
-          <Archive releases={siteContent.archiveReleases} />
-          {initialSoundCloudTrack === undefined ? null : (
-            <SoundCloudPlayer
-              initialTrack={initialSoundCloudTrack}
-              key={initialSoundCloudTrack.id}
-            />
-          )}
-        </div>
+        {isArchiveDetail ? (
+          <div className="archive-sound-grid">
+            <ArchiveDetail release={archiveRelease} />
+            {initialSoundCloudTrack === undefined ? null : (
+              <SoundCloudPlayer
+                initialTrack={initialSoundCloudTrack}
+                key={initialSoundCloudTrack.id}
+              />
+            )}
+          </div>
+        ) : (
+          <>
+            <MainWorks works={siteContent.works} />
+            <div className="archive-sound-grid">
+              <Archive releases={siteContent.archiveReleases} />
+              {initialSoundCloudTrack === undefined ? null : (
+                <SoundCloudPlayer
+                  initialTrack={initialSoundCloudTrack}
+                  key={initialSoundCloudTrack.id}
+                />
+              )}
+            </div>
+          </>
+        )}
         <IndexContact contactLinks={siteContent.contactLinks} indexItems={siteContent.indexItems} />
       </main>
       <NowPlayingBar />

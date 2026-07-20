@@ -2,9 +2,12 @@ import { AudioWaveform } from "lucide-react"
 import { navItems } from "../data/siteContent"
 
 export function SiteNav() {
+  const isArchiveDetail = window.location.pathname.startsWith("/archive/")
+  const publicHref = (href: string) => (isArchiveDetail ? `/${href}` : href)
+
   return (
     <header className="site-nav">
-      <a className="site-nav__brand" href="#main-works" aria-label="Go to works">
+      <a className="site-nav__brand" href={publicHref("#main-works")} aria-label="Go to works">
         <span className="site-nav__brand-mark" aria-hidden="true">
           <AudioWaveform size={15} />
         </span>
@@ -15,7 +18,7 @@ export function SiteNav() {
       </a>
       <nav aria-label="Primary navigation">
         {navItems.map((item) => (
-          <a href={item.href} key={item.href}>
+          <a href={publicHref(item.href)} key={item.href}>
             {item.label}
           </a>
         ))}

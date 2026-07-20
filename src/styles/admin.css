@@ -164,6 +164,37 @@
   font-size: clamp(1.8rem, 8vw, 3.8rem);
 }
 
+.admin-panel__intro {
+  max-width: 66ch;
+  margin: -4px 0 2px;
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.admin-archive-preview {
+  display: grid;
+  grid-template-columns: 86px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--color-line);
+  padding-top: 14px;
+}
+
+.admin-archive-preview img {
+  width: 86px;
+  height: 86px;
+  border: 1px solid var(--color-line);
+  object-fit: cover;
+}
+
+.admin-archive-preview span {
+  color: var(--color-muted);
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+
 .admin-subpanel {
   padding: 14px;
 }

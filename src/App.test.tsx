@@ -63,4 +63,20 @@ describe("App", () => {
     expect(screen.getByRole("heading", { name: "Archive & Sound" })).toBeInTheDocument()
     expect(screen.queryByTitle("SoundCloud playback transport")).not.toBeInTheDocument()
   })
+
+  it("renders an archive release as a separate detail page", () => {
+    // Given
+    window.history.replaceState(null, "", "/archive/release-soulhack")
+
+    // When
+    render(<App />)
+
+    // Then
+    expect(screen.getByRole("heading", { name: "The Point-" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Back to archive" })).toHaveAttribute(
+      "href",
+      "/#archive",
+    )
+    expect(screen.queryByRole("region", { name: "Works" })).not.toBeInTheDocument()
+  })
 })

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import { AudioManagerProvider } from "../audio/AudioManagerProvider"
 import type { AudioRelease } from "../audio/types"
 import { archiveReleases } from "../data/archiveTracks"
@@ -51,6 +51,41 @@ describe("Archive", () => {
     // Then
     expect(screen.getByRole("list", { name: "Sound archive carousel" })).not.toHaveClass(
       "release-carousel--compact",
+    )
+  })
+
+  it("keeps track rows behind the full archive toggle", () => {
+    // Given
+    const release = requireFirstRelease()
+    renderArchive([release])
+
+    // When
+    expect(
+      screen.queryByRole("button", { name: `Play ${release.tracks[0]?.title} with SoundCloud` }),
+    ).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "View all releases" }))
+
+    // Then
+    expect(
+      screen.getByRole("button", { name: `Play ${release.tracks[0]?.title} with SoundCloud` }),
+    ).toBeInTheDocument()
+  })
+
+  it("links each album card to its own detail page and uses the footer SoundCloud account", () => {
+    // Given
+    const release = requireFirstRelease()
+
+    // When
+    renderArchive([release])
+
+    // Then
+    expect(screen.getByRole("link", { name: `Open ${release.title} album page` })).toHaveAttribute(
+      "href",
+      `/archive/${release.id}`,
+    )
+    expect(screen.getByRole("link", { name: "Full archive" })).toHaveAttribute(
+      "href",
+      "https://soundcloud.com/syawla_nnuu",
     )
   })
 })

@@ -75,7 +75,11 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
   }
 
   return (
-    <AdminPanel title="Archive" meta={`${content.archiveReleases.length} releases`}>
+    <AdminPanel title="Archive & Sound" meta={`${content.archiveReleases.length} releases`}>
+      <p className="admin-panel__intro">
+        Edit the album jacket, card title, listening source, detail description, and track list used
+        by the public Archive & Sound page.
+      </p>
       <div className="admin-editor-grid">
         <div className="admin-list">
           {content.archiveReleases.map((item) => (
@@ -116,6 +120,13 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
             value={release.artworkUrl}
             onChange={(artworkUrl) => updateRelease({ artworkUrl })}
           />
+          <div className="admin-archive-preview">
+            <img src={release.artworkUrl} alt={`${release.title} cover preview`} />
+            <span>
+              The cover appears on the album card and the album detail page. Use a square image URL
+              for the cleanest result.
+            </span>
+          </div>
           <AdminSelectField
             label="Type"
             value={release.type}
@@ -179,6 +190,11 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
                   onChange={(soundCloudUrl) => updateTrack(track.id, { soundCloudUrl })}
                 />
                 <AdminTextField
+                  label="Track artwork URL"
+                  value={track.artworkUrl}
+                  onChange={(artworkUrl) => updateTrack(track.id, { artworkUrl })}
+                />
+                <AdminTextField
                   label="Playlist index"
                   type="number"
                   value={track.playlistIndex?.toString() ?? ""}
@@ -193,6 +209,11 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
                   onChange={(trackNumber) =>
                     updateTrack(track.id, { trackNumber: parseOptionalInteger(trackNumber) })
                   }
+                />
+                <AdminTextareaField
+                  label="Track description"
+                  value={track.description}
+                  onChange={(description) => updateTrack(track.id, { description })}
                 />
                 <button
                   className="icon-button"

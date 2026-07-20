@@ -118,13 +118,18 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 - **Interaction**: Works has no current-work label, caption overlay, closing caption, or active-image highlight. Images remain the only visible content.
 - **Audio**: the entry local sound remains fixed while scrolling Works during this prototype phase. Scroll-triggered audio switching and crossfade remain V2 Web Audio extension points.
 
-### Archive Carousel
+### Archive Carousel & Album Detail
 
-- **Structure**: horizontal swipe carousel of SoundCloud releases/playlists.
-- **Album density**: each release card shows five track rows at a time; longer albums scroll inside the card instead of stretching the section.
+- **Structure**: horizontal swipe carousel of album jackets. Each card keeps the title directly under
+  the jacket and a compact SoundCloud listening strip below it; track rows are not shown inside the
+  card.
+- **Album detail**: selecting a jacket or title opens `/archive/:releaseId` with the full track list,
+  release description, cover, and SoundCloud destination.
+- **Full view**: the `View all releases` control in the top-right expands every album's track list
+  below the cards without navigating away.
 - **Responsive count**: the carousel shows one album on mobile, up to two on constrained tablet/desktop columns, and never more than three visible albums on wide screens.
 - **Wide-screen alignment**: groups of one to three releases center as a finite collection at `1180px` and above; four or more releases stay left-anchored and horizontally scrollable.
-- **Interaction**: release and track buttons route to the SoundCloud provider using the official Widget API.
+- **Interaction**: card hover reveals the album destination; listening buttons route to the SoundCloud provider using the official Widget API. `Full archive` points to the same `https://soundcloud.com/syawla_nnuu` account used in the footer.
 - **Data**: edit `archiveReleases`; `archiveTracks` remains the flattened compatibility output.
 
 ### SoundCloud Transport Host
@@ -151,7 +156,10 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 - **Structure**: `/admin` lazy-loads a separate editing shell so the public portfolio does not load admin UI code during normal visits.
 - **Current data mode**: saving validates and writes the draft to browser `localStorage`, which updates the public site in the same browser. Authenticated production save also publishes the generated content file, so other visitors receive the change after deployment.
 - **Works editor**: desktop-only Canva-lite workflow with a left asset/upload panel, Mobile/Web preview toggle, fit-to-screen draggable canvas, one responsive work height control, one mobile-first responsive layout per image/text element, deletable work records, directly editable text blocks with a mouse drag handle, and a right inspector for work and element settings. Both preview modes use the public site's canonical 390px artwork column and identical image crop rules; Web changes the frame treatment, not the composition.
-- **Archive and Index editing**: release/track records, text records, and contact links use dense form panels rather than portfolio-style media layouts.
+- **Archive and Index editing**: the Archive panel edits the jacket URL, title, detail description,
+  SoundCloud URLs, track order, track metadata, and track descriptions used by the card, detail, and
+  full-view states. Text records and contact links use dense form panels rather than portfolio-style
+  media layouts.
 - **Target viewport**: desktop editing only. Small screens keep a basic fallback layout, but QA and future admin design decisions target computer-sized screens.
 - **Guardrails**: allowed layout values, canvas dimensions, canvas rectangles, text styles, status values, release types, and visibility values are schema-validated before a draft can be saved.
 

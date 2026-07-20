@@ -58,7 +58,7 @@ function routeLabel(route: AdminRoute): string {
     case "works":
       return "Works"
     case "archive":
-      return "Archive"
+      return "Archive & Sound"
     case "index-contact":
       return "Index"
     default:
