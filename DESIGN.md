@@ -87,7 +87,7 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 ### Breakpoints
 
 - `max-width: 560px`: QR/mobile exhibition entry.
-- `min-width: 768px`: wider archive cards and index rows; the public Works canvas remains mobile-sized.
+- `min-width: 768px`: wider archive cards and index rows; the public Works canvas scales to a centered 720px maximum display width.
 - `min-width: 860px`: existing desktop shell compatibility and larger player sizing.
 - `min-width: 1180px`: full three-zone admin editor and expanded public media stage.
 
@@ -109,10 +109,10 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 
 ### Main Works Scroll
 
-- **Structure**: image-only black-background sequence rendered from the same 390px logical canvas and element rectangles as the Admin Mobile Preview.
+- **Structure**: image-only black-background sequence rendered from the same 390px logical canvas and element rectangles as the Admin Mobile Preview, then proportionally scaled for wider public displays.
 - **Entry**: Works is the first visible section after the intro; no standalone hero page and no Works title/subtitle block.
 - **Data**: the public page reads validated Admin draft content from the same browser when present, otherwise it reads the generated published content. Work canvas height and each image `layout` rectangle are the canonical public placement values.
-- **Responsive rule**: the public canvas scales proportionally down from 390px on narrow screens and stays centered at 390px on wider screens. Desktop never switches Works to a separate composition.
+- **Responsive rule**: the public canvas uses the 390px logical composition on narrow screens and scales that same composition proportionally up to a centered 720px display width on wider screens. Desktop never switches Works to a separate composition.
 - **Interaction**: Works has no current-work label, caption overlay, closing caption, or active-image highlight. Images remain the only visible content.
 - **Audio**: the entry local sound remains fixed while scrolling Works during this prototype phase. Scroll-triggered audio switching and crossfade remain V2 Web Audio extension points.
 
