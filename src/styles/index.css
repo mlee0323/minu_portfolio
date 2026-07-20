@@ -1010,17 +1010,6 @@ img {
   }
 }
 
-@keyframes intro-dots-drift {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-
-  50% {
-    transform: translateX(8px);
-  }
-}
-
 .app-shell {
   width: 100%;
   padding: 0 0 calc(var(--bottom-player-height) + 24px);
@@ -1079,35 +1068,17 @@ img {
   pointer-events: none;
 }
 
-.intro-overlay__dots {
-  display: inline-grid;
-  grid-template-columns: repeat(3, 4px);
-  gap: 7px;
-  align-items: center;
-  justify-content: center;
-  color: rgb(245 245 245 / 78%);
+.intro-overlay__dot {
+  display: block;
+  width: min(220px, 58vw);
+  height: min(220px, 58vw);
+  flex: 0 0 auto;
   transition:
-    gap 1200ms ease,
     opacity 500ms ease,
     transform 1200ms ease;
 }
 
-.intro-overlay__dots span {
-  width: 4px;
-  height: 4px;
-  border-radius: 999px;
-  background: currentColor;
-  transform: translateY(0);
-}
-
-.intro-overlay--restless .intro-overlay__dots,
-.intro-overlay--prompt .intro-overlay__dots {
-  gap: 11px;
-  color: rgb(245 245 245 / 88%);
-  animation: intro-dots-drift 2800ms ease-in-out infinite;
-}
-
-.intro-overlay--confirming .intro-overlay__dots {
+.intro-overlay--confirming .intro-overlay__dot {
   opacity: 0;
   transform: translateY(-4px);
 }
@@ -1520,7 +1491,7 @@ img {
 
 @media (prefers-reduced-motion: reduce) {
   .intro-overlay,
-  .intro-overlay__dots,
+  .intro-overlay__dot,
   .intro-overlay__prompt,
   .intro-overlay__headphones,
   .typing-letter,

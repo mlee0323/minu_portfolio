@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { useAudioManager } from "../audio/AudioManagerProvider"
 import type { AudioTrack } from "../audio/types"
 import { introContent } from "../data/siteContent"
+import { mountBreathingDot } from "../lib/breathing-dot"
 
 type IntroOverlayProps = {
   readonly introTrack: AudioTrack | undefined
@@ -14,6 +15,7 @@ export function IntroOverlay({ introTrack, onComplete }: IntroOverlayProps) {
   const manager = useAudioManager()
   const [phase, setPhase] = useState<IntroPhase>("silent")
   const timersRef = useRef<number[]>([])
+  const dotContainerRef = useRef<HTMLSpanElement>(null)
   useEffect(() => {
     document.documentElement.classList.add("is-intro-active")
     document.body.classList.add("is-intro-active")
@@ -30,6 +32,20 @@ export function IntroOverlay({ introTrack, onComplete }: IntroOverlayProps) {
       document.documentElement.classList.remove("is-intro-active")
       document.body.classList.remove("is-intro-active")
     }
+  }, [])
+  useEffect(() => {
+    const container = dotContainerRef.current
+    if (container === null) {
+      return
+    }
+
+    const breathingDot = mountBreathingDot(container, {
+      color: "#f5f5f5",
+      ringColor1: "rgba(245,245,245,0.35)",
+      ringColor2: "rgba(245,245,245,0.15)",
+    })
+
+    return breathingDot.destroy
   }, [])
 
   const startExperience = () => {
@@ -65,11 +81,7 @@ export function IntroOverlay({ introTrack, onComplete }: IntroOverlayProps) {
       onClick={startExperience}
       aria-label="Start listening experience"
     >
-      <span className="intro-overlay__dots" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-      </span>
+      <span className="intro-overlay__dot" ref={dotContainerRef} aria-hidden="true" />
       <span className="intro-overlay__prompt" aria-hidden="true">
         {introContent.prompt}
       </span>
