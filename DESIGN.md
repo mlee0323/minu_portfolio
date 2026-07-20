@@ -107,7 +107,8 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 
 - **Structure**: fixed compact brand plus anchor links.
 - **Interaction**: anchor scroll to Works, Archive, Index.
-- **Style**: blend over black/white surfaces without adding a heavy header block.
+- **Style**: blend over black/white surfaces without adding a heavy header block. The supplied Minu
+  logo is rendered from `/images/branding/logo.png`; the supplied 32px mark is the PNG favicon.
 
 ### Main Works Scroll
 
@@ -120,9 +121,10 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 
 ### Archive Carousel & Album Detail
 
-- **Structure**: horizontal swipe carousel of album jackets. Each card keeps the title directly under
-  the jacket and a compact SoundCloud listening strip below it; track rows are not shown inside the
-  card.
+- **Structure**: horizontal swipe carousel of album jackets. Cards are image-only at rest; title,
+  artist, release metadata, and the album destination appear in a hover/focus overlay over the jacket.
+- **Card controls**: archive cards do not expose a play button. Playback remains available on the album
+  detail page and in the expanded track index.
 - **Album detail**: selecting a jacket or title opens `/archive/:releaseId` with the full track list,
   release description, cover, and SoundCloud destination.
 - **Full view**: the `View all releases` control in the top-right expands every album's track list

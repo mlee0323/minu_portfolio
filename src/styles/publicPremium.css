@@ -547,6 +547,14 @@ select {
   gap: 16px;
 }
 
+.site-nav__logo {
+  display: block;
+  width: 86px;
+  height: 34px;
+  object-fit: contain;
+  object-position: left center;
+}
+
 .archive-toggle {
   display: inline-flex;
   align-items: center;
@@ -576,10 +584,8 @@ select {
 }
 
 .release-card {
-  display: grid;
-  gap: 0;
   overflow: hidden;
-  padding: 0 0 18px;
+  padding: 0;
   background: rgb(35 35 31 / 66%);
   transition:
     box-shadow 180ms var(--ease-studio),
@@ -602,6 +608,7 @@ select {
 .release-card__cover-link {
   position: relative;
   display: block;
+  aspect-ratio: 1;
   overflow: hidden;
   color: var(--color-inverse);
 }
@@ -619,20 +626,25 @@ select {
     filter 420ms var(--ease-studio);
 }
 
+.release-card__cover-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(7 7 6 / 66%);
+  opacity: 0;
+  transition: opacity 240ms var(--ease-studio);
+}
+
 .release-card__cover-overlay {
   position: absolute;
-  right: 14px;
-  bottom: 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid rgb(248 247 242 / 70%);
-  border-radius: var(--radius-control);
-  background: rgb(25 25 22 / 82%);
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 7px;
+  background: transparent;
   color: var(--color-inverse);
-  padding: 8px 10px;
-  font-size: 0.68rem;
-  font-weight: 800;
+  padding: 22px;
   opacity: 0;
   transform: translateY(8px);
   transition:
@@ -642,8 +654,13 @@ select {
 
 .release-card__cover-link:hover .track-artwork--medium,
 .release-card__cover-link:focus-visible .track-artwork--medium {
-  filter: saturate(0.8) contrast(1.08);
+  filter: blur(2px) saturate(0.72) contrast(1.08);
   transform: scale(1.035);
+}
+
+.release-card__cover-link:hover .release-card__cover-scrim,
+.release-card__cover-link:focus-visible .release-card__cover-scrim {
+  opacity: 1;
 }
 
 .release-card__cover-link:hover .release-card__cover-overlay,
@@ -652,110 +669,41 @@ select {
   transform: translateY(0);
 }
 
-.release-card__head {
-  display: block;
-  padding: 20px 18px 14px;
+.release-card__cover-overlay .release-card__eyebrow {
+  margin: 0;
+  color: rgb(245 245 245 / 68%);
 }
 
-.release-card__head h3 {
-  margin-bottom: 6px;
+.release-card__cover-title {
+  max-width: 12ch;
   color: var(--color-inverse);
-  font-size: clamp(1.45rem, 3vw, 2rem);
+  font-size: clamp(1.6rem, 4vw, 2.45rem);
+  letter-spacing: -0.04em;
+  line-height: 0.92;
 }
 
-.release-card__title {
-  color: inherit;
+.release-card__cover-artist {
+  color: rgb(245 245 245 / 72%);
+  font-size: 0.8rem;
+  font-weight: 760;
 }
 
-.release-card__title:hover h3,
-.release-card__title:focus-visible h3 {
+.release-card__cover-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 4px;
   color: var(--color-accent);
-}
-
-.release-card__audio {
-  display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) 76px;
-  gap: 11px;
-  align-items: center;
-  margin: 0 18px;
-  border-top: 1px solid rgb(245 245 245 / 18%);
-  padding-top: 14px;
-}
-
-.release-card__audio-button {
-  display: grid;
-  width: 38px;
-  height: 38px;
-  place-items: center;
-  border: 1px solid var(--color-accent);
-  border-radius: 50%;
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
-  transition:
-    transform 180ms var(--ease-studio),
-    background-color 180ms var(--ease-studio);
-}
-
-.release-card__audio-button:hover {
-  background: var(--color-inverse);
-  transform: scale(1.06);
-}
-
-.release-card__audio-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
-}
-
-.release-card__audio-copy {
-  display: grid;
-  gap: 4px;
-  min-width: 0;
-}
-
-.release-card__audio-copy strong {
-  color: var(--color-inverse);
-  font-size: 0.78rem;
-}
-
-.release-card__audio-copy span {
-  overflow: hidden;
-  color: rgb(245 245 245 / 58%);
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  text-overflow: ellipsis;
+  font-size: 0.7rem;
+  font-weight: 850;
   text-transform: uppercase;
-  white-space: nowrap;
 }
 
-.release-card__waveform {
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  gap: 3px;
-  height: 24px;
-}
-
-.release-card__waveform i {
-  display: block;
-  width: 3px;
-  height: 35%;
-  border-radius: 99px;
-  background: var(--color-accent);
-  opacity: 0.8;
-}
-
-.release-card__waveform i:nth-child(2),
-.release-card__waveform i:nth-child(6) {
-  height: 68%;
-}
-
-.release-card__waveform i:nth-child(3),
-.release-card__waveform i:nth-child(5) {
-  height: 100%;
-}
-
-.release-card__waveform i:nth-child(4) {
-  height: 52%;
+.release-card__cover-link:hover .release-card__cover-cta,
+.release-card__cover-link:focus-visible .release-card__cover-cta {
+  color: var(--color-accent);
 }
 
 .archive-all-tracks,

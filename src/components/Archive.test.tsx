@@ -87,5 +87,8 @@ describe("Archive", () => {
       "href",
       "https://soundcloud.com/syawla_nnuu",
     )
+    expect(
+      screen.queryByRole("button", { name: `Play ${release.title} release with SoundCloud` }),
+    ).not.toBeInTheDocument()
   })
 })

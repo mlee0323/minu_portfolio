@@ -1,4 +1,4 @@
-import { ArrowUpRight, Disc3, ListMusic, Play, Radio } from "lucide-react"
+import { ArrowUpRight, Disc3, ListMusic, Radio } from "lucide-react"
 import { useState } from "react"
 import { useAudioManager, useAudioPlayback } from "../audio/AudioManagerProvider"
 import type { AudioRelease, AudioTrack } from "../audio/types"
@@ -130,7 +130,6 @@ export function Archive({ releases }: ArchiveProps) {
 
       <ul className={carouselClassName} aria-label="Sound archive carousel">
         {releases.map((release) => {
-          const firstTrack = release.tracks[0]
           const coverTrack = getReleaseCoverTrack(release)
           const isCurrentRelease =
             playback.currentTrack?.releaseId === release.id ||
@@ -142,63 +141,28 @@ export function Archive({ releases }: ArchiveProps) {
               className={isCurrentRelease ? "release-card is-current" : "release-card"}
               key={release.id}
             >
-              <div className="release-card__cover">
-                <a
-                  className="release-card__cover-link"
-                  href={releaseHref}
-                  aria-label={`Open ${release.title} album page`}
-                >
-                  <TrackArtwork track={coverTrack} size="medium" />
-                  <span className="release-card__cover-overlay">
-                    <ArrowUpRight size={17} />
-                    <span>Open album</span>
-                  </span>
-                </a>
-              </div>
-
-              <div className="release-card__head">
-                <div>
+              <a
+                className="release-card__cover-link"
+                href={releaseHref}
+                aria-label={`Open ${release.title} album page`}
+              >
+                <TrackArtwork track={coverTrack} size="medium" />
+                <span className="release-card__cover-scrim" aria-hidden="true" />
+                <span className="release-card__cover-overlay">
                   <span className="release-card__eyebrow">
                     <Disc3 size={13} />
                     {[release.type, release.year, trackCountLabel(release)]
                       .filter(Boolean)
                       .join(" / ")}
                   </span>
-                  <a className="release-card__title" href={releaseHref}>
-                    <h3>{release.title}</h3>
-                  </a>
-                  <p>{release.artist}</p>
-                </div>
-              </div>
-
-              <div className="release-card__audio">
-                <button
-                  className="release-card__audio-button"
-                  type="button"
-                  disabled={firstTrack === undefined}
-                  onClick={() => {
-                    if (firstTrack !== undefined) {
-                      playTrack(firstTrack)
-                    }
-                  }}
-                  aria-label={`Play ${release.title} release with SoundCloud`}
-                >
-                  {isCurrentRelease ? <Radio size={16} /> : <Play size={16} fill="currentColor" />}
-                </button>
-                <span className="release-card__audio-copy">
-                  <strong>{isCurrentRelease ? "Now playing" : "Listen"}</strong>
-                  <span>SoundCloud / {trackCountLabel(release)}</span>
+                  <strong className="release-card__cover-title">{release.title}</strong>
+                  <span className="release-card__cover-artist">{release.artist}</span>
+                  <span className="release-card__cover-cta">
+                    Open album
+                    <ArrowUpRight size={16} />
+                  </span>
                 </span>
-                <span className="release-card__waveform" aria-hidden="true">
-                  <i />
-                  <i />
-                  <i />
-                  <i />
-                  <i />
-                  <i />
-                  <i />
-                </span>
-              </div>
+              </a>
             </li>
           )
         })}
