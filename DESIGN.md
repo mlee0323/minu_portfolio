@@ -38,12 +38,14 @@ The functional contract remains provider-based audio. Local works, SoundCloud Wi
 | Focus | `--color-focus` | `#6e7a22` | Keyboard focus rings in the accent hue |
 | Status/warm | `--color-amber` | `#a56f12` | Ended status |
 | Status/error | `--color-danger` | `#b23d34` | Playback and form errors |
+| Social mark | `--color-social` | `#191916` | Black Instagram and SoundCloud contact marks |
 
 ### Rules
 
 - Warm black and mineral white dominate every viewport.
 - Accent is a signal only: play, focus, link hover, or an active audio source.
 - Artwork can carry texture, but the interface must not become colorful.
+- Social marks use the same near-black as the primary text for a unified footer treatment.
 - Cards use a shadow-as-border stack instead of heavy outlines: ring, 2px ambient lift,
   and a distant tinted shadow. Dark surfaces use the inverse version of the same stack.
 
@@ -136,6 +138,7 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 - **Structure**: neutral list/table mode for curators and collaborators; no extra explanatory label beside the heading.
 - **Style**: no expressive imagery, no color beyond text and hairlines.
 - **Closing rhythm**: the footer keeps only compact optical breathing room before the fixed player clearance; section and shell padding must not stack into a second empty band.
+- **Contact actions**: the email address is visible as `llsyawla@gmail.com` and opens an accessible mail composer dialog that launches a `mailto:` draft. Instagram and SoundCloud use black SVG marks and open in a new window with `noopener` protection.
 
 ### Now Playing Bar
 
