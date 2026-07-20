@@ -500,7 +500,7 @@ export const publishedAdminContent = {
     {
       "id": "contact-1",
       "label": "Instagram",
-      "href": "https://www.instagram.com/",
+      "href": "https://www.instagram.com/nnuu_lee",
       "sortOrder": 1
     },
     {
