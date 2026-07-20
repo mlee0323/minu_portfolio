@@ -33,6 +33,20 @@ describe("IndexContact", () => {
     expect(soundCloudLink.querySelector("svg")).not.toBeNull()
   })
 
+  it("restores the SoundCloud footer link when an older content draft only has Instagram", () => {
+    render(
+      <IndexContact
+        contactLinks={contactLinks.filter((link) => link.label !== "Soundcloud")}
+        indexItems={indexItems}
+      />,
+    )
+
+    expect(screen.getByRole("link", { name: "Open SoundCloud in a new window" })).toHaveAttribute(
+      "href",
+      "https://soundcloud.com/syawla_nnuu",
+    )
+  })
+
   it("opens a mail composer and launches a mailto draft", async () => {
     const openWindow = vi.spyOn(window, "open").mockImplementation(() => null)
 

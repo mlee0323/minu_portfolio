@@ -9,6 +9,16 @@ type IndexContactProps = {
 }
 
 const fallbackEmailAddress = "llsyawla@gmail.com"
+const fallbackSoundCloudLink: ContactLink = {
+  label: "Soundcloud",
+  href: "https://soundcloud.com/syawla_nnuu",
+}
+
+function withFallbackSoundCloudLink(contactLinks: readonly ContactLink[]): readonly ContactLink[] {
+  return contactLinks.some((link) => link.label.toLowerCase() === "soundcloud")
+    ? contactLinks
+    : [...contactLinks, fallbackSoundCloudLink]
+}
 
 function InstagramMark() {
   return (
@@ -67,10 +77,11 @@ export function IndexContact({ contactLinks, indexItems }: IndexContactProps) {
   const [subject, setSubject] = useState("")
   const [message, setMessage] = useState("")
   const dialogRef = useRef<HTMLDialogElement>(null)
+  const normalizedContactLinks = withFallbackSoundCloudLink(contactLinks)
   const emailAddress = emailAddressFromLink(
-    contactLinks.find((link) => link.label.toLowerCase() === "email"),
+    normalizedContactLinks.find((link) => link.label.toLowerCase() === "email"),
   )
-  const socialLinks = contactLinks.filter((link) => link.label.toLowerCase() !== "email")
+  const socialLinks = normalizedContactLinks.filter((link) => link.label.toLowerCase() !== "email")
 
   useEffect(() => {
     const dialog = dialogRef.current

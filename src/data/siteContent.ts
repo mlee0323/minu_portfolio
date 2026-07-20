@@ -240,4 +240,5 @@ export const indexItems: readonly IndexItem[] = [
 export const contactLinks: readonly ContactLink[] = [
   { label: "hello@minu.audio", href: "mailto:hello@minu.audio" },
   { label: "instagram", href: "https://www.instagram.com/" },
+  { label: "Soundcloud", href: "https://soundcloud.com/syawla_nnuu" },
 ] as const
