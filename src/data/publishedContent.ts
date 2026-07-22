@@ -356,6 +356,70 @@ export const publishedAdminContent = {
         }
       ],
       "textElements": []
+    },
+    {
+      "id": "work-44b25619-97b5-4d9d-82d5-46584b4fe48e",
+      "title": "Untitled Work",
+      "artist": "Minu",
+      "year": "",
+      "medium": "",
+      "location": "",
+      "caption": "",
+      "status": "draft",
+      "isEntry": false,
+      "sortOrder": 6,
+      "canvas": {
+        "height": 720
+      },
+      "audio": {
+        "id": "audio-fcbceebc-96bf-4e23-b03d-29c54713dc65",
+        "title": "Untitled Work",
+        "artist": "Minu",
+        "provider": "local",
+        "artworkUrl": "",
+        "durationMs": 0,
+        "localAudioUrl": "",
+        "soundCloudUrl": "",
+        "soundCloudPlaylistUrl": "",
+        "playlistIndex": null,
+        "visibility": "public",
+        "description": ""
+      },
+      "images": [],
+      "textElements": [
+        {
+          "id": "text-83491816-16b5-40f4-ba43-e16266d1fb77",
+          "text": "Sidechain",
+          "fontSize": 42,
+          "fontWeight": "bold",
+          "lineHeight": 1.05,
+          "textAlign": "left",
+          "color": "#e8e8e8",
+          "sortOrder": 0,
+          "layout": {
+            "x": 0,
+            "y": 104,
+            "width": 273,
+            "height": 72
+          }
+        },
+        {
+          "id": "text-e2c76ef2-1059-4335-9e19-f869c90ab64c",
+          "text": "Tama Art University \nDepartment of Integrated Design \nSelected Graduation Show 2026",
+          "fontSize": 9,
+          "fontWeight": "light",
+          "lineHeight": 1.05,
+          "textAlign": "left",
+          "color": "#ffb3b3",
+          "sortOrder": 1,
+          "layout": {
+            "x": 206,
+            "y": 120,
+            "width": 184,
+            "height": 69
+          }
+        }
+      ]
     }
   ],
   "archiveReleases": [
