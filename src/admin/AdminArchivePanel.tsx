@@ -1,6 +1,7 @@
 import { Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { AdminPanel, AdminSelectField, AdminTextareaField, AdminTextField } from "./AdminFields"
+import { AdminImageUploadField } from "./AdminImageUploadField"
 import { createBlankArchiveRelease, createBlankArchiveTrack } from "./adminFactories"
 import type { AdminArchiveRelease, AdminArchiveTrack, AdminContent } from "./adminTypes"
 import { adminStatusOptions } from "./adminTypes"
@@ -115,16 +116,17 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
             value={release.year}
             onChange={(year) => updateRelease({ year })}
           />
-          <AdminTextField
-            label="Cover URL"
+          <AdminImageUploadField
+            label="Cover image"
             value={release.artworkUrl}
-            onChange={(artworkUrl) => updateRelease({ artworkUrl })}
+            alt={`${release.title} cover preview`}
+            onUpload={({ src }) => updateRelease({ artworkUrl: src })}
           />
           <div className="admin-archive-preview">
             <img src={release.artworkUrl} alt={`${release.title} cover preview`} />
             <span>
-              The cover appears on the album card and the album detail page. Use a square image URL
-              for the cleanest result.
+              The cover appears on the album card and the album detail page. Use a square image for
+              the cleanest result.
             </span>
           </div>
           <AdminSelectField
@@ -189,10 +191,11 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
                   value={track.soundCloudUrl}
                   onChange={(soundCloudUrl) => updateTrack(track.id, { soundCloudUrl })}
                 />
-                <AdminTextField
-                  label="Track artwork URL"
+                <AdminImageUploadField
+                  label="Track artwork"
                   value={track.artworkUrl}
-                  onChange={(artworkUrl) => updateTrack(track.id, { artworkUrl })}
+                  alt={`${track.title} artwork preview`}
+                  onUpload={({ src }) => updateTrack(track.id, { artworkUrl: src })}
                 />
                 <AdminTextField
                   label="Playlist index"

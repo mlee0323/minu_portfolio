@@ -159,7 +159,7 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 - **Structure**: `/admin` lazy-loads a separate editing shell so the public portfolio does not load admin UI code during normal visits.
 - **Current data mode**: saving validates and writes the draft to browser `localStorage`, which updates the public site in the same browser. Authenticated production save also publishes the generated content file, so other visitors receive the change after deployment.
 - **Works editor**: desktop-only Canva-lite workflow with a left asset/upload panel, Mobile/Web preview toggle, fit-to-screen draggable canvas, one responsive work height control, one mobile-first responsive layout per image/text element, deletable work records, directly editable text blocks with a mouse drag handle, and a right inspector for work and element settings. Both preview modes use the public site's canonical 390px artwork column and identical image crop rules; Web changes the frame treatment, not the composition.
-- **Archive and Index editing**: the Archive panel edits the jacket URL, title, detail description,
+- **Archive and Index editing**: the Archive panel edits the jacket image through file upload, title, detail description,
   SoundCloud URLs, track order, track metadata, and track descriptions used by the card, detail, and
   full-view states. Text records and contact links use dense form panels rather than portfolio-style
   media layouts.

@@ -1,6 +1,7 @@
 import { Trash2 } from "lucide-react"
 import { AdminCanvasRectFields } from "./AdminCanvasRectFields"
 import { AdminSelectField, AdminTextareaField, AdminTextField } from "./AdminFields"
+import { AdminImageUploadField } from "./AdminImageUploadField"
 import { AdminWorkSettingsInspector } from "./AdminWorkSettingsInspector"
 import type { SelectedCanvasElement } from "./AdminWorksEditorTypes"
 import { getViewportRectForLayout, getWorkCanvasDimensions } from "./adminCanvas"
@@ -103,13 +104,21 @@ export function AdminWorksInspector({
               <Trash2 size={15} />
             </button>
           </div>
-          <AdminTextField
-            label="Image URL"
+          <AdminImageUploadField
+            label="Image file"
             value={image.src}
-            onChange={(src) => onUpdateImage(image.id, { src })}
+            alt={image.alt}
+            onUpload={({ height, src, width }) =>
+              onUpdateImage(image.id, {
+                src,
+                width,
+                height,
+                aspectRatio: `${width} / ${height}`,
+              })
+            }
           />
           <AdminTextField
-            label="Alt"
+            label="Alt text"
             value={image.alt}
             onChange={(alt) => onUpdateImage(image.id, { alt })}
           />

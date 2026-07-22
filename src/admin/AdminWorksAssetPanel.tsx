@@ -104,7 +104,7 @@ export function AdminWorksAssetPanel({
         </label>
         <button className="pill-button pill-button--accent" type="button" onClick={onAddBlankImage}>
           <Plus size={15} />
-          Add URL image
+          Add placeholder image
         </button>
 
         <div className="admin-asset-list">
