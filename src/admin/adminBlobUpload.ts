@@ -1,6 +1,10 @@
 import { upload } from "@vercel/blob/client"
 import { shouldVerifyAdminAccess } from "./adminAccessClient"
-import { type AdminUploadedImage, readAdminUploadedImage } from "./adminImageUpload"
+import {
+  type AdminUploadedImage,
+  readAdminImageMetadata,
+  readAdminUploadedImage,
+} from "./adminImageUpload"
 
 const blobMultipartThresholdBytes = 4 * 1024 * 1024
 
@@ -19,7 +23,7 @@ export async function uploadAdminImageAsset(file: File): Promise<AdminUploadedIm
     return readAdminUploadedImage(file)
   }
 
-  const preview = await readAdminUploadedImage(file)
+  const metadata = await readAdminImageMetadata(file)
   const blob = await upload(`admin-assets/${Date.now()}-${safePathSegment(file.name)}`, file, {
     access: "public",
     contentType: file.type,
@@ -28,7 +32,7 @@ export async function uploadAdminImageAsset(file: File): Promise<AdminUploadedIm
   })
 
   return {
-    ...preview,
+    ...metadata,
     src: blob.url,
   }
 }

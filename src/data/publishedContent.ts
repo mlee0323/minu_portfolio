@@ -372,6 +372,7 @@ export const publishedAdminContent = {
       "description": "A journey of standing at the threshold of change-\nIn the faint turbulence before transformation,\nwe find direction, move through the tension just before boiling, and finally face ourselves.\nYet the end is not an ending, but an And.\nThrough this flow, the EP unfolds shifting emotions in ambient textures —\ncapturing the quiet movement toward possibility.",
       "status": "published",
       "sortOrder": 0,
+      "images": [],
       "tracks": [
         {
           "id": "archive-soulhack-title-track",
@@ -416,6 +417,7 @@ export const publishedAdminContent = {
       "description": "Remembrance.\n",
       "status": "published",
       "sortOrder": 1,
+      "images": [],
       "tracks": [
         {
           "id": "archive-electric-relaxation",
@@ -446,6 +448,7 @@ export const publishedAdminContent = {
       "description": "The bridge of human and objct, illusion and reallity, space and media.\n",
       "status": "draft",
       "sortOrder": 2,
+      "images": [],
       "tracks": [
         {
           "id": "archive-track-f2d05936-27c4-4748-adea-75ff4d8de2d1",

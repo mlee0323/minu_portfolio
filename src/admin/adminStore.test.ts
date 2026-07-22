@@ -173,6 +173,18 @@ describe("adminStore", () => {
     })
   })
 
+  it("migrates archive releases created before detail images existed", () => {
+    const seed = createSeedAdminContent()
+    const legacyContent = {
+      ...seed,
+      archiveReleases: seed.archiveReleases.map(({ images: _, ...release }) => release),
+    }
+
+    window.localStorage.setItem(adminContentStorageKey, JSON.stringify(legacyContent))
+
+    expect(loadAdminContent().archiveReleases[0]?.images).toEqual([])
+  })
+
   it("rejects drafts that do not pass the admin schema", () => {
     const seed = createSeedAdminContent()
     const firstWork = requireFirstWork(seed)

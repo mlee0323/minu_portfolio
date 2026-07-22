@@ -100,6 +100,24 @@ export function ArchiveDetail({ release }: ArchiveDetailProps) {
         />
       </div>
 
+      {release.images.length > 0 ? (
+        <section className="archive-detail__media" aria-label={`${release.title} release images`}>
+          {release.images.map((image) => (
+            <figure className="archive-detail__media-item" key={image.id}>
+              <img
+                src={image.src}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                loading="lazy"
+                decoding="async"
+                style={{ objectPosition: image.objectPosition }}
+              />
+            </figure>
+          ))}
+        </section>
+      ) : null}
+
       {errorMessage !== null ? <p className="inline-error">{errorMessage}</p> : null}
     </section>
   )

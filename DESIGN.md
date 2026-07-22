@@ -126,7 +126,9 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 - **Card controls**: archive cards do not expose a play button. Playback remains available on the album
   detail page and in the expanded track index.
 - **Album detail**: selecting a jacket or title opens `/archive/:releaseId` with the full track list,
-  release description, cover, and SoundCloud destination.
+  release description, cover, SoundCloud destination, and an image-only release media sequence below
+  the tracks. The sequence uses responsive photo plates without captions, matching the media-first
+  treatment of Main Works.
 - **Full view**: the `View all releases` control in the top-right switches the horizontal carousel
   into a vertical album-card grid below the heading; it never expands track rows. Track playback
   remains inside each album detail page.
@@ -159,10 +161,10 @@ Spacing follows a 4px rhythm, with large vertical pacing for exhibition-like qui
 - **Structure**: `/admin` lazy-loads a separate editing shell so the public portfolio does not load admin UI code during normal visits.
 - **Current data mode**: saving validates and writes the draft to browser `localStorage`, which updates the public site in the same browser. Authenticated production save also publishes the generated content file, so other visitors receive the change after deployment.
 - **Works editor**: desktop-only Canva-lite workflow with a left asset/upload panel, Mobile/Web preview toggle, fit-to-screen draggable canvas, one responsive work height control, one mobile-first responsive layout per image/text element, deletable work records, directly editable text blocks with a mouse drag handle, and a right inspector for work and element settings. Both preview modes use the public site's canonical 390px artwork column and identical image crop rules; Web changes the frame treatment, not the composition.
-- **Archive and Index editing**: the Archive panel edits the jacket image through file upload, title, detail description,
-  SoundCloud URLs, track order, track metadata, and track descriptions used by the card, detail, and
-  full-view states. Text records and contact links use dense form panels rather than portfolio-style
-  media layouts.
+- **Archive and Index editing**: the Archive panel edits the jacket image and album-detail media
+  sequence through file upload, title, detail description, SoundCloud URLs, track order, track
+  metadata, and track descriptions used by the card, detail, and full-view states. Text records and
+  contact links use dense form panels rather than portfolio-style media layouts.
 - **Target viewport**: desktop editing only. Small screens keep a basic fallback layout, but QA and future admin design decisions target computer-sized screens.
 - **Guardrails**: allowed layout values, canvas dimensions, canvas rectangles, text styles, status values, release types, and visibility values are schema-validated before a draft can be saved.
 

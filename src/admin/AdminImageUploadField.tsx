@@ -2,6 +2,7 @@ import { ImagePlus } from "lucide-react"
 import { useId, useState } from "react"
 import { uploadAdminImageAsset } from "./adminBlobUpload"
 import { AdminImageUploadError, type AdminUploadedImage } from "./adminImageUpload"
+import { adminImageInputAccept } from "./adminImageUploadConfig"
 
 type AdminImageUploadFieldProps = {
   readonly label: string
@@ -59,7 +60,7 @@ export function AdminImageUploadField({ alt, label, onUpload, value }: AdminImag
           <input
             id={inputId}
             type="file"
-            accept="image/*"
+            accept={adminImageInputAccept}
             disabled={isUploading}
             onChange={(event) => {
               const file = event.currentTarget.files?.[0]
@@ -72,7 +73,7 @@ export function AdminImageUploadField({ alt, label, onUpload, value }: AdminImag
       <small className="admin-image-upload-field__hint">
         {value.startsWith("data:")
           ? "Stored in this browser draft until you save."
-          : "Choose a new image file to replace the current cover."}
+          : "Choose a new image file to replace the current image."}
       </small>
       {errorMessage ? (
         <small className="admin-image-upload-field__error" role="alert">

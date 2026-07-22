@@ -2,6 +2,10 @@ import { type HandleUploadBody, handleUpload } from "@vercel/blob/client"
 import type { VercelRequest, VercelResponse } from "@vercel/node"
 import { z } from "zod"
 import {
+  adminImageContentTypes,
+  maxProductionAdminImageUploadBytes,
+} from "../../src/admin/adminImageUploadConfig.ts"
+import {
   messageForAdminRequestError,
   statusForAdminRequestError,
   verifyAdminRequest,
@@ -34,13 +38,7 @@ const handleUploadBodySchema = z.discriminatedUnion("type", [
   }),
 ])
 
-const allowedContentTypes: string[] = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-  "video/mp4",
-]
+const allowedContentTypes: string[] = [...adminImageContentTypes]
 
 function parseHandleUploadBody(body: unknown): HandleUploadBody {
   const parsed = handleUploadBodySchema.parse(body)
@@ -86,7 +84,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
       onBeforeGenerateToken: async () => ({
         addRandomSuffix: true,
         allowedContentTypes,
-        maximumSizeInBytes: 100 * 1024 * 1024,
+        maximumSizeInBytes: maxProductionAdminImageUploadBytes,
         tokenPayload: JSON.stringify({ email: session.email }),
       }),
       onUploadCompleted: async () => {},

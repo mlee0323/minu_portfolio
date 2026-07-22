@@ -4,6 +4,7 @@ import {
   createDefaultWorkCanvas,
 } from "./adminCanvas"
 import type {
+  AdminArchiveImage,
   AdminArchiveRelease,
   AdminArchiveTrack,
   AdminAudioTrack,
@@ -143,6 +144,31 @@ export function createBlankArchiveTrack(sortOrder: number): AdminArchiveTrack {
   }
 }
 
+export function createArchiveImageFromAsset({
+  alt,
+  height,
+  sortOrder,
+  src,
+  width,
+}: {
+  readonly alt: string
+  readonly height: number
+  readonly sortOrder: number
+  readonly src: string
+  readonly width: number
+}): AdminArchiveImage {
+  return {
+    id: createAdminId("archive-image"),
+    src,
+    alt,
+    width,
+    height,
+    aspectRatio: `${width} / ${height}`,
+    objectPosition: "center",
+    sortOrder,
+  }
+}
+
 export function createBlankArchiveRelease(sortOrder: number): AdminArchiveRelease {
   return {
     id: createAdminId("release"),
@@ -157,6 +183,7 @@ export function createBlankArchiveRelease(sortOrder: number): AdminArchiveReleas
     description: "",
     status: "draft",
     sortOrder,
+    images: [],
     tracks: [createBlankArchiveTrack(0)],
   }
 }

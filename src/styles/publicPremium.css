@@ -549,10 +549,10 @@ select {
 
 .site-nav__logo {
   display: block;
-  width: 86px;
+  width: 24px;
   height: 34px;
   object-fit: contain;
-  object-position: left center;
+  object-position: center;
 }
 
 .archive-toggle {
@@ -835,7 +835,10 @@ select {
   color: rgb(245 245 245 / 78%);
   font-size: 0.92rem;
   line-height: 1.6;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
   white-space: pre-line;
+  word-break: keep-all;
 }
 
 .archive-detail__actions {
@@ -862,6 +865,26 @@ select {
   margin-bottom: 14px;
 }
 
+.archive-detail__media {
+  display: grid;
+  gap: 18px;
+  margin-top: 56px;
+  border-top: 1px solid rgb(245 245 245 / 30%);
+  padding-top: 22px;
+}
+
+.archive-detail__media-item {
+  margin: 0;
+}
+
+.archive-detail__media-item img {
+  width: 100%;
+  height: auto;
+  background: var(--color-panel-elevated);
+  box-shadow: var(--shadow-dark);
+  object-fit: cover;
+}
+
 @media (min-width: 768px) {
   .archive-detail {
     padding: 138px 48px 112px;
@@ -875,5 +898,14 @@ select {
 
   .archive-detail__artwork {
     max-width: 440px;
+  }
+
+  .archive-detail__media {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .archive-detail__media-item:only-child {
+    grid-column: 1 / -1;
   }
 }

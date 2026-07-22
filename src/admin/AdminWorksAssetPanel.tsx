@@ -1,5 +1,6 @@
 import { ImagePlus, Plus, Trash2, Type } from "lucide-react"
 import type { SelectedCanvasElement } from "./AdminWorksEditorTypes"
+import { adminImageInputAccept } from "./adminImageUploadConfig"
 import type { AdminWork, AdminWorkImage } from "./adminTypes"
 
 type WorksAssetPanelProps = {
@@ -91,7 +92,7 @@ export function AdminWorksAssetPanel({
           <input
             id={uploadInputId}
             type="file"
-            accept="image/*"
+            accept={adminImageInputAccept}
             onChange={(event) => {
               const file = event.currentTarget.files?.item(0)
               event.currentTarget.value = ""

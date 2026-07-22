@@ -34,6 +34,16 @@ export type AudioTrack = {
   readonly description?: string
 }
 
+export type AudioReleaseImage = {
+  readonly id: string
+  readonly src: string
+  readonly alt: string
+  readonly width: number
+  readonly height: number
+  readonly aspectRatio: string
+  readonly objectPosition: string
+}
+
 export type AudioRelease = {
   readonly id: string
   readonly title: string
@@ -41,6 +51,7 @@ export type AudioRelease = {
   readonly type: AudioReleaseType
   readonly provider: AudioProviderKind
   readonly artworkUrl: string
+  readonly images: readonly AudioReleaseImage[]
   readonly tracks: readonly AudioTrack[]
   readonly year?: string
   readonly soundCloudPlaylistUrl?: string

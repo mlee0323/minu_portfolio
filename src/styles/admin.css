@@ -668,6 +668,10 @@
     grid-template-columns: 84px repeat(3, minmax(0, 1fr)) max-content;
   }
 
+  .admin-image-row--detail {
+    grid-template-columns: minmax(240px, 1.25fr) repeat(2, minmax(140px, 1fr)) max-content;
+  }
+
   .admin-index-row {
     grid-template-columns: 96px minmax(220px, 1fr) minmax(260px, 1.4fr) 150px max-content;
   }

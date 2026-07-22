@@ -1,6 +1,7 @@
 import { z } from "zod"
 import {
   type AdminArchiveRelease,
+  type AdminArchiveImage,
   type AdminArchiveTrack,
   type AdminAudioTrack,
   type AdminCanvasLayout,
@@ -110,6 +111,17 @@ export const AdminArchiveTrackSchema = z.object({
   sortOrder: z.number().int().nonnegative(),
 }) satisfies z.ZodType<AdminArchiveTrack>
 
+export const AdminArchiveImageSchema = z.object({
+  id: z.string().min(1),
+  src: z.string().min(1),
+  alt: z.string().min(1),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+  aspectRatio: z.string().min(1),
+  objectPosition: z.string().min(1),
+  sortOrder: z.number().int().nonnegative(),
+}) satisfies z.ZodType<AdminArchiveImage>
+
 export const AdminArchiveReleaseSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
@@ -123,6 +135,7 @@ export const AdminArchiveReleaseSchema = z.object({
   description: z.string(),
   status: statusSchema,
   sortOrder: z.number().int().nonnegative(),
+  images: z.array(AdminArchiveImageSchema),
   tracks: z.array(AdminArchiveTrackSchema),
 }) satisfies z.ZodType<AdminArchiveRelease>
 
@@ -236,6 +249,10 @@ function normalizeWork(work: Record<string, unknown>): Record<string, unknown> {
   }
 }
 
+function normalizeArchiveRelease(release: Record<string, unknown>): Record<string, unknown> {
+  return Array.isArray(release["images"]) ? release : { ...release, images: [] }
+}
+
 function normalizeAdminContentInput(input: unknown): unknown {
   if (!isRecord(input) || !Array.isArray(input["works"])) {
     return input
@@ -244,6 +261,11 @@ function normalizeAdminContentInput(input: unknown): unknown {
   return {
     ...input,
     works: input["works"].map((work) => (isRecord(work) ? normalizeWork(work) : work)),
+    archiveReleases: Array.isArray(input["archiveReleases"])
+      ? input["archiveReleases"].map((release) =>
+          isRecord(release) ? normalizeArchiveRelease(release) : release,
+        )
+      : input["archiveReleases"],
   }
 }
 

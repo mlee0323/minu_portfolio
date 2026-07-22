@@ -94,6 +94,17 @@ export type AdminArchiveTrack = {
   readonly sortOrder: number
 }
 
+export type AdminArchiveImage = {
+  readonly id: string
+  readonly src: string
+  readonly alt: string
+  readonly width: number
+  readonly height: number
+  readonly aspectRatio: string
+  readonly objectPosition: string
+  readonly sortOrder: number
+}
+
 export type AdminArchiveRelease = {
   readonly id: string
   readonly title: string
@@ -107,6 +118,7 @@ export type AdminArchiveRelease = {
   readonly description: string
   readonly status: AdminStatus
   readonly sortOrder: number
+  readonly images: readonly AdminArchiveImage[]
   readonly tracks: readonly AdminArchiveTrack[]
 }
 

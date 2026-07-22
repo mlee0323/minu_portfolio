@@ -4,7 +4,7 @@ import { archiveReleases } from "../data/archiveTracks"
 import { ArchiveDetail } from "./ArchiveDetail"
 
 describe("ArchiveDetail", () => {
-  it("shows the album description and its full track list", () => {
+  it("shows the album description, full track list, and detail images", () => {
     // Given
     const release = archiveReleases[0]
 
@@ -13,9 +13,24 @@ describe("ArchiveDetail", () => {
     }
 
     // When
+    const releaseWithImages = {
+      ...release,
+      images: [
+        {
+          id: "release-image-1",
+          src: "/images/works/eye-stroll-telescope.jpg",
+          alt: "Album installation image",
+          width: 1113,
+          height: 787,
+          aspectRatio: "1113 / 787",
+          objectPosition: "center",
+        },
+      ],
+    }
+
     render(
       <AudioManagerProvider>
-        <ArchiveDetail release={release} />
+        <ArchiveDetail release={releaseWithImages} />
       </AudioManagerProvider>,
     )
 
@@ -32,6 +47,10 @@ describe("ArchiveDetail", () => {
     expect(screen.getByRole("link", { name: "Back to archive" })).toHaveAttribute(
       "href",
       "/#archive",
+    )
+    expect(screen.getByRole("img", { name: "Album installation image" })).toHaveAttribute(
+      "src",
+      "/images/works/eye-stroll-telescope.jpg",
     )
   })
 })

@@ -361,6 +361,14 @@
   color: var(--color-danger, #a33c2b);
 }
 
+.admin-upload-notice {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 550;
+}
+
 .admin-upload-dropzone {
   border: 0;
   border-radius: 8px;
