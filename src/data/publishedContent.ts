@@ -113,7 +113,7 @@ export const publishedAdminContent = {
           "sortOrder": 0,
           "layout": {
             "x": 0,
-            "y": 181,
+            "y": 81,
             "width": 139,
             "height": 150
           }
