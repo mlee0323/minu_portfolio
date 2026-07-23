@@ -113,7 +113,7 @@ export const publishedAdminContent = {
           "sortOrder": 0,
           "layout": {
             "x": 0,
-            "y": 81,
+            "y": 181,
             "width": 139,
             "height": 150
           }
@@ -385,7 +385,26 @@ export const publishedAdminContent = {
         "visibility": "public",
         "description": ""
       },
-      "images": [],
+      "images": [
+        {
+          "id": "image-20ef2419-6238-4fa0-9bd3-a8a4cd61e018",
+          "src": "/images/works/eye-stroll-telescope.jpg",
+          "alt": "Installation image",
+          "width": 1200,
+          "height": 800,
+          "aspectRatio": "1200 / 800",
+          "objectPosition": "center",
+          "align": "center",
+          "scale": "medium",
+          "sortOrder": 0,
+          "layout": {
+            "x": 71,
+            "y": 55,
+            "width": 250,
+            "height": 167
+          }
+        }
+      ],
       "textElements": [
         {
           "id": "text-83491816-16b5-40f4-ba43-e16266d1fb77",
@@ -398,9 +417,9 @@ export const publishedAdminContent = {
           "sortOrder": 0,
           "layout": {
             "x": 0,
-            "y": 104,
+            "y": 124,
             "width": 273,
-            "height": 72
+            "height": 52
           }
         },
         {
