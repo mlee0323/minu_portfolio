@@ -548,6 +548,37 @@ export const publishedAdminContent = {
           "sortOrder": 0
         }
       ]
+    },
+    {
+      "id": "release-d721dfd2-2699-4af0-b955-b5855572ae33",
+      "title": "Sidechain",
+      "artist": "L",
+      "type": "single",
+      "provider": "soundcloud",
+      "artworkUrl": "/images/works/eye-stroll-telescope.jpg",
+      "year": "2026",
+      "soundCloudPlaylistUrl": "",
+      "visibility": "public",
+      "description": "",
+      "status": "published",
+      "sortOrder": 3,
+      "images": [],
+      "tracks": [
+        {
+          "id": "archive-track-b5695dd3-cd34-4d69-9249-710b932929ad",
+          "title": "Untitled Track",
+          "artist": "Minu",
+          "artworkUrl": "/images/works/eye-stroll-telescope.jpg",
+          "durationMs": 0,
+          "soundCloudUrl": "",
+          "soundCloudPlaylistUrl": "",
+          "playlistIndex": null,
+          "trackNumber": 1,
+          "visibility": "public",
+          "description": "",
+          "sortOrder": 0
+        }
+      ]
     }
   ],
   "indexItems": [
