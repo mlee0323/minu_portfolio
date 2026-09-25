@@ -1,34 +1,14 @@
-import { useEffect, useState } from "react"
-import {
-  adminContentChangedEvent,
-  adminContentStorageKey,
-  loadAdminContent,
-} from "../admin/adminStore"
+import { publishedAdminContent } from "./publishedContent"
 import { createPublishedSiteContent, type PublishedSiteContent } from "./publishedSiteContent"
 
+// Public pages reflect the content included in the current deployment.
+// Browser drafts belong to the editor until the publish API commits them.
+const deployedSiteContent = createPublishedSiteContent(publishedAdminContent)
+
 export function loadRuntimeSiteContent(): PublishedSiteContent {
-  return createPublishedSiteContent(loadAdminContent())
+  return deployedSiteContent
 }
 
 export function useRuntimeSiteContent(): PublishedSiteContent {
-  const [content, setContent] = useState<PublishedSiteContent>(loadRuntimeSiteContent)
-
-  useEffect(() => {
-    const refreshContent = () => setContent(loadRuntimeSiteContent())
-    const handleStorage = (event: StorageEvent) => {
-      if (event.key === null || event.key === adminContentStorageKey) {
-        refreshContent()
-      }
-    }
-
-    window.addEventListener("storage", handleStorage)
-    window.addEventListener(adminContentChangedEvent, refreshContent)
-
-    return () => {
-      window.removeEventListener("storage", handleStorage)
-      window.removeEventListener(adminContentChangedEvent, refreshContent)
-    }
-  }, [])
-
-  return content
+  return deployedSiteContent
 }

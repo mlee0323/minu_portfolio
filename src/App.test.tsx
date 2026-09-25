@@ -42,7 +42,7 @@ describe("App", () => {
     window.localStorage.clear()
   })
 
-  it("keeps the public site available when published Archive tracks have no playable URL", () => {
+  it("ignores local draft changes on the public site", () => {
     const contentWithoutPlayableArchive: AdminContent = {
       ...publishedAdminContent,
       archiveReleases: publishedAdminContent.archiveReleases.map((release) => ({
@@ -61,7 +61,7 @@ describe("App", () => {
 
     expect(screen.getByRole("region", { name: "Works" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Archive & Sound" })).toBeInTheDocument()
-    expect(screen.queryByTitle("SoundCloud playback transport")).not.toBeInTheDocument()
+    expect(screen.getByTitle("SoundCloud playback transport")).toBeInTheDocument()
   })
 
   it("renders an archive release as a separate detail page", () => {

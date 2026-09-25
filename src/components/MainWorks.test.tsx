@@ -11,14 +11,19 @@ describe("MainWorks", () => {
     })
     const firstFigure = firstImage.closest("figure")
     const firstCanvas = firstImage.closest("article")
+    const firstLayout = publishedWorks[0]?.images[0]?.layout
+
+    if (firstLayout === undefined) {
+      throw new Error("Expected first published work image to have a layout")
+    }
 
     expect(firstFigure).not.toBeNull()
     expect(firstCanvas).not.toBeNull()
     expect(firstFigure).toHaveStyle({
-      top: `${String((56 / 720) * 100)}%`,
-      left: `${String((25 / 390) * 100)}%`,
-      width: `${String((340 / 390) * 100)}%`,
-      height: `${String((240 / 720) * 100)}%`,
+      top: `${String((firstLayout.y / 720) * 100)}%`,
+      left: `${String((firstLayout.x / 390) * 100)}%`,
+      width: `${String((firstLayout.width / 390) * 100)}%`,
+      height: `${String((firstLayout.height / 720) * 100)}%`,
     })
     expect(firstCanvas).toHaveStyle({ aspectRatio: "390 / 720" })
     expect(firstImage).toHaveClass("work-canvas-image")

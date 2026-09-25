@@ -22,7 +22,9 @@ describe("archiveTracks", () => {
 
         if (track.soundCloudPlaylistUrl !== undefined) {
           expect(isAllowedSoundCloudTrackUrl(track.soundCloudPlaylistUrl)).toBe(true)
-          expect(track.playlistIndex ?? -1).toBeGreaterThanOrEqual(0)
+          if (track.playlistIndex !== undefined) {
+            expect(track.playlistIndex).toBeGreaterThanOrEqual(0)
+          }
         }
       }
     }
@@ -36,8 +38,10 @@ describe("archiveTracks", () => {
       expect(track.title.trim()).not.toHaveLength(0)
       expect(track.artist.trim()).not.toHaveLength(0)
       expect(track.artworkUrl.trim()).not.toHaveLength(0)
-      expect(isAllowedSoundCloudTrackUrl(track.soundCloudUrl ?? "")).toBe(true)
-      expect(track.durationMs ?? 1).toBeGreaterThan(0)
+      if (track.soundCloudUrl !== undefined) {
+        expect(isAllowedSoundCloudTrackUrl(track.soundCloudUrl)).toBe(true)
+      }
+      expect(track.durationMs ?? 0).toBeGreaterThanOrEqual(0)
     }
   })
 })

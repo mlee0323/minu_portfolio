@@ -1,4 +1,4 @@
-import ky from "ky"
+import ky, { HTTPError } from "ky"
 import { z } from "zod"
 import type { AdminContent } from "./adminTypes"
 
@@ -12,13 +12,29 @@ const publishResponseSchema = z.object({
 export type AdminPublishResult = z.infer<typeof publishResponseSchema>
 
 export async function publishAdminContent(content: AdminContent): Promise<AdminPublishResult> {
-  return publishResponseSchema.parse(
-    await ky
-      .post("/api/admin/publish", {
-        json: { content },
-        retry: { limit: 1 },
-        timeout: 30_000,
-      })
-      .json(),
-  )
+  try {
+    return publishResponseSchema.parse(
+      await ky
+        .post("/api/admin/publish", {
+          json: { content },
+          retry: { limit: 1 },
+          timeout: 30_000,
+        })
+        .json(),
+    )
+  } catch (error: unknown) {
+    if (error instanceof HTTPError) {
+      const body: unknown = await error.response.json().catch(() => null)
+      if (
+        typeof body === "object" &&
+        body !== null &&
+        "error" in body &&
+        typeof body.error === "string"
+      ) {
+        throw new Error(`Publish failed: ${body.error}`)
+      }
+      throw new Error(`Publish failed (HTTP ${error.response.status})`)
+    }
+    throw error
+  }
 }

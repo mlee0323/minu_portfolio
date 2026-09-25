@@ -18,7 +18,9 @@ describe("adminWorkMutations", () => {
     const deletedEntryWork = seed.works.slice(1)
     const renumbered = renumberWorks(deletedEntryWork)
 
-    expect(renumbered.map((work) => work.sortOrder)).toEqual([0, 1, 2])
+    expect(renumbered.map((work) => work.sortOrder)).toEqual(
+      deletedEntryWork.map((_, index) => index),
+    )
     expect(requireFirstWork(renumbered).isEntry).toBe(true)
   })
 

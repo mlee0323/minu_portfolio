@@ -1,7 +1,7 @@
-import { act, renderHook } from "@testing-library/react"
+import { renderHook } from "@testing-library/react"
 import { saveAdminContent } from "../admin/adminStore"
 import { publishedAdminContent } from "./publishedContent"
-import { useRuntimeSiteContent } from "./runtimeSiteContent"
+import { loadRuntimeSiteContent, useRuntimeSiteContent } from "./runtimeSiteContent"
 
 function createTestStorage(): Storage {
   const values = new Map<string, string>()
@@ -40,7 +40,7 @@ describe("useRuntimeSiteContent", () => {
     window.localStorage.clear()
   })
 
-  it("updates the public content from a saved Admin draft and hides draft records", () => {
+  it("keeps unpublished browser drafts off the public site", () => {
     const editedContent = {
       ...publishedAdminContent,
       works: publishedAdminContent.works.map((work, index) =>
@@ -51,28 +51,7 @@ describe("useRuntimeSiteContent", () => {
     saveAdminContent(editedContent)
     const { result } = renderHook(() => useRuntimeSiteContent())
 
-    expect(result.current.works[0]?.title).toBe("Saved mobile canvas")
-
-    const updatedContent = {
-      ...editedContent,
-      works: editedContent.works.map((work, index) =>
-        index === 0 ? { ...work, title: "Updated in another Admin save" } : work,
-      ),
-    }
-
-    act(() => saveAdminContent(updatedContent))
-    expect(result.current.works[0]?.title).toBe("Updated in another Admin save")
-
-    const draftOnlyContent = {
-      ...updatedContent,
-      works: updatedContent.works.map((work, index) =>
-        index === 0 ? { ...work, status: "draft" as const } : work,
-      ),
-    }
-
-    act(() => saveAdminContent(draftOnlyContent))
-    expect(
-      result.current.works.some((work) => work.title === "Updated in another Admin save"),
-    ).toBe(false)
+    expect(result.current.works[0]?.title).toBe(publishedAdminContent.works[0]?.title)
+    expect(loadRuntimeSiteContent().works[0]?.title).toBe(publishedAdminContent.works[0]?.title)
   })
 })
