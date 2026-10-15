@@ -33,39 +33,39 @@ export const publishedAdminContent = {
       },
       "images": [
         {
-          "id": "eye-stroll-telescope",
-          "src": "/images/works/eye-stroll-telescope.jpg",
-          "alt": "An Eye Stroll installation with a telescope facing a small circular wall object",
-          "width": 1113,
-          "height": 787,
-          "aspectRatio": "1113 / 787",
+          "id": "image-9794314d-047c-413f-ba9b-fd678f25aa63",
+          "src": "/api/assets?pathname=admin-assets%2F1792075688792-1graduation-exhibition-a-fHkzxx4JzaOZu3Emh2k5YwKWauLv1M.jpg",
+          "alt": "1Graduation Exhibition A",
+          "width": 6060,
+          "height": 3409,
+          "aspectRatio": "6060 / 3409",
           "objectPosition": "center",
           "align": "center",
-          "scale": "large",
+          "scale": "medium",
           "sortOrder": 0,
           "layout": {
             "x": 0,
-            "y": 390,
+            "y": 75,
             "width": 390,
-            "height": 275
+            "height": 220
           }
         },
         {
-          "id": "eye-stroll-room-wide",
-          "src": "/images/works/eye-stroll-room-wide.jpg",
-          "alt": "Wide exhibition room with suspended and freestanding installation objects",
-          "width": 1116,
-          "height": 498,
-          "aspectRatio": "1116 / 498",
+          "id": "image-ef49bb1b-b828-4748-908e-edca0e608511",
+          "src": "/api/assets?pathname=admin-assets%2F1792075722218-1an-eye-stroll-1-3ETAndIiOYLUHWCSiNXq17XO2rVyKo.jpg",
+          "alt": "1An Eye Stroll #1",
+          "width": 4160,
+          "height": 2768,
+          "aspectRatio": "4160 / 2768",
           "objectPosition": "center",
-          "align": "right",
-          "scale": "large",
+          "align": "center",
+          "scale": "medium",
           "sortOrder": 1,
           "layout": {
             "x": 0,
-            "y": 118,
+            "y": 381,
             "width": 390,
-            "height": 173
+            "height": 258
           }
         }
       ],
