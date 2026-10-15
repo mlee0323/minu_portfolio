@@ -36,9 +36,7 @@ export async function uploadAdminImageAsset(
     const uploadPromise = upload(`admin-assets/${Date.now()}-${safePathSegment(file.name)}`, file, {
       access: "public",
       contentType: file.type,
-      // Keep the browser request under the Cloudflare Access-protected /admin/*
-      // destination. Vercel rewrites this path to the API function server-side.
-      handleUploadUrl: "/admin/upload",
+      handleUploadUrl: "/api/admin/upload",
       multipart: file.size >= blobMultipartThresholdBytes,
       onUploadProgress: (event) => onProgress?.(event.percentage),
       abortSignal: abortController.signal,
