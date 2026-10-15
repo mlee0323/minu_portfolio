@@ -32,9 +32,7 @@ export async function uploadAdminImageAsset(
     contentType: file.type,
     handleUploadUrl: "/api/admin/upload",
     multipart: file.size >= blobMultipartThresholdBytes,
-    onUploadProgress: (event) => {
-      onProgress?.(Math.round(event.loaded / event.total * 100))
-    },
+    onUploadProgress: (event) => onProgress?.(event.percentage),
   })
 
   return {
