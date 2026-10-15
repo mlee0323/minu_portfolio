@@ -75,9 +75,13 @@ export default async function handler(request: VercelRequest, response: VercelRe
     return
   }
 
+  const startedAt = Date.now()
+  let stage = "authenticate"
   try {
     const session = await verifyAdminRequest(request.headers, process.env)
+    stage = "parse-request"
     const body = parseHandleUploadBody(request.body)
+    stage = "generate-token"
     const result = await handleUpload({
       request,
       body,
@@ -87,11 +91,23 @@ export default async function handler(request: VercelRequest, response: VercelRe
         maximumSizeInBytes: maxProductionAdminImageUploadBytes,
         tokenPayload: JSON.stringify({ email: session.email }),
       }),
-      onUploadCompleted: async () => {},
+      // Assets are added from the browser's upload result. Do not register a no-op
+      // webhook: Vercel Blob's server callback cannot sign in to Cloudflare Access.
     })
 
+    console.info("admin.blob.upload", {
+      event: body.type,
+      status: 200,
+      durationMs: Date.now() - startedAt,
+    })
     sendJson(response, 200, result)
   } catch (error: unknown) {
+    console.error("admin.blob.upload.failed", {
+      stage,
+      status: error instanceof z.ZodError ? 400 : statusForAdminRequestError(error),
+      durationMs: Date.now() - startedAt,
+      errorType: error instanceof Error ? error.name : "UnknownError",
+    })
     if (error instanceof z.ZodError) {
       sendJson(response, 400, { ok: false, error: "Upload request is invalid" })
       return

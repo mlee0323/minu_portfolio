@@ -13,7 +13,7 @@ const contentSecurityPolicy = [
   "media-src 'self' blob: data: https://*.blob.vercel-storage.com",
   "frame-src https://w.soundcloud.com",
   "child-src https://w.soundcloud.com",
-  "connect-src 'self' http://127.0.0.1:* ws://127.0.0.1:* http://localhost:* ws://localhost:* https://api.soundcloud.com https://*.soundcloud.com https://*.sndcdn.com https://blob.vercel-storage.com https://*.blob.vercel-storage.com",
+  "connect-src 'self' http://127.0.0.1:* ws://127.0.0.1:* http://localhost:* ws://localhost:* https://api.soundcloud.com https://*.soundcloud.com https://*.sndcdn.com https://vercel.com/api/blob/ https://blob.vercel-storage.com https://*.blob.vercel-storage.com",
   "font-src 'self' data:",
   "manifest-src 'self'",
 ].join("; ")
