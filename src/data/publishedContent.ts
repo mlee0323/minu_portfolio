@@ -5,7 +5,7 @@ export const publishedAdminContent = {
   "works": [
     {
       "id": "work-field-study",
-      "title": "Sidechian",
+      "title": "Sidechian 2025 TEST",
       "artist": "Minu",
       "year": "2025",
       "medium": "size variable / astronomical telescope / mirror / other items",
