@@ -537,6 +537,10 @@ select {
   .site-nav {
     align-items: flex-start;
     min-height: 50px;
+    padding: 8px 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
   }
 
   .site-nav__menu-toggle {
@@ -546,17 +550,17 @@ select {
 
   .site-nav nav {
     position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
+    top: calc(100% + 2px);
+    right: auto;
     left: 0;
     display: none;
     flex-direction: column;
-    align-items: stretch;
-    gap: 2px;
-    padding: 8px;
-    border-radius: 8px;
-    background: rgb(25 25 22 / 92%);
-    box-shadow: 0 14px 40px -20px rgb(7 7 6 / 80%);
+    align-items: flex-start;
+    gap: 0;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
   }
 
   .site-nav.is-menu-open nav {
@@ -564,15 +568,7 @@ select {
   }
 
   .site-nav nav a {
-    padding: 12px 10px;
-  }
-
-  .site-nav nav {
-    gap: 0;
-  }
-
-  .site-nav nav a {
-    padding-inline: 6px;
+    padding: 8px 0;
   }
 
   .site-nav__brand small {
