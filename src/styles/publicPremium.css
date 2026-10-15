@@ -548,7 +548,7 @@ select {
     margin: 0;
     width: 34px;
     height: 34px;
-    transform: translateY(1px);
+    transform: translateY(13px);
   }
 
   .site-nav__menu-toggle svg {
@@ -558,7 +558,7 @@ select {
 
   .site-nav nav {
     position: absolute;
-    top: 8px;
+    top: 21px;
     right: 48px;
     left: auto;
     display: flex;
