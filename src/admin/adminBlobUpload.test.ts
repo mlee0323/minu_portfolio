@@ -55,7 +55,7 @@ describe("uploadAdminImageAsset", () => {
       expect.objectContaining({
         access: "public",
         contentType: "image/jpeg",
-        handleUploadUrl: "/api/admin/upload",
+        handleUploadUrl: "/admin/upload",
       }),
     )
   })

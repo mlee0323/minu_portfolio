@@ -37,6 +37,10 @@
   ],
   "rewrites": [
     {
+      "source": "/admin/upload",
+      "destination": "/api/admin/upload"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     },
