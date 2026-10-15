@@ -29,12 +29,10 @@ export async function uploadAdminImageAsset(
 
   const metadata = await readAdminImageMetadata(file)
   const abortController = new AbortController()
-  const timeoutId = window.setTimeout(() => abortController.abort(), blobUploadTimeoutMs)
-
   onProgress?.(0)
 
   try {
-    const blob = await upload(`admin-assets/${Date.now()}-${safePathSegment(file.name)}`, file, {
+    const uploadPromise = upload(`admin-assets/${Date.now()}-${safePathSegment(file.name)}`, file, {
       access: "public",
       contentType: file.type,
       handleUploadUrl: "/api/admin/upload",
@@ -42,12 +40,17 @@ export async function uploadAdminImageAsset(
       onUploadProgress: (event) => onProgress?.(event.percentage),
       abortSignal: abortController.signal,
     })
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      window.setTimeout(() => {
+        abortController.abort()
+        reject(new DOMException("Image upload timed out", "AbortError"))
+      }, blobUploadTimeoutMs)
+    })
+    const blob = await Promise.race([uploadPromise, timeoutPromise])
 
     return {
       ...metadata,
       src: blob.url,
     }
-  } finally {
-    window.clearTimeout(timeoutId)
   }
 }
