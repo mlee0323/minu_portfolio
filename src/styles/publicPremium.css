@@ -550,13 +550,13 @@ select {
 
   .site-nav nav {
     position: absolute;
-    top: calc(100% + 2px);
-    right: auto;
+    top: 0;
+    right: 44px;
     left: 0;
     display: none;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
-    gap: 0;
+    gap: 14px;
     padding: 0;
     border-radius: 0;
     background: transparent;
