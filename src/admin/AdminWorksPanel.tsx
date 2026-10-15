@@ -168,6 +168,8 @@ export function AdminWorksPanel({ content, onChange }: WorksPanelProps) {
       return
     }
 
+    setNotice("Uploading image…")
+
     try {
       const uploaded = await uploadAdminImageAsset(file)
       const image = createWorkImageFromAsset({
@@ -182,7 +184,8 @@ export function AdminWorksPanel({ content, onChange }: WorksPanelProps) {
         setNotice(error.message)
         return
       }
-      throw error
+
+      setNotice(error instanceof Error ? `Image upload failed: ${error.message}` : "Image upload failed.")
     }
   }
 
