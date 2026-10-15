@@ -546,13 +546,20 @@ select {
   .site-nav__menu-toggle {
     display: inline-flex;
     margin: -2px 0;
+    width: 40px;
+    height: 40px;
+  }
+
+  .site-nav__menu-toggle svg {
+    width: 24px;
+    height: 24px;
   }
 
   .site-nav nav {
     position: absolute;
     top: 0;
-    right: 44px;
-    left: 0;
+    right: 48px;
+    left: 36px;
     display: none;
     flex-direction: row;
     align-items: flex-start;
