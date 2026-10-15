@@ -545,7 +545,7 @@ select {
 
   .site-nav__menu-toggle {
     display: inline-flex;
-    margin: -2px 0;
+    margin: 0;
     width: 34px;
     height: 34px;
   }
