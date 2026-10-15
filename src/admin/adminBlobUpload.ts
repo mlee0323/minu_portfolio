@@ -7,6 +7,7 @@ import {
 } from "./adminImageUpload"
 
 const blobMultipartThresholdBytes = 4 * 1024 * 1024
+const blobUploadTimeoutMs = 30_000
 
 function safePathSegment(fileName: string): string {
   const cleaned = fileName
@@ -27,16 +28,26 @@ export async function uploadAdminImageAsset(
   }
 
   const metadata = await readAdminImageMetadata(file)
-  const blob = await upload(`admin-assets/${Date.now()}-${safePathSegment(file.name)}`, file, {
-    access: "public",
-    contentType: file.type,
-    handleUploadUrl: "/api/admin/upload",
-    multipart: file.size >= blobMultipartThresholdBytes,
-    onUploadProgress: (event) => onProgress?.(event.percentage),
-  })
+  const abortController = new AbortController()
+  const timeoutId = window.setTimeout(() => abortController.abort(), blobUploadTimeoutMs)
 
-  return {
-    ...metadata,
-    src: blob.url,
+  onProgress?.(0)
+
+  try {
+    const blob = await upload(`admin-assets/${Date.now()}-${safePathSegment(file.name)}`, file, {
+      access: "public",
+      contentType: file.type,
+      handleUploadUrl: "/api/admin/upload",
+      multipart: file.size >= blobMultipartThresholdBytes,
+      onUploadProgress: (event) => onProgress?.(event.percentage),
+      abortSignal: abortController.signal,
+    })
+
+    return {
+      ...metadata,
+      src: blob.url,
+    }
+  } finally {
+    window.clearTimeout(timeoutId)
   }
 }

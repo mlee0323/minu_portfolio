@@ -193,7 +193,12 @@ export function AdminWorksPanel({ content, onChange }: WorksPanelProps) {
         return
       }
 
-      const message = error instanceof Error ? `Image upload failed: ${error.message}` : "Image upload failed."
+      const message =
+        error instanceof DOMException && error.name === "AbortError"
+          ? "Image upload timed out. Check Blob authentication and try again."
+          : error instanceof Error
+            ? `Image upload failed: ${error.message}`
+            : "Image upload failed."
       setNotice(message)
       setUploadStatus(message)
       setUploadProgress(null)
