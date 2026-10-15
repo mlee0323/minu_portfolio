@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowUpRight, Disc3, Play, Radio } from "lucide-react"
 import { useState } from "react"
 import { useAudioManager, useAudioPlayback } from "../audio/AudioManagerProvider"
 import type { AudioRelease, AudioTrack } from "../audio/types"
+import { navigateWithinPublicApp } from "../lib/navigation"
 import { ArchiveTrackRows } from "./Archive"
 import { TrackArtwork } from "./TrackArtwork"
 
@@ -29,7 +30,25 @@ export function ArchiveDetail({ release }: ArchiveDetailProps) {
 
   return (
     <section className="archive-detail" id="archive-detail">
-      <a className="archive-detail__back" href="/#archive">
+      <a
+        className="archive-detail__back"
+        href="/#archive"
+        onClick={(event) => {
+          if (
+            event.defaultPrevented ||
+            event.button !== 0 ||
+            event.metaKey ||
+            event.ctrlKey ||
+            event.shiftKey ||
+            event.altKey
+          ) {
+            return
+          }
+
+          event.preventDefault()
+          navigateWithinPublicApp("/#archive")
+        }}
+      >
         <ArrowLeft size={15} />
         Back to archive
       </a>

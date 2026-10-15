@@ -2,6 +2,7 @@ import { ArrowUpRight, Disc3, ListMusic, Radio } from "lucide-react"
 import { useState } from "react"
 import { useAudioPlayback } from "../audio/AudioManagerProvider"
 import type { AudioRelease, AudioTrack } from "../audio/types"
+import { navigateWithinPublicApp } from "../lib/navigation"
 import { formatDuration } from "../lib/time"
 import { TrackArtwork } from "./TrackArtwork"
 
@@ -144,6 +145,21 @@ export function Archive({ releases }: ArchiveProps) {
                 className="release-card__cover-link"
                 href={releaseHref}
                 aria-label={`Open ${release.title} album page`}
+                onClick={(event) => {
+                  if (
+                    event.defaultPrevented ||
+                    event.button !== 0 ||
+                    event.metaKey ||
+                    event.ctrlKey ||
+                    event.shiftKey ||
+                    event.altKey
+                  ) {
+                    return
+                  }
+
+                  event.preventDefault()
+                  navigateWithinPublicApp(releaseHref)
+                }}
               >
                 <TrackArtwork track={coverTrack} size="medium" />
                 <span className="release-card__cover-scrim" aria-hidden="true" />

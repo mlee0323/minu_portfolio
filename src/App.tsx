@@ -55,26 +55,17 @@ function PublicSite() {
         {isArchiveDetail ? (
           <div className="archive-sound-grid">
             <ArchiveDetail release={archiveRelease} />
-            {initialSoundCloudTrack === undefined ? null : (
-              <SoundCloudPlayer
-                initialTrack={initialSoundCloudTrack}
-                key={initialSoundCloudTrack.id}
-              />
-            )}
           </div>
         ) : (
           <>
             <MainWorks works={siteContent.works} />
             <div className="archive-sound-grid">
               <Archive releases={siteContent.archiveReleases} />
-              {initialSoundCloudTrack === undefined ? null : (
-                <SoundCloudPlayer
-                  initialTrack={initialSoundCloudTrack}
-                  key={initialSoundCloudTrack.id}
-                />
-              )}
             </div>
           </>
+        )}
+        {initialSoundCloudTrack === undefined ? null : (
+          <SoundCloudPlayer initialTrack={initialSoundCloudTrack} />
         )}
         <IndexContact contactLinks={siteContent.contactLinks} indexItems={siteContent.indexItems} />
       </main>
