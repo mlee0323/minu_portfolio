@@ -557,12 +557,12 @@ select {
 
   .site-nav nav {
     position: absolute;
-    top: 0;
+    top: 8px;
     right: 48px;
-    left: 36px;
+    left: auto;
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     gap: 14px;
     padding: 0;
     border-radius: 0;
@@ -570,23 +570,27 @@ select {
     box-shadow: none;
     opacity: 0;
     pointer-events: none;
-    transform: translateX(-10px);
+    transform: scaleX(0);
+    transform-origin: right center;
     transition:
-      opacity 180ms var(--ease-studio),
-      transform 220ms var(--ease-studio),
-      visibility 180ms var(--ease-studio);
+      opacity 420ms var(--ease-studio),
+      transform 420ms var(--ease-studio),
+      visibility 420ms var(--ease-studio);
     visibility: hidden;
   }
 
   .site-nav.is-menu-open nav {
     opacity: 1;
     pointer-events: auto;
-    transform: translateX(0);
+    transform: scaleX(1);
     visibility: visible;
   }
 
   .site-nav nav a {
-    padding: 8px 0;
+    display: inline-flex;
+    align-items: center;
+    height: 34px;
+    padding: 0;
   }
 
   .site-nav__brand small {
