@@ -1,6 +1,7 @@
 import { type HandleUploadBody, handleUpload } from "@vercel/blob/client"
 import type { VercelRequest, VercelResponse } from "@vercel/node"
 import { z } from "zod"
+import { isAdminImageAssetPath } from "../../src/admin/adminImageAsset.ts"
 import {
   adminImageContentTypes,
   maxProductionAdminImageUploadBytes,
@@ -24,7 +25,7 @@ const handleUploadBodySchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("blob.generate-client-token"),
     payload: z.object({
-      pathname: z.string().min(1),
+      pathname: z.string().refine(isAdminImageAssetPath),
       multipart: z.boolean(),
       clientPayload: z.string().nullable(),
     }),

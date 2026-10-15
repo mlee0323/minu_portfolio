@@ -35,7 +35,7 @@ describe("uploadAdminImageAsset", () => {
     vi.useFakeTimers()
     mocks.shouldVerifyAdminAccess.mockReturnValue(true)
     mocks.readAdminImageMetadata.mockResolvedValue({ alt: "test", width: 10, height: 10 })
-    let finish!: (value: { url: string }) => void
+    let finish!: (value: { url: string; pathname: string }) => void
     mocks.upload.mockImplementation(
       () =>
         new Promise((resolve) => {
@@ -50,8 +50,10 @@ describe("uploadAdminImageAsset", () => {
     await vi.advanceTimersByTimeAsync(20_000)
     expect(options.abortSignal.aborted).toBe(false)
     options.onUploadProgress({ percentage: 80 })
-    finish({ url: "https://store.example.com/test.jpg" })
-    await expect(result).resolves.toMatchObject({ src: "https://store.example.com/test.jpg" })
+    finish({ url: "https://store.example.com/test.jpg", pathname: "admin-assets/123-test.jpg" })
+    await expect(result).resolves.toMatchObject({
+      src: "/api/assets?pathname=admin-assets%2F123-test.jpg",
+    })
     expect(onProgress.mock.calls.map(([progress]) => progress)).toEqual([0, 40, 80, 100])
     expect(vi.getTimerCount()).toBe(0)
   })
@@ -82,12 +84,15 @@ describe("uploadAdminImageAsset", () => {
     mocks.readAdminUploadedImage.mockRejectedValue(
       new Error("Local draft image limit should not run in production"),
     )
-    mocks.upload.mockResolvedValue({ url: "https://store.example.com/album-detail.jpg" })
+    mocks.upload.mockResolvedValue({
+      url: "https://store.example.com/album-detail.jpg",
+      pathname: "admin-assets/123-album-detail.jpg",
+    })
 
     await expect(uploadAdminImageAsset(file)).resolves.toEqual({
       alt: "album detail",
       height: 1600,
-      src: "https://store.example.com/album-detail.jpg",
+      src: "/api/assets?pathname=admin-assets%2F123-album-detail.jpg",
       width: 2400,
     })
 
@@ -96,7 +101,7 @@ describe("uploadAdminImageAsset", () => {
       expect.stringMatching(/^admin-assets\//),
       file,
       expect.objectContaining({
-        access: "public",
+        access: "private",
         contentType: "image/jpeg",
         handleUploadUrl: "/api/admin/upload",
       }),

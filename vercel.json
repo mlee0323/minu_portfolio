@@ -4,6 +4,9 @@
   "framework": "vite",
   "outputDirectory": "dist",
   "functions": {
+    "api/assets.ts": {
+      "includeFiles": "src/**"
+    },
     "api/admin/*.ts": {
       "includeFiles": "src/**"
     }

@@ -1,5 +1,6 @@
 import { upload } from "@vercel/blob/client"
 import { shouldVerifyAdminAccess } from "./adminAccessClient"
+import { adminImageAssetSrc } from "./adminImageAsset"
 import {
   AdminImageUploadError,
   type AdminUploadedImage,
@@ -51,7 +52,7 @@ export async function uploadAdminImageAsset(
       resetIdleTimeout()
     })
     const uploadPromise = upload(`admin-assets/${Date.now()}-${safePathSegment(file.name)}`, file, {
-      access: "public",
+      access: "private",
       contentType: file.type,
       handleUploadUrl: "/api/admin/upload",
       multipart: file.size >= blobMultipartThresholdBytes,
@@ -70,7 +71,7 @@ export async function uploadAdminImageAsset(
 
     return {
       ...metadata,
-      src: blob.url,
+      src: adminImageAssetSrc(blob.pathname),
     }
   } finally {
     if (timeoutId !== undefined) {

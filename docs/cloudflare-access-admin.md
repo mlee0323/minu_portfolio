@@ -59,13 +59,13 @@ When the admin clicks `Save draft` in production, `/api/admin/publish` commits a
 ## Vercel Blob Setup
 
 1. In Vercel, open the project `Storage` tab.
-2. Create a Blob store.
+2. Create a **Private** Blob store (production uses `minu_db`).
 3. Connect it to this project.
 4. Confirm `BLOB_READ_WRITE_TOKEN` is present in the project environment variables.
 
 Images uploaded in local development stay as local preview data URLs. Images uploaded after
-Cloudflare admin login go to Vercel Blob and the public Blob URL is stored in the published
-content.
+Cloudflare admin login go to Vercel Blob and a same-origin `/api/assets?pathname=...` URL is stored in the published
+content. The Blob URL itself remains private.
 
 ## App Behavior
 
@@ -88,6 +88,15 @@ webhook is registered, since a Blob service callback cannot authenticate through
 the protected Cloudflare Access application. The read/write token remains in the
 server environment; the browser receives only a constrained upload token.
 
+Uploads use `access: "private"` to match `minu_db`. `/api/assets` streams images
+using the server token. Anonymous requests can read only image paths referenced
+by **published** works/releases in the deployed content. Unpublished previews
+require a valid Cloudflare Access JWT from the assertion header or signed
+`CF_Authorization` cookie, with the existing issuer, audience and email checks.
+All image responses use `private, no-store`; unknown paths and unauthenticated
+drafts return 404. The endpoint restricts paths to `admin-assets/` upload files
+and serves only the supported raster image types, never arbitrary store data.
+
 Uploads abort after 30 seconds without progress, rather than 30 seconds total.
 The upload endpoint logs event/status/duration and failure stage/error type, never
 JWTs, client tokens, or the Blob read/write token.
@@ -98,5 +107,8 @@ On 2026-10-15 the production browser showed `/api/admin/session` and
 `sfo1::iad1::rx9jf-1792072691916-0ea64d7b73c9` (Cloudflare ray
 `a4af565469dbd938-LAX`). The following Blob upload was blocked by both CSP
 policies, and retries ended in the client timeout. This was not a Cloudflare
-Access login failure. Check the token POST, subsequent Blob request, browser CSP
+Access login failure. After fixing CSP, the public upload attempt reached the
+Blob API but returned HTTP 400 without CORS headers. The dashboard confirmed
+`minu_db` is Private while the uploader requested public access. The uploader
+and server image delivery now keep the existing store private. Check the token POST, subsequent Blob request, browser CSP
 errors, and `admin.blob.upload` runtime log separately when diagnosing uploads.
