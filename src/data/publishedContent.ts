@@ -45,7 +45,7 @@ export const publishedAdminContent = {
           "sortOrder": 0,
           "layout": {
             "x": 0,
-            "y": 32,
+            "y": 66,
             "width": 390,
             "height": 220
           }
@@ -63,7 +63,7 @@ export const publishedAdminContent = {
           "sortOrder": 1,
           "layout": {
             "x": 0,
-            "y": 381,
+            "y": 374,
             "width": 390,
             "height": 258
           }
@@ -147,7 +147,7 @@ export const publishedAdminContent = {
       "artist": "L",
       "type": "ep",
       "provider": "soundcloud",
-      "artworkUrl": "https://i1.sndcdn.com/artworks-000067273270-uinyvw-t500x500.jpg",
+      "artworkUrl": "/api/assets?pathname=admin-assets%2F1792076460288-the-point--KJPB4TO6oRtGqsOYPAAfoHCZqhRp9h.png",
       "year": "2025",
       "soundCloudPlaylistUrl": "https://soundcloud.com/syawla_nnuu/sets/the-point?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       "visibility": "public",
@@ -192,20 +192,31 @@ export const publishedAdminContent = {
       "artist": "L",
       "type": "single",
       "provider": "soundcloud",
-      "artworkUrl": "https://picsum.photos/seed/archive-loose/640/640",
+      "artworkUrl": "/api/assets?pathname=admin-assets%2F1792075860745-2-x41Amp2PXOs45xlWvnKe4KDk1T4fKZ.jpg",
       "year": "2025",
       "soundCloudPlaylistUrl": "https://soundcloud.com/syawla_nnuu/envelope?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       "visibility": "public",
       "description": "Remembrance.\n",
       "status": "published",
       "sortOrder": 1,
-      "images": [],
+      "images": [
+        {
+          "id": "archive-image-93e7d701-e7b0-43c3-8fec-eec01afd6343",
+          "src": "/api/assets?pathname=admin-assets%2F1792076502732-kakaotalk-photo-2026-02-03-23-53-26-3-07cKMYDx2JUSPl7z8FKOrlMMEeRUK3.png",
+          "alt": "KakaoTalk Photo 2026 02 03 23 53 26 3",
+          "width": 3605,
+          "height": 2733,
+          "aspectRatio": "3605 / 2733",
+          "objectPosition": "center",
+          "sortOrder": 0
+        }
+      ],
       "tracks": [
         {
           "id": "archive-electric-relaxation",
           "title": "Envelope",
           "artist": "L",
-          "artworkUrl": "https://picsum.photos/seed/archive-electric-relaxation/640/640",
+          "artworkUrl": "/api/assets?pathname=admin-assets%2F1792076521555-envelope-zBDQjjbUVn3AUkCTTdJjdBpbRfoeem.jpg",
           "durationMs": 196000,
           "soundCloudUrl": "https://soundcloud.com/syawla_nnuu/envelope?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
           "soundCloudPlaylistUrl": "",
@@ -223,7 +234,7 @@ export const publishedAdminContent = {
       "artist": "L",
       "type": "single",
       "provider": "soundcloud",
-      "artworkUrl": "/images/works/eye-stroll-telescope.jpg",
+      "artworkUrl": "/api/assets?pathname=admin-assets%2F1792076268597-1an-eye-stroll-1--2aoVsikB2zvPk7LpCf711PEUW16GLM.jpg",
       "year": "2026",
       "soundCloudPlaylistUrl": "https://soundcloud.com/syawla_nnuu/sidechain-wav?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       "visibility": "public",
@@ -254,7 +265,7 @@ export const publishedAdminContent = {
       "artist": "L",
       "type": "single",
       "provider": "soundcloud",
-      "artworkUrl": "/images/works/eye-stroll-telescope.jpg",
+      "artworkUrl": "/api/assets?pathname=admin-assets%2F1792076486983-sidechain-pmxWnEx0uxMhuFb2EHZc2ihfvRkLVw.jpg",
       "year": "2026",
       "soundCloudPlaylistUrl": "",
       "visibility": "public",
