@@ -41,6 +41,12 @@ function PublicSite() {
     setExperienceStarted(isArchiveDetail)
   }, [isArchiveDetail])
 
+  useEffect(() => {
+    if (isArchiveDetail) {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" })
+    }
+  }, [isArchiveDetail, pathname])
+
   return (
     <AudioManagerProvider>
       <LocalAudioBridge />
