@@ -39,6 +39,7 @@ export function AdminWorksPanel({ content, onChange }: WorksPanelProps) {
   const [selectedElement, setSelectedElement] = useState<SelectedCanvasElement | null>(null)
   const [viewport, setViewport] = useState<AdminCanvasViewport>("mobile")
   const [notice, setNotice] = useState("Drag images and text directly on the preview.")
+  const [uploadStatus, setUploadStatus] = useState("")
   const selectedWork = content.works.find((work) => work.id === selectedWorkId) ?? content.works[0]
   const archiveTracks = listArchiveAudioTracks(content)
 
@@ -169,6 +170,7 @@ export function AdminWorksPanel({ content, onChange }: WorksPanelProps) {
     }
 
     setNotice("Uploading image…")
+    setUploadStatus("Uploading image…")
 
     try {
       const uploaded = await uploadAdminImageAsset(file)
@@ -179,13 +181,17 @@ export function AdminWorksPanel({ content, onChange }: WorksPanelProps) {
       updateSelectedWork({ images: [...selectedWork.images, image] })
       setSelectedElement({ kind: "image", id: image.id })
       setNotice("Image added.")
+      setUploadStatus("Image added to Assets.")
     } catch (error: unknown) {
       if (error instanceof AdminImageUploadError) {
         setNotice(error.message)
+        setUploadStatus(error.message)
         return
       }
 
-      setNotice(error instanceof Error ? `Image upload failed: ${error.message}` : "Image upload failed.")
+      const message = error instanceof Error ? `Image upload failed: ${error.message}` : "Image upload failed."
+      setNotice(message)
+      setUploadStatus(message)
     }
   }
 
@@ -213,6 +219,7 @@ export function AdminWorksPanel({ content, onChange }: WorksPanelProps) {
           onUploadImage={(file) => {
             void uploadImage(file)
           }}
+          uploadStatus={uploadStatus}
         />
 
         <section className="admin-preview-workspace">

@@ -15,6 +15,7 @@ type WorksAssetPanelProps = {
   readonly onSelectElement: (element: SelectedCanvasElement) => void
   readonly onSelectWork: (workId: string) => void
   readonly onUploadImage: (file: File) => void
+  readonly uploadStatus: string
 }
 
 function isSelectedImage(
@@ -33,6 +34,7 @@ export function AdminWorksAssetPanel({
   onSelectElement,
   onSelectWork,
   onUploadImage,
+  uploadStatus,
   selectedElement,
   selectedWork,
   works,
@@ -103,6 +105,11 @@ export function AdminWorksAssetPanel({
             }}
           />
         </label>
+        {uploadStatus ? (
+          <span className="admin-upload-notice" role="status" aria-live="polite">
+            {uploadStatus}
+          </span>
+        ) : null}
         <button className="pill-button pill-button--accent" type="button" onClick={onAddBlankImage}>
           <Plus size={15} />
           Add placeholder image
