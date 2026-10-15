@@ -29,6 +29,7 @@ export async function uploadAdminImageAsset(
 
   const metadata = await readAdminImageMetadata(file)
   const abortController = new AbortController()
+  let timeoutId: number | undefined
   onProgress?.(0)
 
   try {
@@ -43,7 +44,7 @@ export async function uploadAdminImageAsset(
       abortSignal: abortController.signal,
     })
     const timeoutPromise = new Promise<never>((_, reject) => {
-      window.setTimeout(() => {
+      timeoutId = window.setTimeout(() => {
         abortController.abort()
         reject(new DOMException("Image upload timed out", "AbortError"))
       }, blobUploadTimeoutMs)
@@ -53,6 +54,10 @@ export async function uploadAdminImageAsset(
     return {
       ...metadata,
       src: blob.url,
+    }
+  } finally {
+    if (timeoutId !== undefined) {
+      window.clearTimeout(timeoutId)
     }
   }
 }
