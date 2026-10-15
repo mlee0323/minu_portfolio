@@ -546,8 +546,8 @@ select {
   .site-nav__menu-toggle {
     display: inline-flex;
     margin: -2px 0;
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
   }
 
   .site-nav__menu-toggle svg {
@@ -560,7 +560,7 @@ select {
     top: 0;
     right: 48px;
     left: 36px;
-    display: none;
+    display: flex;
     flex-direction: row;
     align-items: flex-start;
     gap: 14px;
@@ -568,10 +568,21 @@ select {
     border-radius: 0;
     background: transparent;
     box-shadow: none;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-10px);
+    transition:
+      opacity 180ms var(--ease-studio),
+      transform 220ms var(--ease-studio),
+      visibility 180ms var(--ease-studio);
+    visibility: hidden;
   }
 
   .site-nav.is-menu-open nav {
-    display: flex;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+    visibility: visible;
   }
 
   .site-nav nav a {
