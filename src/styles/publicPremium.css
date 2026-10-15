@@ -548,6 +548,7 @@ select {
     margin: 0;
     width: 34px;
     height: 34px;
+    color: #d9d9d9;
     transform: translateY(10.3px);
   }
 
