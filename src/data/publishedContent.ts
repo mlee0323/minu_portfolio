@@ -5,7 +5,7 @@ export const publishedAdminContent = {
   "works": [
     {
       "id": "work-field-study",
-      "title": "Sidechian",
+      "title": "Sidechian NETWORK TEST",
       "artist": "Minu",
       "year": "2025",
       "medium": "size variable / astronomical telescope / mirror / other items",
@@ -18,18 +18,18 @@ export const publishedAdminContent = {
         "height": 720
       },
       "audio": {
-        "id": "archive-track-f2d05936-27c4-4748-adea-75ff4d8de2d1",
-        "title": "Sidechain",
+        "id": "archive-electric-relaxation",
+        "title": "Envelope",
         "artist": "L",
         "provider": "soundcloud",
-        "artworkUrl": "/images/works/eye-stroll-telescope.jpg",
-        "durationMs": 0,
+        "artworkUrl": "https://picsum.photos/seed/archive-electric-relaxation/640/640",
+        "durationMs": 196000,
         "localAudioUrl": "",
-        "soundCloudUrl": "https://soundcloud.com/syawla_nnuu/sidechain-wav?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+        "soundCloudUrl": "https://soundcloud.com/syawla_nnuu/envelope?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
         "soundCloudPlaylistUrl": "",
         "playlistIndex": null,
         "visibility": "public",
-        "description": ""
+        "description": "Archive data file entry. Editing this file updates the section."
       },
       "images": [
         {
