@@ -18,7 +18,10 @@ function safePathSegment(fileName: string): string {
   return cleaned.length > 0 ? cleaned : "upload"
 }
 
-export async function uploadAdminImageAsset(file: File): Promise<AdminUploadedImage> {
+export async function uploadAdminImageAsset(
+  file: File,
+  onProgress?: (progress: number) => void,
+): Promise<AdminUploadedImage> {
   if (!shouldVerifyAdminAccess()) {
     return readAdminUploadedImage(file)
   }
@@ -29,6 +32,9 @@ export async function uploadAdminImageAsset(file: File): Promise<AdminUploadedIm
     contentType: file.type,
     handleUploadUrl: "/api/admin/upload",
     multipart: file.size >= blobMultipartThresholdBytes,
+    onUploadProgress: (event) => {
+      onProgress?.(Math.round(event.loaded / event.total * 100))
+    },
   })
 
   return {

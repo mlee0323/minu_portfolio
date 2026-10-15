@@ -16,6 +16,7 @@ type WorksAssetPanelProps = {
   readonly onSelectWork: (workId: string) => void
   readonly onUploadImage: (file: File) => void
   readonly uploadStatus: string
+  readonly uploadProgress: number | null
 }
 
 function isSelectedImage(
@@ -35,6 +36,7 @@ export function AdminWorksAssetPanel({
   onSelectWork,
   onUploadImage,
   uploadStatus,
+  uploadProgress,
   selectedElement,
   selectedWork,
   works,
@@ -107,8 +109,16 @@ export function AdminWorksAssetPanel({
         </label>
         {uploadStatus ? (
           <span className="admin-upload-notice" role="status" aria-live="polite">
-            {uploadStatus}
+            {uploadProgress === null ? uploadStatus : `${uploadStatus} ${uploadProgress}%`}
           </span>
+        ) : null}
+        {uploadProgress !== null ? (
+          <progress
+            className="admin-upload-progress"
+            max="100"
+            value={uploadProgress}
+            aria-label={`Image upload ${uploadProgress}%`}
+          />
         ) : null}
         <button className="pill-button pill-button--accent" type="button" onClick={onAddBlankImage}>
           <Plus size={15} />
