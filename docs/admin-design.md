@@ -562,3 +562,22 @@ Suggested migration order:
 The section below is retained as a future database-migration option, not the current implementation path.
 
 Do not migrate the public site immediately. Build the admin against Supabase, seed the current content, and verify that a non-developer can create a realistic Main Work draft. Once that flow feels good, switch the public Works section to Supabase behind a feature flag.
+# Archive detail header editing
+
+`/admin/archive` includes a **Header design** canvas for each release. Select the
+release in the left panel, then select its cover, release information, title,
+artist, description, or playback buttons. Drag or resize elements on the preview,
+or enter their position and dimensions in the inspector. Text elements support
+font size, weight, color, alignment, and line height. Arrow keys move the selected
+element; Shift + arrow moves it by ten units.
+
+**Text** and **Add header image** add extra header content. **Mobile** and **Web**
+store separate positions, sizes, typography, and header heights while sharing the
+release's actual text and cover. Layer controls resolve overlapping elements.
+**Restore original layout** removes the custom header design.
+
+Use the existing **Save draft** action to persist and publish the layout. Legacy
+releases retain their original responsive header until a custom layout is saved.
+The track list, playback actions, release metadata fields and lower detail-image
+gallery retain their existing behavior. Private uploaded header images use the
+same authenticated preview and published-image allowlist as other assets.

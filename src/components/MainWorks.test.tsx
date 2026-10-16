@@ -1,13 +1,35 @@
 import { render, screen } from "@testing-library/react"
-import { publishedWorks } from "../data/publishedSiteContent"
+import {
+  createBlankWork,
+  createBlankWorkTextElement,
+  createWorkImageFromAsset,
+} from "../admin/adminFactories"
 import { MainWorks } from "./MainWorks"
 
 describe("MainWorks", () => {
   it("renders the Admin Mobile canvas as an image-only public sequence", () => {
+    const publishedWorks = [
+      {
+        ...createBlankWork(0),
+        images: [
+          {
+            ...createWorkImageFromAsset({
+              src: "/fixture.jpg",
+              alt: "Canvas image fixture",
+              width: 1200,
+              height: 800,
+              sortOrder: 0,
+            }),
+            layout: { x: 24, y: 64, width: 300, height: 200 },
+          },
+        ],
+        textElements: [{ ...createBlankWorkTextElement(0), text: "Editor-only text fixture" }],
+      },
+    ]
     render(<MainWorks works={publishedWorks} />)
 
     const firstImage = screen.getByRole("img", {
-      name: /An Eye Stroll installation with a telescope/,
+      name: "Canvas image fixture",
     })
     const firstFigure = firstImage.closest("figure")
     const firstCanvas = firstImage.closest("article")
@@ -28,6 +50,7 @@ describe("MainWorks", () => {
     expect(firstCanvas).toHaveStyle({ aspectRatio: "390 / 720" })
     expect(firstImage).toHaveClass("work-canvas-image")
     expect(screen.queryByText("Current Work")).not.toBeInTheDocument()
+    expect(screen.queryByText("Editor-only text fixture")).not.toBeInTheDocument()
     expect(document.querySelector("figcaption")).not.toBeInTheDocument()
     expect(document.querySelector(".is-current")).not.toBeInTheDocument()
   })

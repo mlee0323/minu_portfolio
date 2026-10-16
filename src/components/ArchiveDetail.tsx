@@ -4,6 +4,7 @@ import { useAudioManager, useAudioPlayback } from "../audio/AudioManagerProvider
 import type { AudioRelease, AudioTrack } from "../audio/types"
 import { navigateWithinPublicApp } from "../lib/navigation"
 import { ArchiveTrackRows } from "./Archive"
+import { ArchiveHero } from "./ArchiveHero"
 import { TrackArtwork } from "./TrackArtwork"
 
 type ArchiveDetailProps = {
@@ -27,6 +28,34 @@ export function ArchiveDetail({ release }: ArchiveDetailProps) {
       setErrorMessage(error instanceof Error ? error.message : "Could not start SoundCloud track")
     })
   }
+
+  const releaseActions = (
+    <div className="archive-detail__actions">
+      <button
+        className="pill-button pill-button--neutral"
+        type="button"
+        disabled={firstTrack === undefined}
+        onClick={() => {
+          if (firstTrack !== undefined) {
+            playTrack(firstTrack)
+          }
+        }}
+        aria-label={`Play ${release.title} release with SoundCloud`}
+      >
+        {isCurrentRelease ? <Radio size={16} /> : <Play size={16} fill="currentColor" />}
+        {isCurrentRelease ? "Now playing" : "Play release"}
+      </button>
+      <a
+        className="section-heading__link"
+        href={release.soundCloudPlaylistUrl ?? soundCloudProfileUrl}
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Open on SoundCloud
+        <ArrowUpRight size={15} />
+      </a>
+    </div>
+  )
 
   return (
     <section className="archive-detail" id="archive-detail">
@@ -53,59 +82,39 @@ export function ArchiveDetail({ release }: ArchiveDetailProps) {
         Back to archive
       </a>
 
-      <div className="archive-detail__hero">
-        <div className="archive-detail__artwork">
-          <TrackArtwork
-            track={{
-              id: `${release.id}-cover`,
-              title: release.title,
-              artist: release.artist,
-              provider: release.provider,
-              artworkUrl: release.artworkUrl,
-            }}
-            size="large"
-          />
-        </div>
-
-        <div className="archive-detail__copy">
-          <span className="release-card__eyebrow">
-            <Disc3 size={13} />
-            {[release.type, release.year, `${release.tracks.length} tracks`]
-              .filter(Boolean)
-              .join(" / ")}
-          </span>
-          <h1>{release.title}</h1>
-          <p className="archive-detail__artist">{release.artist}</p>
-          <p className="archive-detail__description">
-            {release.description ?? "No release description yet."}
-          </p>
-          <div className="archive-detail__actions">
-            <button
-              className="pill-button pill-button--neutral"
-              type="button"
-              disabled={firstTrack === undefined}
-              onClick={() => {
-                if (firstTrack !== undefined) {
-                  playTrack(firstTrack)
-                }
+      {release.hero === undefined ? (
+        <div className="archive-detail__hero">
+          <div className="archive-detail__artwork">
+            <TrackArtwork
+              track={{
+                id: `${release.id}-cover`,
+                title: release.title,
+                artist: release.artist,
+                provider: release.provider,
+                artworkUrl: release.artworkUrl,
               }}
-              aria-label={`Play ${release.title} release with SoundCloud`}
-            >
-              {isCurrentRelease ? <Radio size={16} /> : <Play size={16} fill="currentColor" />}
-              {isCurrentRelease ? "Now playing" : "Play release"}
-            </button>
-            <a
-              className="section-heading__link"
-              href={release.soundCloudPlaylistUrl ?? soundCloudProfileUrl}
-              rel="noreferrer noopener"
-              target="_blank"
-            >
-              Open on SoundCloud
-              <ArrowUpRight size={15} />
-            </a>
+              size="large"
+            />
+          </div>
+
+          <div className="archive-detail__copy">
+            <span className="release-card__eyebrow">
+              <Disc3 size={13} />
+              {[release.type, release.year, `${release.tracks.length} tracks`]
+                .filter(Boolean)
+                .join(" / ")}
+            </span>
+            <h1>{release.title}</h1>
+            <p className="archive-detail__artist">{release.artist}</p>
+            <p className="archive-detail__description">
+              {release.description ?? "No release description yet."}
+            </p>
+            {releaseActions}
           </div>
         </div>
-      </div>
+      ) : (
+        <ArchiveHero design={release.hero} release={release} actions={releaseActions} />
+      )}
 
       <div className="archive-detail__tracks">
         <div className="archive-detail__tracks-head">

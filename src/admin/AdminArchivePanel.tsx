@@ -1,5 +1,6 @@
 import { ImagePlus, Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
+import { AdminArchiveHeroEditor } from "./AdminArchiveHeroEditor"
 import { AdminPanel, AdminSelectField, AdminTextareaField, AdminTextField } from "./AdminFields"
 import { AdminImageUploadField } from "./AdminImageUploadField"
 import { uploadAdminImageAsset } from "./adminBlobUpload"
@@ -139,25 +140,16 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
         Edit the album jacket, card title, listening source, detail description, and track list used
         by the public Archive & Sound page.
       </p>
-      <div className="admin-editor-grid">
-        <div className="admin-list">
-          {content.archiveReleases.map((item) => (
-            <button
-              className={item.id === release.id ? "admin-list-row is-active" : "admin-list-row"}
-              key={item.id}
-              type="button"
-              onClick={() => setSelectedReleaseId(item.id)}
-            >
-              <strong>{item.title}</strong>
-              <span>{`${item.type} / ${item.tracks.length} tracks / ${item.status}`}</span>
-            </button>
-          ))}
-          <button className="pill-button pill-button--accent" type="button" onClick={addRelease}>
-            <Plus size={15} />
-            Add release
-          </button>
-        </div>
-
+      <AdminArchiveHeroEditor
+        key={release.id}
+        release={release}
+        releases={content.archiveReleases}
+        onChange={updateRelease}
+        onSelectRelease={setSelectedReleaseId}
+        onAddRelease={addRelease}
+      />
+      <details className="admin-archive-settings" open>
+        <summary>Release settings & tracks</summary>
         <div className="admin-form-grid">
           <AdminTextField
             label="Release title"
@@ -360,7 +352,7 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
             ))}
           </div>
         </div>
-      </div>
+      </details>
     </AdminPanel>
   )
 }

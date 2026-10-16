@@ -10,6 +10,9 @@ export function publishedImageAssetPaths(content: AdminContent): ReadonlySet<str
       .filter((release) => release.status === "published")
       .flatMap((release) => [
         release.artworkUrl,
+        ...(release.hero?.elements
+          .filter((element) => element.kind === "image")
+          .map((element) => element.src) ?? []),
         ...release.images.map((image) => image.src),
         ...release.tracks.map((track) => track.artworkUrl),
       ]),

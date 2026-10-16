@@ -1,7 +1,7 @@
 import { z } from "zod"
 import {
-  type AdminArchiveRelease,
   type AdminArchiveImage,
+  type AdminArchiveRelease,
   type AdminArchiveTrack,
   type AdminAudioTrack,
   type AdminCanvasLayout,
@@ -122,7 +122,32 @@ export const AdminArchiveImageSchema = z.object({
   sortOrder: z.number().int().nonnegative(),
 }) satisfies z.ZodType<AdminArchiveImage>
 
+const heroStyleSchema = z.object({
+  fontSize: z.number().min(8).max(220),
+  fontWeight: z.number().int().min(100).max(900),
+  lineHeight: z.number().min(0.75).max(3),
+  textAlign: z.enum(["left", "center", "right"]),
+  color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+})
+const heroElementSchema = z.object({
+  id: z.string().min(1),
+  kind: z.enum(["cover", "metadata", "title", "artist", "description", "actions", "image", "text"]),
+  text: z.string(),
+  src: z.string(),
+  alt: z.string(),
+  layouts: z.object({ mobile: AdminCanvasRectSchema, desktop: AdminCanvasRectSchema }),
+  styles: z.object({ mobile: heroStyleSchema, desktop: heroStyleSchema }),
+})
+export const ArchiveHeroDesignSchema = z.object({
+  heights: z.object({
+    mobile: z.number().int().min(360).max(2800),
+    desktop: z.number().int().min(360).max(2800),
+  }),
+  elements: z.array(heroElementSchema).min(1).max(60),
+})
+
 export const AdminArchiveReleaseSchema = z.object({
+  hero: ArchiveHeroDesignSchema.optional(),
   id: z.string().min(1),
   title: z.string().min(1),
   artist: z.string().min(1),

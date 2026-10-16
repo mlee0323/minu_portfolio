@@ -1,9 +1,39 @@
 import { render, screen } from "@testing-library/react"
 import { AudioManagerProvider } from "../audio/AudioManagerProvider"
+import { createArchiveHeroElement, createDefaultArchiveHero } from "../data/archiveHero"
 import { archiveReleases } from "../data/archiveTracks"
 import { ArchiveDetail } from "./ArchiveDetail"
 
 describe("ArchiveDetail", () => {
+  it("renders a custom header while preserving the track list and release playback controls", () => {
+    const release = archiveReleases[0]
+    if (!release) throw new Error("Expected archive release")
+    const hero = createDefaultArchiveHero(release)
+    const caption = {
+      ...createArchiveHeroElement("text", "custom-caption"),
+      text: "An editable header caption",
+    }
+    render(
+      <AudioManagerProvider>
+        <ArchiveDetail
+          release={{ ...release, hero: { ...hero, elements: [...hero.elements, caption] } }}
+        />
+      </AudioManagerProvider>,
+    )
+    expect(screen.getByRole("heading", { level: 1, name: release.title })).toBeInTheDocument()
+    expect(screen.getByText("An editable header caption")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Track list" })).toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: `Play ${release.title} release with SoundCloud` }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: `Play ${release.tracks[0]?.title} with SoundCloud` }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Open on SoundCloud" })).toHaveAttribute(
+      "target",
+      "_blank",
+    )
+  })
   it("shows the album description, full track list, and detail images", () => {
     // Given
     const release = archiveReleases[0]

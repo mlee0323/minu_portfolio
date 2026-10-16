@@ -1,3 +1,5 @@
+import type { ArchiveHeroDesign } from "../data/archiveHero"
+
 export type AudioProviderKind = "local" | "soundcloud" | "spotify"
 
 export type PlaybackStatus = "idle" | "loading" | "playing" | "paused" | "ended" | "error"
@@ -45,6 +47,7 @@ export type AudioReleaseImage = {
 }
 
 export type AudioRelease = {
+  readonly hero?: ArchiveHeroDesign
   readonly id: string
   readonly title: string
   readonly artist: string
