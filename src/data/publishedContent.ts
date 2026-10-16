@@ -187,6 +187,204 @@ export const publishedAdminContent = {
       ]
     },
     {
+      "detail": {
+        "heights": {
+          "mobile": 720,
+          "desktop": 3600
+        },
+        "elements": [
+          {
+            "id": "archive-image-93e7d701-e7b0-43c3-8fec-eec01afd6343",
+            "kind": "image",
+            "text": "",
+            "src": "/api/assets?pathname=admin-assets%2F1792076502732-kakaotalk-photo-2026-02-03-23-53-26-3-07cKMYDx2JUSPl7z8FKOrlMMEeRUK3.png",
+            "alt": "KakaoTalk Photo 2026 02 03 23 53 26 3",
+            "objectPosition": "center",
+            "layouts": {
+              "mobile": {
+                "x": 20,
+                "y": 0,
+                "width": 350,
+                "height": 265
+              },
+              "desktop": {
+                "x": 0,
+                "y": 632,
+                "width": 1200,
+                "height": 971
+              }
+            },
+            "styles": {
+              "mobile": {
+                "fontSize": 24,
+                "fontWeight": 430,
+                "lineHeight": 1.15,
+                "textAlign": "left",
+                "color": "#f5f5f5"
+              },
+              "desktop": {
+                "fontSize": 36,
+                "fontWeight": 430,
+                "lineHeight": 1.15,
+                "textAlign": "left",
+                "color": "#f5f5f5"
+              }
+            }
+          },
+          {
+            "id": "detail-image-0bb64fb5-09e3-463f-9838-72fca4fdead6",
+            "kind": "image",
+            "text": "",
+            "src": "/api/assets?pathname=admin-assets%2F1792179234221-kakaotalk-photo-2026-02-03-23-53-26-14-TRSkHBHOjmhMHie2sSVrOa1G1fgeG6.jpeg",
+            "alt": "KakaoTalk Photo 2026 02 03 23 53 26 14",
+            "objectPosition": "center",
+            "layouts": {
+              "mobile": {
+                "x": 20,
+                "y": 20,
+                "width": 350,
+                "height": 230
+              },
+              "desktop": {
+                "x": 314,
+                "y": 196,
+                "width": 560,
+                "height": 370
+              }
+            },
+            "styles": {
+              "mobile": {
+                "fontSize": 24,
+                "fontWeight": 430,
+                "lineHeight": 1.15,
+                "textAlign": "left",
+                "color": "#f5f5f5"
+              },
+              "desktop": {
+                "fontSize": 36,
+                "fontWeight": 430,
+                "lineHeight": 1.15,
+                "textAlign": "left",
+                "color": "#f5f5f5"
+              }
+            }
+          },
+          {
+            "id": "detail-image-2f712f33-428b-4e8f-9546-9bb6d0b15bdc",
+            "kind": "image",
+            "text": "",
+            "src": "/api/assets?pathname=admin-assets%2F1792179284654-kakaotalk-photo-2026-02-03-23-53-26-13-1RoNxqKXjJ6Ve5DyYp9T2T4i0mFhMA.jpeg",
+            "alt": "KakaoTalk Photo 2026 02 03 23 53 26 13",
+            "objectPosition": "center",
+            "layouts": {
+              "mobile": {
+                "x": 20,
+                "y": 20,
+                "width": 350,
+                "height": 230
+              },
+              "desktop": {
+                "x": 86,
+                "y": 1502,
+                "width": 560,
+                "height": 370
+              }
+            },
+            "styles": {
+              "mobile": {
+                "fontSize": 24,
+                "fontWeight": 430,
+                "lineHeight": 1.15,
+                "textAlign": "left",
+                "color": "#f5f5f5"
+              },
+              "desktop": {
+                "fontSize": 36,
+                "fontWeight": 430,
+                "lineHeight": 1.15,
+                "textAlign": "left",
+                "color": "#f5f5f5"
+              }
+            }
+          },
+          {
+            "id": "detail-image-8e9bce35-386c-43a4-a9dd-1d28f2845cc9",
+            "kind": "image",
+            "text": "",
+            "src": "/api/assets?pathname=admin-assets%2F1792179306104-kakaotalk-photo-2026-02-03-23-53-26-15-XRxFnaGV5V8BwqPv5ZvHuEDinNxtrY.jpeg",
+            "alt": "KakaoTalk Photo 2026 02 03 23 53 26 15",
+            "objectPosition": "center",
+            "layouts": {
+              "mobile": {
+                "x": 20,
+                "y": 20,
+                "width": 350,
+                "height": 230
+              },
+              "desktop": {
+                "x": 536,
+                "y": 1843,
+                "width": 560,
+                "height": 370
+              }
+            },
+            "styles": {
+              "mobile": {
+                "fontSize": 24,
+                "fontWeight": 430,
+                "lineHeight": 1.15,
+                "textAlign": "left",
+                "color": "#f5f5f5"
+              },
+              "desktop": {
+                "fontSize": 36,
+                "fontWeight": 430,
+                "lineHeight": 1.15,
+                "textAlign": "left",
+                "color": "#f5f5f5"
+              }
+            }
+          },
+          {
+            "id": "detail-image-1e784c8a-dac4-436a-9e95-72587a7c544f",
+            "kind": "image",
+            "text": "",
+            "src": "/api/assets?pathname=admin-assets%2F1792179372852-kakaotalk-photo-2026-02-03-23-53-26-20-JywGUHE2em2l856lfjAszxWpotiOur.png",
+            "alt": "KakaoTalk Photo 2026 02 03 23 53 26 20",
+            "objectPosition": "center",
+            "layouts": {
+              "mobile": {
+                "x": 20,
+                "y": 20,
+                "width": 350,
+                "height": 230
+              },
+              "desktop": {
+                "x": 0,
+                "y": 2564,
+                "width": 1200,
+                "height": 780
+              }
+            },
+            "styles": {
+              "mobile": {
+                "fontSize": 24,
+                "fontWeight": 430,
+                "lineHeight": 1.15,
+                "textAlign": "left",
+                "color": "#f5f5f5"
+              },
+              "desktop": {
+                "fontSize": 36,
+                "fontWeight": 430,
+                "lineHeight": 1.15,
+                "textAlign": "left",
+                "color": "#f5f5f5"
+              }
+            }
+          }
+        ]
+      },
       "id": "release-loose-archive",
       "title": "Envelope",
       "artist": "L",
@@ -273,22 +471,23 @@ export const publishedAdminContent = {
       "status": "published",
       "sortOrder": 3,
       "images": [],
-      "tracks": [
-        {
-          "id": "archive-track-b5695dd3-cd34-4d69-9249-710b932929ad",
-          "title": "Untitled Track",
-          "artist": "Minu",
-          "artworkUrl": "/images/works/eye-stroll-telescope.jpg",
-          "durationMs": 0,
-          "soundCloudUrl": "",
-          "soundCloudPlaylistUrl": "",
-          "playlistIndex": null,
-          "trackNumber": 1,
-          "visibility": "public",
-          "description": "",
-          "sortOrder": 0
-        }
-      ]
+      "tracks": []
+    },
+    {
+      "id": "release-b54c4f96-2efb-4157-a0c9-9bc09e63753a",
+      "title": "Untitled Release",
+      "artist": "Minu",
+      "type": "album",
+      "provider": "soundcloud",
+      "artworkUrl": "/images/works/eye-stroll-telescope.jpg",
+      "year": "",
+      "soundCloudPlaylistUrl": "",
+      "visibility": "public",
+      "description": "",
+      "status": "draft",
+      "sortOrder": 4,
+      "images": [],
+      "tracks": []
     }
   ],
   "indexItems": [
