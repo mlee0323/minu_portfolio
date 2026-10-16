@@ -1,0 +1,73 @@
+.archive-detail-canvas {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.archive-detail-canvas__stage {
+  --detail-width: 390;
+  --detail-height: var(--detail-canvas-height-mobile);
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--detail-width) / var(--detail-height);
+  overflow: hidden;
+}
+
+.archive-detail-canvas__element {
+  --detail-x: var(--detail-x-mobile);
+  --detail-y: var(--detail-y-mobile);
+  --detail-w: var(--detail-width-mobile);
+  --detail-h: var(--detail-height-mobile);
+  --detail-size: var(--detail-font-size-mobile);
+  position: absolute;
+  left: calc(var(--detail-x) / var(--detail-width) * 100%);
+  top: calc(var(--detail-y) / var(--detail-height) * 100%);
+  width: calc(var(--detail-w) / var(--detail-width) * 100%);
+  height: calc(var(--detail-h) / var(--detail-height) * 100%);
+  color: var(--detail-color-mobile);
+  font-size: calc(var(--detail-size) / var(--detail-width) * 100cqw);
+  font-weight: var(--detail-font-weight-mobile);
+  line-height: var(--detail-line-height-mobile);
+  text-align: var(--detail-text-align-mobile);
+  overflow: hidden;
+}
+
+.archive-detail-canvas__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.archive-detail-canvas__text {
+  display: block;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  letter-spacing: -0.025em;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 768px) {
+  .archive-detail-canvas__stage {
+    --detail-width: 1200;
+    --detail-height: var(--detail-canvas-height-desktop);
+  }
+  .archive-detail-canvas__element {
+    --detail-x: var(--detail-x-desktop);
+    --detail-y: var(--detail-y-desktop);
+    --detail-w: var(--detail-width-desktop);
+    --detail-h: var(--detail-height-desktop);
+    --detail-size: var(--detail-font-size-desktop);
+    color: var(--detail-color-desktop);
+    font-weight: var(--detail-font-weight-desktop);
+    line-height: var(--detail-line-height-desktop);
+    text-align: var(--detail-text-align-desktop);
+  }
+}
+
+.archive-detail__body {
+  margin-top: 56px;
+  border-top: 1px solid rgb(245 245 245 / 30%);
+  padding-top: 22px;
+}

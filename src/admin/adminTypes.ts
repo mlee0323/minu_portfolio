@@ -1,5 +1,5 @@
 import type { AudioProviderKind, AudioReleaseType, SoundCloudVisibility } from "../audio/types"
-import type { ArchiveHeroDesign } from "../data/archiveHero"
+import type { ArchiveDetailCanvasDesign } from "../data/archiveDetailCanvas"
 import type { WorkImage } from "../data/siteContent"
 
 export const adminStatusOptions = ["draft", "published"] as const
@@ -107,7 +107,7 @@ export type AdminArchiveImage = {
 }
 
 export type AdminArchiveRelease = {
-  readonly hero?: ArchiveHeroDesign | undefined
+  readonly detail?: ArchiveDetailCanvasDesign | undefined
   readonly id: string
   readonly title: string
   readonly artist: string

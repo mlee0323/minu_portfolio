@@ -1,4 +1,4 @@
-import type { ArchiveHeroDesign } from "../data/archiveHero"
+import type { ArchiveDetailCanvasDesign } from "../data/archiveDetailCanvas"
 
 export type AudioProviderKind = "local" | "soundcloud" | "spotify"
 
@@ -47,7 +47,7 @@ export type AudioReleaseImage = {
 }
 
 export type AudioRelease = {
-  readonly hero?: ArchiveHeroDesign
+  readonly detail?: ArchiveDetailCanvasDesign
   readonly id: string
   readonly title: string
   readonly artist: string

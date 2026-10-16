@@ -523,23 +523,23 @@
     min-width: 0;
   }
 }
-.admin-archive-hero-editor {
+.admin-archive-detail-editor {
   display: grid;
   gap: 14px;
   margin-block: 20px 32px;
 }
-.admin-hero-element-list {
+.admin-detail-element-list {
   display: grid;
   gap: 7px;
 }
-.admin-archive-hero-canvas {
+.admin-archive-detail-canvas {
   margin: 0;
   padding: 0;
   min-width: 0;
   background: #1b1b18;
   border-radius: 0;
 }
-.admin-hero-selectable {
+.admin-detail-selectable {
   display: block;
   padding: 0;
   border: 0;
@@ -550,32 +550,25 @@
   overflow: hidden;
   cursor: move;
 }
-.admin-hero-selectable:focus-visible {
+.admin-detail-selectable:focus-visible {
   outline: 3px solid #d3e46a;
   outline-offset: -3px;
 }
-.admin-hero-layer-actions {
+.admin-detail-layer-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-}
-.archive-hero__preview-play,
-.archive-hero__preview-link {
-  display: inline-flex;
-  padding: 0.65em 0.9em;
-  border: 1px solid #a0a09c;
-  border-radius: 6px;
-  font-weight: 760;
-}
-.archive-hero__preview-link {
-  padding-inline: 0;
-  border: 0;
-  border-bottom: 1px solid;
-  border-radius: 0;
 }
 .admin-archive-settings > summary {
   margin-bottom: 20px;
   cursor: pointer;
   font-size: 1.1rem;
   font-weight: 760;
+}
+
+.admin-detail-empty {
+  margin: 40px;
+  color: #a0a09c;
+  font-size: 24px;
+  text-align: center;
 }

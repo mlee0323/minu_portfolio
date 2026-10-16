@@ -122,32 +122,33 @@ export const AdminArchiveImageSchema = z.object({
   sortOrder: z.number().int().nonnegative(),
 }) satisfies z.ZodType<AdminArchiveImage>
 
-const heroStyleSchema = z.object({
+const detailStyleSchema = z.object({
   fontSize: z.number().min(8).max(220),
   fontWeight: z.number().int().min(100).max(900),
   lineHeight: z.number().min(0.75).max(3),
   textAlign: z.enum(["left", "center", "right"]),
   color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
 })
-const heroElementSchema = z.object({
+const detailElementSchema = z.object({
   id: z.string().min(1),
-  kind: z.enum(["cover", "metadata", "title", "artist", "description", "actions", "image", "text"]),
+  kind: z.enum(["image", "text"]),
   text: z.string(),
   src: z.string(),
   alt: z.string(),
+  objectPosition: z.string().min(1),
   layouts: z.object({ mobile: AdminCanvasRectSchema, desktop: AdminCanvasRectSchema }),
-  styles: z.object({ mobile: heroStyleSchema, desktop: heroStyleSchema }),
+  styles: z.object({ mobile: detailStyleSchema, desktop: detailStyleSchema }),
 })
-export const ArchiveHeroDesignSchema = z.object({
+export const ArchiveDetailCanvasDesignSchema = z.object({
   heights: z.object({
-    mobile: z.number().int().min(360).max(2800),
-    desktop: z.number().int().min(360).max(2800),
+    mobile: z.number().int().min(360).max(24000),
+    desktop: z.number().int().min(360).max(24000),
   }),
-  elements: z.array(heroElementSchema).min(1).max(60),
+  elements: z.array(detailElementSchema).max(60),
 })
 
 export const AdminArchiveReleaseSchema = z.object({
-  hero: ArchiveHeroDesignSchema.optional(),
+  detail: ArchiveDetailCanvasDesignSchema.optional(),
   id: z.string().min(1),
   title: z.string().min(1),
   artist: z.string().min(1),

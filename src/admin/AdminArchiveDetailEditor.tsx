@@ -1,20 +1,23 @@
-import { ArrowDown, ArrowUp, ImagePlus, Plus, RotateCcw, Trash2, Type } from "lucide-react"
+import { ArrowDown, ArrowUp, ImagePlus, Plus, Trash2, Type } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Rnd } from "react-rnd"
-import { ArchiveHeroElementContent, archiveHeroElementStyle } from "../components/ArchiveHero"
 import {
-  type ArchiveHeroDesign,
-  type ArchiveHeroElement,
-  type ArchiveHeroRect,
-  type ArchiveHeroStyle,
-  type ArchiveHeroViewport,
-  archiveHeroLabels,
-  archiveHeroText,
-  archiveHeroWidths,
-  clampArchiveHeroRect,
-  createArchiveHeroElement,
-  createDefaultArchiveHero,
-} from "../data/archiveHero"
+  ArchiveDetailCanvasElementContent,
+  archiveDetailCanvasElementStyle,
+} from "../components/ArchiveDetailCanvas"
+import {
+  type ArchiveDetailCanvasDesign,
+  type ArchiveDetailCanvasElement,
+  type ArchiveDetailCanvasRect,
+  type ArchiveDetailCanvasStyle,
+  type ArchiveDetailCanvasViewport,
+  archiveDetailCanvasLabels,
+  archiveDetailCanvasMaxHeight,
+  archiveDetailCanvasWidths,
+  clampArchiveDetailCanvasRect,
+  createArchiveDetailCanvasElement,
+  createDefaultArchiveDetailCanvas,
+} from "../data/archiveDetailCanvas"
 import { AdminSelectField, AdminTextareaField, AdminTextField } from "./AdminFields"
 import { AdminImageUploadField } from "./AdminImageUploadField"
 import { AdminPreviewToolbar } from "./AdminPreviewToolbar"
@@ -31,42 +34,38 @@ type Props = {
   readonly onAddRelease: () => void
 }
 
-const previewActions = (
-  <>
-    <span className="archive-hero__preview-play">▶ Play release</span>
-    <span className="archive-hero__preview-link">Open on SoundCloud ↗</span>
-  </>
-)
-
-function fitNewElement(element: ArchiveHeroElement, design: ArchiveHeroDesign): ArchiveHeroElement {
+function fitNewElement(
+  element: ArchiveDetailCanvasElement,
+  design: ArchiveDetailCanvasDesign,
+): ArchiveDetailCanvasElement {
   return {
     ...element,
     layouts: {
-      mobile: clampArchiveHeroRect(
+      mobile: clampArchiveDetailCanvasRect(
         element.layouts.mobile,
-        archiveHeroWidths.mobile,
+        archiveDetailCanvasWidths.mobile,
         design.heights.mobile,
       ),
-      desktop: clampArchiveHeroRect(
+      desktop: clampArchiveDetailCanvasRect(
         element.layouts.desktop,
-        archiveHeroWidths.desktop,
+        archiveDetailCanvasWidths.desktop,
         design.heights.desktop,
       ),
     },
   }
 }
 
-export function AdminArchiveHeroEditor({
+export function AdminArchiveDetailEditor({
   release,
   releases,
   onChange,
   onSelectRelease,
   onAddRelease,
 }: Props) {
-  const design = release.hero ?? createDefaultArchiveHero(release)
+  const design = release.detail ?? createDefaultArchiveDetailCanvas(release)
   const latestChange = useRef(onChange)
   latestChange.current = onChange
-  const [viewport, setViewport] = useState<ArchiveHeroViewport>("desktop")
+  const [viewport, setViewport] = useState<ArchiveDetailCanvasViewport>("desktop")
   const [selectedId, setSelectedId] = useState(design.elements[0]?.id ?? "")
   const [notice, setNotice] = useState(
     "Select an element, then drag or resize it. Mobile and Web layouts are saved separately.",
@@ -78,7 +77,7 @@ export function AdminArchiveHeroEditor({
   const latestDesign = useRef(design)
   latestDesign.current = design
   const selected = design.elements.find((element) => element.id === selectedId)
-  const width = archiveHeroWidths[viewport]
+  const width = archiveDetailCanvasWidths[viewport]
   const height = design.heights[viewport]
   const scale = Math.min(1, availableWidth / width)
 
@@ -103,30 +102,33 @@ export function AdminArchiveHeroEditor({
     return () => observer.disconnect()
   }, [])
 
-  const save = (hero: ArchiveHeroDesign) => latestChange.current({ hero })
-  const update = (patch: Partial<ArchiveHeroElement>) => {
+  const save = (detail: ArchiveDetailCanvasDesign) => latestChange.current({ detail })
+  const update = (patch: Partial<ArchiveDetailCanvasElement>) => {
     if (!selected) return
     save({
-      ...design,
-      elements: design.elements.map((element) =>
+      ...latestDesign.current,
+      elements: latestDesign.current.elements.map((element) =>
         element.id === selected.id ? { ...element, ...patch } : element,
       ),
     })
   }
-  const move = (element: ArchiveHeroElement, rect: ArchiveHeroRect) => {
+  const move = (element: ArchiveDetailCanvasElement, rect: ArchiveDetailCanvasRect) => {
     save({
       ...design,
       elements: design.elements.map((item) =>
         item.id === element.id
           ? {
               ...item,
-              layouts: { ...item.layouts, [viewport]: clampArchiveHeroRect(rect, width, height) },
+              layouts: {
+                ...item.layouts,
+                [viewport]: clampArchiveDetailCanvasRect(rect, width, height),
+              },
             }
           : item,
       ),
     })
   }
-  const changeStyle = (patch: Partial<ArchiveHeroStyle>) => {
+  const changeStyle = (patch: Partial<ArchiveDetailCanvasStyle>) => {
     if (selected)
       update({
         styles: { ...selected.styles, [viewport]: { ...selected.styles[viewport], ...patch } },
@@ -134,15 +136,12 @@ export function AdminArchiveHeroEditor({
   }
   const changeText = (text: string) => {
     if (!selected) return
-    if (selected.kind === "title") onChange({ title: text })
-    else if (selected.kind === "artist") onChange({ artist: text })
-    else if (selected.kind === "description") onChange({ description: text })
-    else update({ text })
+    update({ text })
   }
   const addText = () => {
     if (design.elements.length >= 60) return
     const element = fitNewElement(
-      createArchiveHeroElement("text", createAdminId("hero-text")),
+      createArchiveDetailCanvasElement("text", createAdminId("detail-text")),
       design,
     )
     save({ ...design, elements: [...design.elements, element] })
@@ -157,12 +156,12 @@ export function AdminArchiveHeroEditor({
       const image = await uploadAdminImageAsset(file, setProgress)
       if (uploadTarget.current !== targetId) return
       if (latestDesign.current.elements.length >= 60) {
-        setNotice("The header can contain up to 60 elements.")
+        setNotice("The detail can contain up to 60 elements.")
         return
       }
       const element = fitNewElement(
         {
-          ...createArchiveHeroElement("image", createAdminId("hero-image")),
+          ...createArchiveDetailCanvasElement("image", createAdminId("detail-image")),
           src: image.src,
           alt: image.alt,
         },
@@ -171,7 +170,7 @@ export function AdminArchiveHeroEditor({
       // Preserve edits made while the file was uploading through the current design ref.
       save({ ...latestDesign.current, elements: [...latestDesign.current.elements, element] })
       setSelectedId(element.id)
-      setNotice("Image added to the header.")
+      setNotice("Image added to the detail.")
     } catch (error) {
       if (uploadTarget.current === targetId)
         setNotice(error instanceof Error ? error.message : "Image upload failed.")
@@ -194,13 +193,13 @@ export function AdminArchiveHeroEditor({
   }
 
   return (
-    <section className="admin-archive-hero-editor" aria-label="Archive header editor">
+    <section className="admin-archive-detail-editor" aria-label="Archive detail editor">
       <div className="admin-subpanel__head">
-        <h3>Header design</h3>
-        <span>Images & text</span>
+        <h3>Detail design</h3>
+        <span>Below the track list · Images & text</span>
       </div>
-      <div className="admin-works-builder admin-archive-hero-builder">
-        <aside className="admin-asset-panel" aria-label="Header elements">
+      <div className="admin-works-builder admin-archive-detail-builder">
+        <aside className="admin-asset-panel" aria-label="Detail elements">
           <AdminSelectField
             label="Release"
             value={release.id}
@@ -214,20 +213,25 @@ export function AdminArchiveHeroEditor({
           </button>
           <div className="admin-asset-section__head">
             <strong>Elements</strong>
-            <button className="pill-button" type="button" onClick={addText}>
+            <button
+              className="pill-button"
+              type="button"
+              disabled={design.elements.length >= 60}
+              onClick={addText}
+            >
               <Type size={15} />
               Text
             </button>
           </div>
-          <label className="admin-upload-dropzone" htmlFor={`hero-upload-${release.id}`}>
+          <label className="admin-upload-dropzone" htmlFor={`detail-upload-${release.id}`}>
             <ImagePlus size={22} />
-            <strong>Add header image</strong>
-            <span>Place a photo anywhere in the header.</span>
+            <strong>Add detail image</strong>
+            <span>Place a photo anywhere in the detail.</span>
             <input
-              id={`hero-upload-${release.id}`}
+              id={`detail-upload-${release.id}`}
               type="file"
               accept={adminImageInputAccept}
-              disabled={progress !== null}
+              disabled={progress !== null || design.elements.length >= 60}
               onChange={(event) => {
                 const file = event.currentTarget.files?.[0]
                 event.currentTarget.value = ""
@@ -239,10 +243,10 @@ export function AdminArchiveHeroEditor({
             <progress
               max="100"
               value={progress}
-              aria-label={`Header image upload ${Math.round(progress)}%`}
+              aria-label={`Detail image upload ${Math.round(progress)}%`}
             />
           ) : null}
-          <div className="admin-hero-element-list">
+          <div className="admin-detail-element-list">
             {design.elements.map((element) => (
               <button
                 className={
@@ -258,30 +262,12 @@ export function AdminArchiveHeroEditor({
                     ? element.alt
                     : element.kind === "text"
                       ? element.text || "Text"
-                      : archiveHeroLabels[element.kind]}
+                      : archiveDetailCanvasLabels[element.kind]}
                 </strong>
-                <span>
-                  {element.kind === "cover" || element.kind === "image"
-                    ? "Image"
-                    : element.kind === "actions"
-                      ? "Buttons"
-                      : "Text"}
-                </span>
+                <span>{element.kind === "image" ? "Image" : "Text"}</span>
               </button>
             ))}
           </div>
-          <button
-            className="pill-button"
-            type="button"
-            onClick={() => {
-              onChange({ hero: undefined })
-              setSelectedId(createDefaultArchiveHero(release).elements[0]?.id ?? "")
-              setNotice("Original responsive header restored.")
-            }}
-          >
-            <RotateCcw size={14} />
-            Restore original layout
-          </button>
         </aside>
         <section className="admin-preview-workspace">
           <AdminPreviewToolbar
@@ -295,10 +281,15 @@ export function AdminArchiveHeroEditor({
               style={{ width: width * scale, height: height * scale }}
             >
               <fieldset
-                className={`admin-canvas admin-archive-hero-canvas admin-canvas--${viewport}`}
+                className={`admin-canvas admin-archive-detail-canvas admin-canvas--${viewport}`}
                 style={{ width, height, transform: `scale(${scale})` }}
-                aria-label={`${viewport === "desktop" ? "Web" : "Mobile"} archive header canvas`}
+                aria-label={`${viewport === "desktop" ? "Web" : "Mobile"} archive detail canvas`}
               >
+                {design.elements.length === 0 ? (
+                  <p className="admin-detail-empty">
+                    Add an image or text to start the detail content below the track list.
+                  </p>
+                ) : null}
                 {design.elements.map((element) => {
                   const rect = element.layouts[viewport]
                   return (
@@ -321,11 +312,11 @@ export function AdminArchiveHeroEditor({
                       }
                     >
                       <button
-                        className="admin-hero-selectable"
+                        className="admin-detail-selectable"
                         type="button"
                         tabIndex={0}
-                        aria-label={`Select ${element.kind === "text" ? element.text : element.kind === "image" ? element.alt : archiveHeroLabels[element.kind]}`}
-                        style={archiveHeroElementStyle(element, viewport)}
+                        aria-label={`Select ${element.kind === "text" ? element.text : element.kind === "image" ? element.alt : archiveDetailCanvasLabels[element.kind]}`}
+                        style={archiveDetailCanvasElementStyle(element, viewport)}
                         onClick={() => setSelectedId(element.id)}
                         onKeyDown={(event) => {
                           if (event.key === "Enter" || event.key === " ") {
@@ -358,11 +349,7 @@ export function AdminArchiveHeroEditor({
                           }
                         }}
                       >
-                        <ArchiveHeroElementContent
-                          element={element}
-                          release={release}
-                          actions={previewActions}
-                        />
+                        <ArchiveDetailCanvasElementContent element={element} />
                       </button>
                     </Rnd>
                   )
@@ -371,13 +358,15 @@ export function AdminArchiveHeroEditor({
             </div>
           </div>
         </section>
-        <aside className="admin-inspector" aria-label="Header element settings">
+        <aside className="admin-inspector" aria-label="Detail element settings">
           <AdminTextField
-            label={`${viewport === "desktop" ? "Web" : "Mobile"} header height`}
+            label={`${viewport === "desktop" ? "Web" : "Mobile"} detail height`}
             type="number"
             value={String(height)}
             onChange={(value) => {
-              const nextHeight = Math.round(numeric(value, height, 360, 2800))
+              const nextHeight = Math.round(
+                numeric(value, height, 360, archiveDetailCanvasMaxHeight),
+              )
               save({
                 ...design,
                 heights: { ...design.heights, [viewport]: nextHeight },
@@ -385,7 +374,11 @@ export function AdminArchiveHeroEditor({
                   ...element,
                   layouts: {
                     ...element.layouts,
-                    [viewport]: clampArchiveHeroRect(element.layouts[viewport], width, nextHeight),
+                    [viewport]: clampArchiveDetailCanvasRect(
+                      element.layouts[viewport],
+                      width,
+                      nextHeight,
+                    ),
                   },
                 })),
               })
@@ -394,12 +387,12 @@ export function AdminArchiveHeroEditor({
           {selected ? (
             <>
               <div className="admin-inspector__head">
-                <h3>{archiveHeroLabels[selected.kind]}</h3>
+                <h3>{archiveDetailCanvasLabels[selected.kind]}</h3>
                 {selected.kind === "image" || selected.kind === "text" ? (
                   <button
                     className="icon-button"
                     type="button"
-                    aria-label="Remove header element"
+                    aria-label="Remove detail element"
                     onClick={() => {
                       save({
                         ...design,
@@ -412,41 +405,34 @@ export function AdminArchiveHeroEditor({
                   </button>
                 ) : null}
               </div>
-              {selected.kind === "cover" || selected.kind === "image" ? (
+              {selected.kind === "image" ? (
                 <>
                   <AdminImageUploadField
-                    label="Header image"
-                    value={selected.kind === "cover" ? release.artworkUrl : selected.src}
-                    alt={selected.kind === "cover" ? `${release.title} cover` : selected.alt}
-                    onUpload={({ src, alt }) =>
-                      selected.kind === "cover"
-                        ? onChange({ artworkUrl: src })
-                        : update({ src, alt })
+                    label="Detail image"
+                    value={selected.src}
+                    alt={selected.alt}
+                    onUpload={({ src, alt }) => update({ src, alt })}
+                  />
+                  <AdminTextField
+                    label="Image description"
+                    value={selected.alt}
+                    onChange={(alt) => update({ alt })}
+                  />
+                  <AdminTextField
+                    label="Object position"
+                    value={selected.objectPosition}
+                    onChange={(objectPosition) =>
+                      update({ objectPosition: objectPosition || "center" })
                     }
                   />
-                  {selected.kind === "image" ? (
-                    <AdminTextField
-                      label="Image description"
-                      value={selected.alt}
-                      onChange={(alt) => update({ alt })}
-                    />
-                  ) : null}
                 </>
-              ) : selected.kind !== "actions" ? (
+              ) : (
                 <>
-                  {selected.kind !== "metadata" ? (
-                    <AdminTextareaField
-                      label="Header text"
-                      value={
-                        selected.kind === "description"
-                          ? release.description
-                          : archiveHeroText(selected, release)
-                      }
-                      onChange={changeText}
-                    />
-                  ) : (
-                    <p>Type, year and track count update from the release settings.</p>
-                  )}
+                  <AdminTextareaField
+                    label="Detail text"
+                    value={selected.text}
+                    onChange={changeText}
+                  />
                   <AdminTextField
                     label="Font size"
                     type="number"
@@ -486,8 +472,6 @@ export function AdminArchiveHeroEditor({
                     }
                   />
                 </>
-              ) : (
-                <p>Playback and SoundCloud links keep their release settings.</p>
               )}
               <div className="admin-inspector-grid">
                 {(["x", "y", "width", "height"] as const).map((key) => (
@@ -516,7 +500,7 @@ export function AdminArchiveHeroEditor({
                   />
                 ))}
               </div>
-              <div className="admin-hero-layer-actions">
+              <div className="admin-detail-layer-actions">
                 <button className="pill-button" type="button" onClick={() => reorder(-1)}>
                   <ArrowDown size={14} />
                   Send backward

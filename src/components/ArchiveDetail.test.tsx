@@ -1,27 +1,40 @@
 import { render, screen } from "@testing-library/react"
 import { AudioManagerProvider } from "../audio/AudioManagerProvider"
-import { createArchiveHeroElement, createDefaultArchiveHero } from "../data/archiveHero"
+import {
+  createArchiveDetailCanvasElement,
+  createDefaultArchiveDetailCanvas,
+} from "../data/archiveDetailCanvas"
 import { archiveReleases } from "../data/archiveTracks"
 import { ArchiveDetail } from "./ArchiveDetail"
 
 describe("ArchiveDetail", () => {
-  it("renders a custom header while preserving the track list and release playback controls", () => {
+  it("renders custom detail below tracks while keeping the original fixed header and playback controls", () => {
     const release = archiveReleases[0]
     if (!release) throw new Error("Expected archive release")
-    const hero = createDefaultArchiveHero(release)
+    const detail = createDefaultArchiveDetailCanvas(release)
     const caption = {
-      ...createArchiveHeroElement("text", "custom-caption"),
-      text: "An editable header caption",
+      ...createArchiveDetailCanvasElement("text", "custom-caption"),
+      text: "An editable detail caption",
     }
     render(
       <AudioManagerProvider>
         <ArchiveDetail
-          release={{ ...release, hero: { ...hero, elements: [...hero.elements, caption] } }}
+          release={{ ...release, detail: { ...detail, elements: [...detail.elements, caption] } }}
         />
       </AudioManagerProvider>,
     )
     expect(screen.getByRole("heading", { level: 1, name: release.title })).toBeInTheDocument()
-    expect(screen.getByText("An editable header caption")).toBeInTheDocument()
+    expect(screen.getByText("An editable detail caption")).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { level: 1 }).closest(".archive-detail__hero"),
+    ).not.toBeNull()
+    expect(
+      screen
+        .getByRole("heading", { name: "Track list" })
+        .compareDocumentPosition(screen.getByText("An editable detail caption")) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+
     expect(screen.getByRole("heading", { name: "Track list" })).toBeInTheDocument()
     expect(
       screen.getByRole("button", { name: `Play ${release.title} release with SoundCloud` }),
@@ -34,6 +47,35 @@ describe("ArchiveDetail", () => {
       "_blank",
     )
   })
+  it("keeps an explicitly empty detail canvas empty instead of showing legacy images", () => {
+    const release = archiveReleases[0]
+    if (!release) throw new Error("Expected archive release")
+    render(
+      <AudioManagerProvider>
+        <ArchiveDetail
+          release={{
+            ...release,
+            images: [
+              {
+                id: "hidden-legacy",
+                src: "/legacy.jpg",
+                alt: "Removed legacy image",
+                width: 100,
+                height: 100,
+                aspectRatio: "1 / 1",
+                objectPosition: "center",
+              },
+            ],
+            detail: { heights: { mobile: 720, desktop: 900 }, elements: [] },
+          }}
+        />
+      </AudioManagerProvider>,
+    )
+    expect(screen.queryByRole("img", { name: "Removed legacy image" })).not.toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: release.title })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Track list" })).toBeInTheDocument()
+  })
+
   it("shows the album description, full track list, and detail images", () => {
     // Given
     const release = archiveReleases[0]

@@ -4,7 +4,7 @@ import { useAudioManager, useAudioPlayback } from "../audio/AudioManagerProvider
 import type { AudioRelease, AudioTrack } from "../audio/types"
 import { navigateWithinPublicApp } from "../lib/navigation"
 import { ArchiveTrackRows } from "./Archive"
-import { ArchiveHero } from "./ArchiveHero"
+import { ArchiveDetailCanvas } from "./ArchiveDetailCanvas"
 import { TrackArtwork } from "./TrackArtwork"
 
 type ArchiveDetailProps = {
@@ -82,39 +82,35 @@ export function ArchiveDetail({ release }: ArchiveDetailProps) {
         Back to archive
       </a>
 
-      {release.hero === undefined ? (
-        <div className="archive-detail__hero">
-          <div className="archive-detail__artwork">
-            <TrackArtwork
-              track={{
-                id: `${release.id}-cover`,
-                title: release.title,
-                artist: release.artist,
-                provider: release.provider,
-                artworkUrl: release.artworkUrl,
-              }}
-              size="large"
-            />
-          </div>
-
-          <div className="archive-detail__copy">
-            <span className="release-card__eyebrow">
-              <Disc3 size={13} />
-              {[release.type, release.year, `${release.tracks.length} tracks`]
-                .filter(Boolean)
-                .join(" / ")}
-            </span>
-            <h1>{release.title}</h1>
-            <p className="archive-detail__artist">{release.artist}</p>
-            <p className="archive-detail__description">
-              {release.description ?? "No release description yet."}
-            </p>
-            {releaseActions}
-          </div>
+      <div className="archive-detail__hero">
+        <div className="archive-detail__artwork">
+          <TrackArtwork
+            track={{
+              id: `${release.id}-cover`,
+              title: release.title,
+              artist: release.artist,
+              provider: release.provider,
+              artworkUrl: release.artworkUrl,
+            }}
+            size="large"
+          />
         </div>
-      ) : (
-        <ArchiveHero design={release.hero} release={release} actions={releaseActions} />
-      )}
+
+        <div className="archive-detail__copy">
+          <span className="release-card__eyebrow">
+            <Disc3 size={13} />
+            {[release.type, release.year, `${release.tracks.length} tracks`]
+              .filter(Boolean)
+              .join(" / ")}
+          </span>
+          <h1>{release.title}</h1>
+          <p className="archive-detail__artist">{release.artist}</p>
+          <p className="archive-detail__description">
+            {release.description ?? "No release description yet."}
+          </p>
+          {releaseActions}
+        </div>
+      </div>
 
       <div className="archive-detail__tracks">
         <div className="archive-detail__tracks-head">
@@ -128,7 +124,13 @@ export function ArchiveDetail({ release }: ArchiveDetailProps) {
         />
       </div>
 
-      {release.images.length > 0 ? (
+      {release.detail !== undefined ? (
+        release.detail.elements.length > 0 ? (
+          <section className="archive-detail__body" aria-label={`${release.title} detail content`}>
+            <ArchiveDetailCanvas design={release.detail} />
+          </section>
+        ) : null
+      ) : release.images.length > 0 ? (
         <section className="archive-detail__media" aria-label={`${release.title} release images`}>
           {release.images.map((image) => (
             <figure className="archive-detail__media-item" key={image.id}>

@@ -117,7 +117,7 @@ function toAudioRelease(release: AdminArchiveRelease): AudioRelease {
     type: release.type,
     provider: "soundcloud",
     artworkUrl: release.artworkUrl,
-    ...(release.hero === undefined ? {} : { hero: release.hero }),
+    ...(release.detail === undefined ? {} : { detail: release.detail }),
     images: sortByOrder(release.images).map((image) => ({
       id: image.id,
       src: image.src,

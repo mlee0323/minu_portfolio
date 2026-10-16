@@ -1,22 +1,10 @@
-import { ImagePlus, Plus, Trash2 } from "lucide-react"
+import { Plus, Trash2 } from "lucide-react"
 import { useState } from "react"
-import { AdminArchiveHeroEditor } from "./AdminArchiveHeroEditor"
+import { AdminArchiveDetailEditor } from "./AdminArchiveDetailEditor"
 import { AdminPanel, AdminSelectField, AdminTextareaField, AdminTextField } from "./AdminFields"
 import { AdminImageUploadField } from "./AdminImageUploadField"
-import { uploadAdminImageAsset } from "./adminBlobUpload"
-import {
-  createArchiveImageFromAsset,
-  createBlankArchiveRelease,
-  createBlankArchiveTrack,
-} from "./adminFactories"
-import { AdminImageUploadError } from "./adminImageUpload"
-import { adminImageInputAccept } from "./adminImageUploadConfig"
-import type {
-  AdminArchiveImage,
-  AdminArchiveRelease,
-  AdminArchiveTrack,
-  AdminContent,
-} from "./adminTypes"
+import { createBlankArchiveRelease, createBlankArchiveTrack } from "./adminFactories"
+import type { AdminArchiveRelease, AdminArchiveTrack, AdminContent } from "./adminTypes"
 import { adminStatusOptions } from "./adminTypes"
 
 const releaseTypeOptions = ["single", "ep", "album", "playlist"] as const
@@ -37,10 +25,6 @@ function renumberTracks(tracks: readonly AdminArchiveTrack[]): readonly AdminArc
   return tracks.map((track, sortOrder) => ({ ...track, sortOrder }))
 }
 
-function renumberReleaseImages(images: readonly AdminArchiveImage[]): readonly AdminArchiveImage[] {
-  return images.map((image, sortOrder) => ({ ...image, sortOrder }))
-}
-
 function parseOptionalInteger(value: string): number | null {
   const parsed = Number.parseInt(value, 10)
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : null
@@ -48,7 +32,6 @@ function parseOptionalInteger(value: string): number | null {
 
 export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
   const [selectedReleaseId, setSelectedReleaseId] = useState(content.archiveReleases[0]?.id ?? "")
-  const [detailImageNotice, setDetailImageNotice] = useState("")
   const release =
     content.archiveReleases.find((item) => item.id === selectedReleaseId) ??
     content.archiveReleases[0]
@@ -76,51 +59,10 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
       ),
     })
   }
-  const updateReleaseImage = (imageId: string, patch: Partial<AdminArchiveImage>) => {
-    if (release === undefined) {
-      return
-    }
-
-    updateRelease({
-      images: release.images.map((image) =>
-        image.id === imageId ? { ...image, ...patch } : image,
-      ),
-    })
-  }
-  const addReleaseImage = async (file: File | undefined) => {
-    if (release === undefined || file === undefined) {
-      return
-    }
-
-    setDetailImageNotice("")
-
-    try {
-      const uploaded = await uploadAdminImageAsset(file)
-      updateRelease({
-        images: [
-          ...release.images,
-          createArchiveImageFromAsset({
-            ...uploaded,
-            sortOrder: release.images.length,
-          }),
-        ],
-      })
-      setDetailImageNotice("Detail image added.")
-    } catch (error: unknown) {
-      setDetailImageNotice(
-        error instanceof AdminImageUploadError
-          ? error.message
-          : error instanceof Error
-            ? error.message
-            : "Image upload failed.",
-      )
-    }
-  }
   const addRelease = () => {
     const nextRelease = createBlankArchiveRelease(content.archiveReleases.length)
     replaceReleases([...content.archiveReleases, nextRelease])
     setSelectedReleaseId(nextRelease.id)
-    setDetailImageNotice("")
   }
 
   if (release === undefined) {
@@ -138,9 +80,10 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
     <AdminPanel title="Archive & Sound" meta={`${content.archiveReleases.length} releases`}>
       <p className="admin-panel__intro">
         Edit the album jacket, card title, listening source, detail description, and track list used
-        by the public Archive & Sound page.
+        by the public Archive & Sound page. The header layout stays fixed; use Detail design for
+        images and text below the track list.
       </p>
-      <AdminArchiveHeroEditor
+      <AdminArchiveDetailEditor
         key={release.id}
         release={release}
         releases={content.archiveReleases}
@@ -207,74 +150,6 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
             value={release.description}
             onChange={(description) => updateRelease({ description })}
           />
-
-          <div className="admin-subpanel admin-subpanel--wide">
-            <div className="admin-subpanel__head">
-              <h3>Detail images</h3>
-              <span>{`${release.images.length} ${release.images.length === 1 ? "image" : "images"}`}</span>
-            </div>
-            <p className="admin-panel__intro">
-              These photos appear below the track list on the album detail page.
-            </p>
-            <label className="admin-upload-dropzone" htmlFor={`detail-image-upload-${release.id}`}>
-              <ImagePlus size={24} />
-              <strong>Add detail image</strong>
-              <span>Upload a JPEG, PNG, WebP, AVIF, or GIF image.</span>
-              <input
-                id={`detail-image-upload-${release.id}`}
-                type="file"
-                accept={adminImageInputAccept}
-                onChange={(event) => {
-                  const file = event.currentTarget.files?.[0]
-                  event.currentTarget.value = ""
-                  void addReleaseImage(file)
-                }}
-              />
-            </label>
-            {detailImageNotice ? <p className="admin-upload-notice">{detailImageNotice}</p> : null}
-            {release.images.map((image) => (
-              <div className="admin-image-row admin-image-row--detail" key={image.id}>
-                <AdminImageUploadField
-                  label="Image file"
-                  value={image.src}
-                  alt={image.alt}
-                  onUpload={({ alt, height, src, width }) =>
-                    updateReleaseImage(image.id, {
-                      alt,
-                      src,
-                      width,
-                      height,
-                      aspectRatio: `${width} / ${height}`,
-                    })
-                  }
-                />
-                <AdminTextField
-                  label="Alt text"
-                  value={image.alt}
-                  onChange={(alt) => updateReleaseImage(image.id, { alt })}
-                />
-                <AdminTextField
-                  label="Object position"
-                  value={image.objectPosition}
-                  onChange={(objectPosition) => updateReleaseImage(image.id, { objectPosition })}
-                />
-                <button
-                  className="icon-button"
-                  type="button"
-                  aria-label={`Remove ${image.alt}`}
-                  onClick={() =>
-                    updateRelease({
-                      images: renumberReleaseImages(
-                        release.images.filter((item) => item.id !== image.id),
-                      ),
-                    })
-                  }
-                >
-                  <Trash2 size={15} />
-                </button>
-              </div>
-            ))}
-          </div>
 
           <div className="admin-subpanel admin-subpanel--wide">
             <div className="admin-subpanel__head">
