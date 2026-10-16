@@ -467,10 +467,35 @@ select {
 
 .now-playing {
   border: 0;
-  border-radius: 10px;
+  border-radius: 13px;
+  background: transparent;
+  box-shadow: 0 22px 60px rgb(7 7 6 / 36%);
+  isolation: isolate;
+}
+
+/* Keep the glass surface separate so smoothing doesn't clip the outer shadow. */
+.now-playing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: var(--player-surface-radius, inherit);
   background: rgb(25 25 22 / 94%);
-  box-shadow: var(--shadow-dark);
   backdrop-filter: blur(20px) saturate(1.12);
+  clip-path: var(--player-surface-clip, none);
+  pointer-events: none;
+}
+
+.now-playing__outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: rgb(248 247 242 / 13%);
+  stroke-width: 1;
+  pointer-events: none;
 }
 
 .index-section {

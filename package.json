@@ -32,6 +32,7 @@
     "@fontsource-variable/geist": "^5.2.9",
     "@fontsource-variable/geist-mono": "^5.2.8",
     "@vercel/blob": "^2.5.0",
+    "figma-squircle": "1.1.0",
     "jose": "^6.2.3",
     "ky": "^2.0.2",
     "lucide-react": "^1.23.0",

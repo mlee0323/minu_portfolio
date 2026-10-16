@@ -1,5 +1,13 @@
+import { getSvgPath } from "figma-squircle"
 import { Pause, Play } from "lucide-react"
-import { useCallback, useEffect, useState } from "react"
+import {
+  type CSSProperties,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react"
 import { useAudioManager, useAudioPlayback } from "../audio/AudioManagerProvider"
 import { formatDuration, progressPercent } from "../lib/time"
 import { TrackArtwork } from "./TrackArtwork"
@@ -22,6 +30,27 @@ export function NowPlayingBar() {
   const playback = useAudioPlayback()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const track = playback.currentTrack
+  const surfaceRef = useRef<HTMLElement>(null)
+  const [surfacePath, setSurfacePath] = useState("")
+  const hasTrack = track !== null
+
+  useLayoutEffect(() => {
+    const surface = surfaceRef.current
+    if (!hasTrack || surface === null) return
+    const measure = () => {
+      const { width, height } = surface.getBoundingClientRect()
+      if (width <= 0 || height <= 0) return
+      setSurfacePath(getSvgPath({ width, height, cornerRadius: 13, cornerSmoothing: 0.7 }))
+    }
+    measure()
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", measure)
+      return () => window.removeEventListener("resize", measure)
+    }
+    const observer = new ResizeObserver(measure)
+    observer.observe(surface)
+    return () => observer.disconnect()
+  }, [hasTrack])
   const progress = progressPercent(playback.positionMs, playback.durationMs)
   const shouldPause = playback.status === "playing" || playback.status === "loading"
   const activeProvider = playback.provider ?? track?.provider ?? null
@@ -83,7 +112,24 @@ export function NowPlayingBar() {
   }
 
   return (
-    <aside className="now-playing" aria-live="polite">
+    <aside
+      className="now-playing"
+      aria-live="polite"
+      ref={surfaceRef}
+      style={
+        surfacePath
+          ? ({
+              "--player-surface-radius": "0px",
+              "--player-surface-clip": `path('${surfacePath}')`,
+            } as CSSProperties)
+          : undefined
+      }
+    >
+      {surfacePath ? (
+        <svg className="now-playing__outline" aria-hidden="true" focusable="false">
+          <path d={surfacePath} />
+        </svg>
+      ) : null}
       <div className="now-playing__identity">
         <TrackArtwork track={track} size="small" />
         <div>
