@@ -324,10 +324,10 @@ export const publishedAdminContent = {
             "alt": "Image",
             "objectPosition": "center",
             "layout": {
-              "x": 254,
-              "y": 184,
+              "x": 253,
+              "y": 219,
               "width": 130,
-              "height": 100
+              "height": 33
             },
             "style": {
               "fontSize": 8,
