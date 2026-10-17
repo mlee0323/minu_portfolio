@@ -304,9 +304,9 @@ export const publishedAdminContent = {
             "objectPosition": "center",
             "layout": {
               "x": 3,
-              "y": 208,
-              "width": 288,
-              "height": 54
+              "y": 224,
+              "width": 263,
+              "height": 28
             },
             "style": {
               "fontSize": 29,
@@ -319,14 +319,14 @@ export const publishedAdminContent = {
           {
             "id": "detail-text-1b57818a-1230-40d1-9645-fcfc15a3cf6c",
             "kind": "text",
-            "text": "TAEHAN KIN\nMARC6000\nSWITCHBOX _ ROSS ANDERSON",
+            "text": "TAEHAN KIM\nMARC6000\nSWITCHBOX _ ROSS ANDERSON",
             "src": "",
             "alt": "Image",
             "objectPosition": "center",
             "layout": {
-              "x": 253,
-              "y": 219,
-              "width": 130,
+              "x": 265,
+              "y": 223,
+              "width": 119,
               "height": 33
             },
             "style": {
