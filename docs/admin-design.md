@@ -585,3 +585,23 @@ have separate messages. The editor polls the deployed content hash and reports
 **Website updated** only when the public deployment contains that exact content.
 A pending or failed deployment check never reports the save itself as lost.
 Private image authentication and published-image delivery are unchanged.
+
+## Deployment history
+
+**배포 히스토리** appears immediately below Index in the admin sidebar at
+`/admin/deployments`. Authenticated `GET /api/admin/deployments` reads the configured
+production branch's commit history and Vercel's commit-status context. Records
+persist in GitHub across browser sessions. Pages show ten records; older records
+are available through pagination. Status lookup uses bounded concurrency and a
+short server cache, while the visible history page refreshes every 15 seconds.
+
+Vercel pending maps to **진행중**, success to **완료**, and failure/error to **오류**.
+Missing old deployment records or failed lookups display **확인 필요**, never a
+fabricated success or failed build. Each row links to its Vercel details when
+available. The active server's commit is marked **현재 운영중** when system commit
+metadata is available. No Vercel or GitHub token is exposed to the browser.
+
+After a save, **배포 상태 보기** opens this history. Save completion now verifies
+both the deployed content hash and that exact commit's Vercel success status, so
+saving unchanged content cannot prematurely report the new deployment complete.
+A real build failure preserves the successful save and reports deployment failure.

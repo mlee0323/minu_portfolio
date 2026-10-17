@@ -2,6 +2,7 @@ import { ArrowLeft, Database, RotateCcw, Save } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { AdminArchivePanel } from "./AdminArchivePanel"
 import { AdminDashboard } from "./AdminDashboard"
+import { AdminDeploymentHistory } from "./AdminDeploymentHistory"
 import { AdminIndexPanel } from "./AdminIndexPanel"
 import { AdminWorksPanel } from "./AdminWorksPanel"
 import {
@@ -9,6 +10,7 @@ import {
   loadAdminAccessSession,
   shouldVerifyAdminAccess,
 } from "./adminAccessClient"
+import { AdminDeploymentFailedError } from "./adminDeploymentTypes"
 import {
   loadPublishedAdminContent,
   publishAdminContent,
@@ -27,7 +29,7 @@ import type { AdminContent } from "./adminTypes"
 import "../styles/admin.css"
 import "../styles/adminPremium.css"
 
-const adminRoutes = ["dashboard", "works", "archive", "index-contact"] as const
+const adminRoutes = ["dashboard", "works", "archive", "index-contact", "deployments"] as const
 type AdminRoute = (typeof adminRoutes)[number]
 
 function assertNever(value: never): never {
@@ -35,6 +37,7 @@ function assertNever(value: never): never {
 }
 
 function routeFromPath(pathname: string): AdminRoute {
+  if (pathname.endsWith("/deployments")) return "deployments"
   if (pathname.endsWith("/works")) {
     return "works"
   }
@@ -57,6 +60,8 @@ function pathForRoute(route: AdminRoute): string {
       return "/admin/archive"
     case "index-contact":
       return "/admin/index-contact"
+    case "deployments":
+      return "/admin/deployments"
     default:
       return assertNever(route)
   }
@@ -72,6 +77,8 @@ function routeLabel(route: AdminRoute): string {
       return "Archive & Sound"
     case "index-contact":
       return "Index"
+    case "deployments":
+      return "배포 히스토리"
     default:
       return assertNever(route)
   }
@@ -92,6 +99,7 @@ export function AdminApp() {
   const [route, setRoute] = useState<AdminRoute>(() => routeFromPath(window.location.pathname))
   const [message, setMessage] = useState("Local draft is ready.")
   const [isSaving, setIsSaving] = useState(false)
+  const [latestCommitSha, setLatestCommitSha] = useState<string | null>(null)
   const [baseSha, setBaseSha] = useState<string | null>(null)
   const [loadingContent, setLoadingContent] = useState(shouldVerifyAdminAccess())
   const [loadError, setLoadError] = useState("")
@@ -217,6 +225,7 @@ export function AdminApp() {
     try {
       const published = await publishAdminContent(result.data, baseSha)
       savedCommit = published.commitSha.slice(0, 7)
+      setLatestCommitSha(published.commitSha)
       setBaseSha(published.sha)
       savedSnapshot.current = contentSnapshot(result.data)
       try {
@@ -227,7 +236,11 @@ export function AdminApp() {
       setMessage(`Saved ${savedCommit}. Updating the website…`)
       const check = new AbortController()
       deploymentCheck.current = check
-      const ready = await waitForPublishedDeployment(published.contentHash, check.signal)
+      const ready = await waitForPublishedDeployment(
+        published.contentHash,
+        check.signal,
+        published.commitSha,
+      )
       if (check.signal.aborted) return
       const dirty = contentSnapshot(contentRef.current) !== savedSnapshot.current
       setMessage(
@@ -239,7 +252,9 @@ export function AdminApp() {
     } catch (error) {
       setMessage(
         savedCommit
-          ? `Saved ${savedCommit}, but deployment verification failed. ${error instanceof Error ? error.message : "Check the website later."}`
+          ? error instanceof AdminDeploymentFailedError
+            ? `Saved ${savedCommit}. Deployment failed: ${error.message} 배포 히스토리에서 상세 내용을 확인하세요.`
+            : `Saved ${savedCommit}, but deployment verification failed. ${error instanceof Error ? error.message : "Check the website later."}`
           : `${error instanceof Error ? error.message : "Publish failed."}${localSaved ? " Your local draft is saved." : " Keep this page open to preserve your edits."}`,
       )
     } finally {
@@ -288,30 +303,34 @@ export function AdminApp() {
           </span>
           <strong>{routeLabel(route)}</strong>
         </div>
-        <div className="admin-actions">
-          <button
-            className="pill-button"
-            type="button"
-            disabled={isSaving || loadingContent}
-            onClick={shouldVerifyAdminAccess() ? () => void loadPublished() : resetDraft}
-          >
-            <RotateCcw size={15} />
-            {shouldVerifyAdminAccess() ? "Reload published" : "Reset"}
-          </button>
-          <button
-            className="pill-button pill-button--accent"
-            type="button"
-            disabled={isSaving || loadingContent || (shouldVerifyAdminAccess() && baseSha === null)}
-            onClick={saveDraft}
-          >
-            <Save size={15} />
-            {isSaving
-              ? "Saving / updating site…"
-              : shouldVerifyAdminAccess()
-                ? "Save & publish"
-                : "Save draft"}
-          </button>
-        </div>
+        {route !== "deployments" ? (
+          <div className="admin-actions">
+            <button
+              className="pill-button"
+              type="button"
+              disabled={isSaving || loadingContent}
+              onClick={shouldVerifyAdminAccess() ? () => void loadPublished() : resetDraft}
+            >
+              <RotateCcw size={15} />
+              {shouldVerifyAdminAccess() ? "Reload published" : "Reset"}
+            </button>
+            <button
+              className="pill-button pill-button--accent"
+              type="button"
+              disabled={
+                isSaving || loadingContent || (shouldVerifyAdminAccess() && baseSha === null)
+              }
+              onClick={saveDraft}
+            >
+              <Save size={15} />
+              {isSaving
+                ? "Saving / updating site…"
+                : shouldVerifyAdminAccess()
+                  ? "Save & publish"
+                  : "Save draft"}
+            </button>
+          </div>
+        ) : null}
       </header>
 
       <div className="admin-layout">
@@ -333,6 +352,15 @@ export function AdminApp() {
             <Database size={15} />
             {message}
           </p>
+          {latestCommitSha !== null && route !== "deployments" ? (
+            <button
+              className="pill-button admin-deployments__shortcut"
+              type="button"
+              onClick={() => navigate("deployments")}
+            >
+              배포 상태 보기
+            </button>
+          ) : null}
           {recoveryDraft !== null ? (
             <div className="admin-recovery" role="status">
               <p>
@@ -351,7 +379,9 @@ export function AdminApp() {
               </button>
             </div>
           ) : null}
-          {loadingContent ? (
+          {route === "deployments" ? (
+            <AdminDeploymentHistory latestCommitSha={latestCommitSha} />
+          ) : loadingContent ? (
             <p>Loading current published content…</p>
           ) : loadError ? (
             <div className="admin-recovery" role="alert">

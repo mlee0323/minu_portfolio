@@ -587,3 +587,142 @@
   flex: 1 1 300px;
   margin: 0;
 }
+
+.admin-deployments__toolbar,
+.admin-deployments__pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block: 20px;
+}
+.admin-deployments__toolbar > span,
+.admin-deployments__pagination > span {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+}
+.admin-deployments__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-block: 22px;
+}
+.admin-deployments__summary > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.admin-deployments__summary strong {
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+.admin-deployment-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border-radius: 7px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.admin-deployment-status--pending {
+  background: #fff0c2;
+  color: #725000;
+}
+.admin-deployment-status--success {
+  background: #dcecd5;
+  color: #254f25;
+}
+.admin-deployment-status--error {
+  background: #f9ddd8;
+  color: #862c23;
+}
+.admin-deployment-status--unknown {
+  background: #e9e7e1;
+  color: #55534b;
+}
+.admin-deployments__table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+}
+.admin-deployments__table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  text-align: left;
+}
+.admin-deployments__table th {
+  font-size: 0.75rem;
+  padding: 15px 18px;
+  background: var(--color-page-soft);
+}
+.admin-deployments__table td {
+  padding: 18px;
+  border-top: 1px solid var(--color-line);
+  vertical-align: top;
+  font-size: 0.85rem;
+}
+.admin-deployments__table td:nth-child(2) {
+  min-width: 180px;
+  font-variant-numeric: tabular-nums;
+}
+.admin-deployments__table small {
+  display: block;
+  margin-top: 7px;
+  color: var(--color-muted);
+  font-size: 0.72rem;
+}
+.admin-deployments__table p {
+  margin: 7px 0;
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
+}
+.admin-deployments__table .is-latest-save td {
+  background: rgb(211 228 106 / 12%);
+}
+.admin-deployments__table .admin-deployments__current {
+  color: #254f25;
+  font-weight: 700;
+}
+.admin-deployments__links {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  white-space: nowrap;
+}
+.admin-deployments__links > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.admin-deployments__links > a:last-child {
+  font-size: 0.75rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.admin-deployments__error {
+  padding: 14px;
+  border: 1px solid #cfada5;
+  border-radius: 8px;
+  color: #862c23;
+}
+.admin-deployments__shortcut {
+  margin-bottom: 18px;
+}
+.is-spinning {
+  animation: admin-deployment-spin 1.5s linear infinite;
+}
+@keyframes admin-deployment-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .is-spinning {
+    animation: none;
+  }
+}

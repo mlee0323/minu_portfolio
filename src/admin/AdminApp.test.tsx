@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { AdminApp } from "./AdminApp"
+import { AdminDeploymentFailedError } from "./adminDeploymentTypes"
 import {
   loadPublishedAdminContent,
   publishAdminContent,
@@ -17,6 +18,10 @@ vi.mock("./adminPublishClient", () => ({
   loadPublishedAdminContent: vi.fn(),
   publishAdminContent: vi.fn(),
   waitForPublishedDeployment: vi.fn(),
+}))
+
+vi.mock("./AdminDeploymentHistory", () => ({
+  AdminDeploymentHistory: () => <section aria-label="Deployment history panel" />,
 }))
 
 const seed = createSeedAdminContent()
@@ -126,6 +131,35 @@ describe("production admin content and publishing", () => {
     expect(
       await screen.findByText("Saved 1234567, but deployment verification failed. Connection lost"),
     ).toBeInTheDocument()
+  })
+  it("places deployment history below Index and allows viewing it without publishing again", async () => {
+    render(<AdminApp />)
+    await screen.findByRole("textbox", { name: "Release title", exact: true })
+    const nav = screen.getByRole("navigation", { name: "Admin sections" })
+    expect([...nav.querySelectorAll("button")].map((button) => button.textContent)).toEqual([
+      "Overview",
+      "Works",
+      "Archive & Sound",
+      "Index",
+      "배포 히스토리",
+    ])
+    fireEvent.click(screen.getByRole("button", { name: "배포 히스토리", exact: true }))
+    expect(screen.getByRole("region", { name: "Deployment history panel" })).toBeInTheDocument()
+    expect(window.location.pathname).toBe("/admin/deployments")
+    expect(screen.queryByRole("button", { name: "Save & publish" })).not.toBeInTheDocument()
+    expect(publishAdminContent).not.toHaveBeenCalled()
+  })
+  it("reports a failed deployment while preserving its successful save", async () => {
+    vi.mocked(waitForPublishedDeployment).mockRejectedValue(
+      new AdminDeploymentFailedError("Build failed"),
+    )
+    render(<AdminApp />)
+    await screen.findByRole("textbox", { name: "Release title", exact: true })
+    fireEvent.click(screen.getByRole("button", { name: "Save & publish" }))
+    expect(
+      await screen.findByText(/Saved 1234567\. Deployment failed: Build failed/),
+    ).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "배포 상태 보기" })).toBeInTheDocument()
   })
   it("distinguishes a saved commit from a deployment still pending", async () => {
     vi.mocked(waitForPublishedDeployment).mockResolvedValue(false)

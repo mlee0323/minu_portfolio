@@ -73,7 +73,7 @@ export function readGitHubPublishConfig(
   }
 }
 
-function createGitHubClient(config: GitHubPublishConfig): typeof ky {
+export function createGitHubClient(config: GitHubPublishConfig): typeof ky {
   return ky.create({
     prefix: "https://api.github.com",
     headers: {
