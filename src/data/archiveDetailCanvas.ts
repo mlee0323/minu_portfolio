@@ -20,11 +20,11 @@ export type ArchiveDetailCanvasElement = {
   readonly src: string
   readonly alt: string
   readonly objectPosition: string
-  readonly layouts: Readonly<Record<ArchiveDetailCanvasViewport, ArchiveDetailCanvasRect>>
-  readonly styles: Readonly<Record<ArchiveDetailCanvasViewport, ArchiveDetailCanvasStyle>>
+  readonly layout: ArchiveDetailCanvasRect
+  readonly style: ArchiveDetailCanvasStyle
 }
 export type ArchiveDetailCanvasDesign = {
-  readonly heights: Readonly<Record<ArchiveDetailCanvasViewport, number>>
+  readonly height: number
   readonly elements: readonly ArchiveDetailCanvasElement[]
 }
 type DetailImage = {
@@ -36,7 +36,7 @@ type DetailImage = {
   readonly objectPosition: string
 }
 
-export const archiveDetailCanvasWidths = { mobile: 390, desktop: 1200 } as const
+export const archiveDetailCanvasWidths = { mobile: 390, desktop: 390 } as const
 export const archiveDetailCanvasLabels = { image: "Image", text: "Text" } as const
 export const archiveDetailCanvasMaxHeight = 24000
 
@@ -58,11 +58,8 @@ export function createArchiveDetailCanvasElement(
     src: "",
     alt: "Image",
     objectPosition: "center",
-    layouts: {
-      mobile: { x: 20, y: 20, width: 350, height: kind === "image" ? 230 : 100 },
-      desktop: { x: 40, y: 40, width: 560, height: kind === "image" ? 370 : 140 },
-    },
-    styles: { mobile: style, desktop: { ...style, fontSize: 36 } },
+    layout: { x: 20, y: 20, width: 350, height: kind === "image" ? 230 : 100 },
+    style,
   }
 }
 
@@ -72,26 +69,20 @@ export function createDefaultArchiveDetailCanvas(release: {
   readonly images: readonly DetailImage[]
 }): ArchiveDetailCanvasDesign {
   let mobileY = 0
-  let desktopY = 0
   const elements = release.images.map((image) => {
     const mobileHeight = Math.max(24, Math.round((350 * image.height) / image.width))
-    const desktopHeight = Math.max(24, Math.round((1000 * image.height) / image.width))
     const element = {
       ...createArchiveDetailCanvasElement("image", image.id),
       src: image.src,
       alt: image.alt,
       objectPosition: image.objectPosition,
-      layouts: {
-        mobile: { x: 20, y: mobileY, width: 350, height: mobileHeight },
-        desktop: { x: 100, y: desktopY, width: 1000, height: desktopHeight },
-      },
+      layout: { x: 20, y: mobileY, width: 350, height: mobileHeight },
     }
     mobileY += mobileHeight + 24
-    desktopY += desktopHeight + 40
     return element
   })
   return {
-    heights: { mobile: Math.max(720, mobileY), desktop: Math.max(900, desktopY) },
+    height: Math.min(archiveDetailCanvasMaxHeight, Math.max(720, mobileY)),
     elements,
   }
 }

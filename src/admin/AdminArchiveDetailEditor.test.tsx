@@ -47,18 +47,20 @@ function editor() {
 }
 
 describe("archive detail editing", () => {
-  it("imports existing images only on edit and keeps separate Web/Mobile geometry", () => {
+  it("imports existing images and shares Web/Mobile geometry", () => {
     const state = editor()
     expect(state.current().detail).toBeUndefined()
     const settings = within(screen.getByRole("complementary", { name: "Detail element settings" }))
-    fireEvent.change(settings.getByLabelText("X", { exact: true }), { target: { value: "80" } })
-    expect(state.current().detail?.elements[0]?.layouts.desktop.x).toBe(80)
-    expect(state.current().detail?.elements[0]?.layouts.mobile.x).toBe(20)
+    fireEvent.change(settings.getByLabelText("X", { exact: true }), { target: { value: "10" } })
+    expect(state.current().detail?.elements[0]?.layout.x).toBe(10)
     expect(state.current().detail?.elements[0]?.objectPosition).toBe("top")
     fireEvent.click(screen.getByRole("button", { name: "Mobile", exact: true }))
     fireEvent.change(settings.getByLabelText("X", { exact: true }), { target: { value: "30" } })
-    expect(state.current().detail?.elements[0]?.layouts.desktop.x).toBe(80)
-    expect(state.current().detail?.elements[0]?.layouts.mobile.x).toBe(30)
+    expect(state.current().detail?.elements[0]?.layout.x).toBe(30)
+    expect(state.current().detail?.elements[0]?.layout.x).toBe(30)
+    fireEvent.change(screen.getByLabelText("Detail height"), { target: { value: "1500" } })
+    fireEvent.click(screen.getByRole("button", { name: "Web", exact: true }))
+    expect(screen.getByLabelText("Detail height")).toHaveValue(1500)
     expect(state.current().tracks).toBe(state.original.tracks)
     expect(screen.queryByRole("region", { name: "Archive header editor" })).not.toBeInTheDocument()
   })
@@ -78,8 +80,8 @@ describe("archive detail editing", () => {
     const published = createPublishedSiteContent(reloaded).archiveReleases[0]
     const text = published?.detail?.elements.find((element) => element.kind === "text")
     expect(text?.text).toBe("A detail caption")
-    expect(text?.styles.desktop.fontSize).toBe(88)
-    expect(text?.styles.mobile.fontSize).toBe(24)
+    expect(text?.style.fontSize).toBe(88)
+    expect(text?.style.fontSize).toBe(88)
     expect(published?.title).toBe(state.original.title)
     expect(published?.artworkUrl).toBe(state.original.artworkUrl)
     expect(published?.description).toBeUndefined()
@@ -92,7 +94,7 @@ describe("archive detail editing", () => {
       key: "ArrowRight",
       shiftKey: true,
     })
-    expect(state.current().detail?.elements[0]?.layouts.desktop.x).toBe(110)
+    expect(state.current().detail?.elements[0]?.layout.x).toBe(30)
     fireEvent.click(screen.getByRole("button", { name: "Remove detail element" }))
     expect(state.current().detail?.elements).toHaveLength(0)
     expect(

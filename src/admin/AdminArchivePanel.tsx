@@ -31,7 +31,21 @@ function parseOptionalInteger(value: string): number | null {
 }
 
 export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
-  const [selectedReleaseId, setSelectedReleaseId] = useState(content.archiveReleases[0]?.id ?? "")
+  const [selectedReleaseId, setSelectedReleaseId] = useState(
+    () =>
+      new URLSearchParams(window.location.search).get("release") ??
+      content.archiveReleases.find(
+        (release) => (release.detail?.elements.length ?? release.images.length) > 0,
+      )?.id ??
+      content.archiveReleases[0]?.id ??
+      "",
+  )
+  const selectRelease = (id: string) => {
+    setSelectedReleaseId(id)
+    const url = new URL(window.location.href)
+    url.searchParams.set("release", id)
+    window.history.replaceState(null, "", `${url.pathname}${url.search}`)
+  }
   const release =
     content.archiveReleases.find((item) => item.id === selectedReleaseId) ??
     content.archiveReleases[0]
@@ -62,7 +76,7 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
   const addRelease = () => {
     const nextRelease = createBlankArchiveRelease(content.archiveReleases.length)
     replaceReleases([...content.archiveReleases, nextRelease])
-    setSelectedReleaseId(nextRelease.id)
+    selectRelease(nextRelease.id)
   }
 
   if (release === undefined) {
@@ -88,7 +102,7 @@ export function AdminArchivePanel({ content, onChange }: ArchivePanelProps) {
         release={release}
         releases={content.archiveReleases}
         onChange={updateRelease}
-        onSelectRelease={setSelectedReleaseId}
+        onSelectRelease={selectRelease}
         onAddRelease={addRelease}
       />
       <details className="admin-archive-settings" open>

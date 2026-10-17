@@ -99,3 +99,31 @@ export function resetAdminContent(): AdminContent {
 
   return content
 }
+
+const publishedBaselineStorageKey = "minu-admin-published-baseline:v1"
+
+export function markAdminContentPublished(content: AdminContent): void {
+  if (canUseLocalStorage())
+    window.localStorage.setItem(
+      publishedBaselineStorageKey,
+      JSON.stringify(AdminContentSchema.parse(content)),
+    )
+}
+
+export function recoverableAdminContent(published: AdminContent): AdminContent | null {
+  const stored = readStoredContent()
+  if (stored === null) return null
+  try {
+    const draft = parseAdminContent(JSON.parse(stored))
+    const serialized = JSON.stringify(draft)
+    if (serialized === JSON.stringify(parseAdminContent(published))) return null
+    const baseline = window.localStorage.getItem(publishedBaselineStorageKey)
+    if (baseline !== null && serialized === JSON.stringify(parseAdminContent(JSON.parse(baseline))))
+      return null
+    if (window.localStorage.getItem("minu-admin-content-recovery:v1") === null)
+      window.localStorage.setItem("minu-admin-content-recovery:v1", JSON.stringify(draft))
+    return draft
+  } catch {
+    return null
+  }
+}

@@ -136,14 +136,11 @@ const detailElementSchema = z.object({
   src: z.string(),
   alt: z.string(),
   objectPosition: z.string().min(1),
-  layouts: z.object({ mobile: AdminCanvasRectSchema, desktop: AdminCanvasRectSchema }),
-  styles: z.object({ mobile: detailStyleSchema, desktop: detailStyleSchema }),
+  layout: AdminCanvasRectSchema,
+  style: detailStyleSchema,
 })
 export const ArchiveDetailCanvasDesignSchema = z.object({
-  heights: z.object({
-    mobile: z.number().int().min(360).max(24000),
-    desktop: z.number().int().min(360).max(24000),
-  }),
+  height: z.number().int().min(360).max(24000),
   elements: z.array(detailElementSchema).max(60),
 })
 
@@ -276,7 +273,46 @@ function normalizeWork(work: Record<string, unknown>): Record<string, unknown> {
 }
 
 function normalizeArchiveRelease(release: Record<string, unknown>): Record<string, unknown> {
-  return Array.isArray(release["images"]) ? release : { ...release, images: [] }
+  const detail = release["detail"]
+  if (!isRecord(detail) || typeof detail["height"] === "number") {
+    return { ...release, images: release["images"] ?? [] }
+  }
+  const heights = detail["heights"]
+  if (!isRecord(heights) || !Array.isArray(detail["elements"])) return release
+  const desktop = typeof heights["desktop"] === "number"
+  const viewport = desktop ? "desktop" : "mobile"
+  const factor = desktop ? 390 / 1200 : 1
+  const height = heights[viewport]
+  return {
+    ...release,
+    images: release["images"] ?? [],
+    detail: {
+      height: typeof height === "number" ? Math.max(360, Math.round(height * factor)) : height,
+      elements: detail["elements"].map((element: unknown) => {
+        if (!isRecord(element)) return element
+        const layouts = element["layouts"]
+        const styles = element["styles"]
+        const rect = isRecord(layouts) ? rectFrom(layouts[viewport]) : null
+        const style = isRecord(styles) ? styles[viewport] : null
+        return {
+          ...element,
+          layout:
+            rect === null
+              ? null
+              : {
+                  x: Math.round(rect.x * factor),
+                  y: Math.round(rect.y * factor),
+                  width: Math.max(1, Math.round(rect.width * factor)),
+                  height: Math.max(1, Math.round(rect.height * factor)),
+                },
+          style:
+            isRecord(style) && typeof style["fontSize"] === "number"
+              ? { ...style, fontSize: Math.max(8, style["fontSize"] * factor) }
+              : style,
+        }
+      }),
+    },
+  }
 }
 
 function normalizeAdminContentInput(input: unknown): unknown {

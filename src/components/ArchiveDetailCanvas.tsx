@@ -3,7 +3,6 @@ import type { CSSProperties } from "react"
 import type {
   ArchiveDetailCanvasDesign,
   ArchiveDetailCanvasElement,
-  ArchiveDetailCanvasViewport,
 } from "../data/archiveDetailCanvas"
 
 export function ArchiveDetailCanvasElementContent({
@@ -28,9 +27,8 @@ export function ArchiveDetailCanvasElementContent({
 
 export function archiveDetailCanvasElementStyle(
   element: ArchiveDetailCanvasElement,
-  viewport: ArchiveDetailCanvasViewport,
 ): CSSProperties {
-  const style = element.styles[viewport]
+  const style = element.style
   return {
     color: style.color,
     fontSize: style.fontSize,
@@ -47,24 +45,20 @@ export function ArchiveDetailCanvas({ design }: { readonly design: ArchiveDetail
         className="archive-detail-canvas__stage"
         style={
           {
-            "--detail-canvas-height-mobile": design.heights.mobile,
-            "--detail-canvas-height-desktop": design.heights.desktop,
+            "--detail-canvas-height": design.height,
           } as CSSProperties
         }
       >
         {design.elements.map((element) => {
           const variables: Record<string, string | number> = {}
-          for (const viewport of ["mobile", "desktop"] as const) {
-            const rect = element.layouts[viewport]
-            const style = element.styles[viewport]
-            for (const [key, value] of Object.entries(rect))
-              variables[`--detail-${key}-${viewport}`] = value
-            variables[`--detail-font-size-${viewport}`] = style.fontSize
-            variables[`--detail-font-weight-${viewport}`] = style.fontWeight
-            variables[`--detail-line-height-${viewport}`] = style.lineHeight
-            variables[`--detail-text-align-${viewport}`] = style.textAlign
-            variables[`--detail-color-${viewport}`] = style.color
-          }
+          const rect = element.layout
+          const style = element.style
+          for (const [key, value] of Object.entries(rect)) variables[`--detail-${key}`] = value
+          variables["--detail-font-size"] = style.fontSize
+          variables["--detail-font-weight"] = style.fontWeight
+          variables["--detail-line-height"] = style.lineHeight
+          variables["--detail-text-align"] = style.textAlign
+          variables["--detail-color"] = style.color
           return (
             <div
               key={element.id}

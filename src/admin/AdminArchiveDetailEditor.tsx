@@ -40,18 +40,11 @@ function fitNewElement(
 ): ArchiveDetailCanvasElement {
   return {
     ...element,
-    layouts: {
-      mobile: clampArchiveDetailCanvasRect(
-        element.layouts.mobile,
-        archiveDetailCanvasWidths.mobile,
-        design.heights.mobile,
-      ),
-      desktop: clampArchiveDetailCanvasRect(
-        element.layouts.desktop,
-        archiveDetailCanvasWidths.desktop,
-        design.heights.desktop,
-      ),
-    },
+    layout: clampArchiveDetailCanvasRect(
+      element.layout,
+      archiveDetailCanvasWidths.mobile,
+      design.height,
+    ),
   }
 }
 
@@ -68,7 +61,7 @@ export function AdminArchiveDetailEditor({
   const [viewport, setViewport] = useState<ArchiveDetailCanvasViewport>("desktop")
   const [selectedId, setSelectedId] = useState(design.elements[0]?.id ?? "")
   const [notice, setNotice] = useState(
-    "Select an element, then drag or resize it. Mobile and Web layouts are saved separately.",
+    "Select an element, then drag or resize it. Mobile and Web share one layout, just like Works.",
   )
   const [progress, setProgress] = useState<number | null>(null)
   const uploadTarget = useRef(release.id)
@@ -78,7 +71,7 @@ export function AdminArchiveDetailEditor({
   latestDesign.current = design
   const selected = design.elements.find((element) => element.id === selectedId)
   const width = archiveDetailCanvasWidths[viewport]
-  const height = design.heights[viewport]
+  const height = design.height
   const scale = Math.min(1, availableWidth / width)
 
   useEffect(() => {
@@ -119,10 +112,7 @@ export function AdminArchiveDetailEditor({
         item.id === element.id
           ? {
               ...item,
-              layouts: {
-                ...item.layouts,
-                [viewport]: clampArchiveDetailCanvasRect(rect, width, height),
-              },
+              layout: clampArchiveDetailCanvasRect(rect, width, height),
             }
           : item,
       ),
@@ -131,7 +121,7 @@ export function AdminArchiveDetailEditor({
   const changeStyle = (patch: Partial<ArchiveDetailCanvasStyle>) => {
     if (selected)
       update({
-        styles: { ...selected.styles, [viewport]: { ...selected.styles[viewport], ...patch } },
+        style: { ...selected.style, ...patch },
       })
   }
   const changeText = (text: string) => {
@@ -291,7 +281,7 @@ export function AdminArchiveDetailEditor({
                   </p>
                 ) : null}
                 {design.elements.map((element) => {
-                  const rect = element.layouts[viewport]
+                  const rect = element.layout
                   return (
                     <Rnd
                       key={element.id}
@@ -316,7 +306,7 @@ export function AdminArchiveDetailEditor({
                         type="button"
                         tabIndex={0}
                         aria-label={`Select ${element.kind === "text" ? element.text : element.kind === "image" ? element.alt : archiveDetailCanvasLabels[element.kind]}`}
-                        style={archiveDetailCanvasElementStyle(element, viewport)}
+                        style={archiveDetailCanvasElementStyle(element)}
                         onClick={() => setSelectedId(element.id)}
                         onKeyDown={(event) => {
                           if (event.key === "Enter" || event.key === " ") {
@@ -360,7 +350,7 @@ export function AdminArchiveDetailEditor({
         </section>
         <aside className="admin-inspector" aria-label="Detail element settings">
           <AdminTextField
-            label={`${viewport === "desktop" ? "Web" : "Mobile"} detail height`}
+            label="Detail height"
             type="number"
             value={String(height)}
             onChange={(value) => {
@@ -369,17 +359,10 @@ export function AdminArchiveDetailEditor({
               )
               save({
                 ...design,
-                heights: { ...design.heights, [viewport]: nextHeight },
+                height: nextHeight,
                 elements: design.elements.map((element) => ({
                   ...element,
-                  layouts: {
-                    ...element.layouts,
-                    [viewport]: clampArchiveDetailCanvasRect(
-                      element.layouts[viewport],
-                      width,
-                      nextHeight,
-                    ),
-                  },
+                  layout: clampArchiveDetailCanvasRect(element.layout, width, nextHeight),
                 })),
               })
             }}
@@ -436,38 +419,38 @@ export function AdminArchiveDetailEditor({
                   <AdminTextField
                     label="Font size"
                     type="number"
-                    value={String(selected.styles[viewport].fontSize)}
+                    value={String(selected.style.fontSize)}
                     onChange={(value) =>
                       changeStyle({
-                        fontSize: numeric(value, selected.styles[viewport].fontSize, 8, 220),
+                        fontSize: numeric(value, selected.style.fontSize, 8, 220),
                       })
                     }
                   />
                   <AdminSelectField
                     label="Font weight"
-                    value={String(selected.styles[viewport].fontWeight)}
+                    value={String(selected.style.fontWeight)}
                     options={["300", "430", "500", "700", "760", "900"]}
                     onChange={(value) => changeStyle({ fontWeight: Number(value) })}
                   />
                   <AdminSelectField
                     label="Text alignment"
-                    value={selected.styles[viewport].textAlign}
+                    value={selected.style.textAlign}
                     options={["left", "center", "right"]}
                     onChange={(textAlign) => changeStyle({ textAlign })}
                   />
                   <AdminTextField
                     label="Text color"
                     type="color"
-                    value={selected.styles[viewport].color}
+                    value={selected.style.color}
                     onChange={(color) => changeStyle({ color })}
                   />
                   <AdminTextField
                     label="Line height"
                     type="number"
-                    value={String(selected.styles[viewport].lineHeight)}
+                    value={String(selected.style.lineHeight)}
                     onChange={(value) =>
                       changeStyle({
-                        lineHeight: numeric(value, selected.styles[viewport].lineHeight, 0.75, 3),
+                        lineHeight: numeric(value, selected.style.lineHeight, 0.75, 3),
                       })
                     }
                   />
@@ -485,13 +468,13 @@ export function AdminArchiveDetailEditor({
                           : "Height"
                     }
                     type="number"
-                    value={String(selected.layouts[viewport][key])}
+                    value={String(selected.layout[key])}
                     onChange={(value) =>
                       move(selected, {
-                        ...selected.layouts[viewport],
+                        ...selected.layout,
                         [key]: numeric(
                           value,
-                          selected.layouts[viewport][key],
+                          selected.layout[key],
                           key === "x" || key === "y" ? 0 : 24,
                           key === "x" || key === "width" ? width : height,
                         ),

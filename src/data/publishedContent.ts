@@ -188,10 +188,6 @@ export const publishedAdminContent = {
     },
     {
       "detail": {
-        "heights": {
-          "mobile": 720,
-          "desktop": 3600
-        },
         "elements": [
           {
             "id": "archive-image-93e7d701-e7b0-43c3-8fec-eec01afd6343",
@@ -200,35 +196,18 @@ export const publishedAdminContent = {
             "src": "/api/assets?pathname=admin-assets%2F1792076502732-kakaotalk-photo-2026-02-03-23-53-26-3-07cKMYDx2JUSPl7z8FKOrlMMEeRUK3.png",
             "alt": "KakaoTalk Photo 2026 02 03 23 53 26 3",
             "objectPosition": "center",
-            "layouts": {
-              "mobile": {
-                "x": 20,
-                "y": 0,
-                "width": 350,
-                "height": 265
-              },
-              "desktop": {
-                "x": 0,
-                "y": 632,
-                "width": 1200,
-                "height": 971
-              }
+            "layout": {
+              "x": 0,
+              "y": 205,
+              "width": 390,
+              "height": 316
             },
-            "styles": {
-              "mobile": {
-                "fontSize": 24,
-                "fontWeight": 430,
-                "lineHeight": 1.15,
-                "textAlign": "left",
-                "color": "#f5f5f5"
-              },
-              "desktop": {
-                "fontSize": 36,
-                "fontWeight": 430,
-                "lineHeight": 1.15,
-                "textAlign": "left",
-                "color": "#f5f5f5"
-              }
+            "style": {
+              "fontSize": 11.700000000000001,
+              "fontWeight": 430,
+              "lineHeight": 1.15,
+              "textAlign": "left",
+              "color": "#f5f5f5"
             }
           },
           {
@@ -238,35 +217,18 @@ export const publishedAdminContent = {
             "src": "/api/assets?pathname=admin-assets%2F1792179234221-kakaotalk-photo-2026-02-03-23-53-26-14-TRSkHBHOjmhMHie2sSVrOa1G1fgeG6.jpeg",
             "alt": "KakaoTalk Photo 2026 02 03 23 53 26 14",
             "objectPosition": "center",
-            "layouts": {
-              "mobile": {
-                "x": 20,
-                "y": 20,
-                "width": 350,
-                "height": 230
-              },
-              "desktop": {
-                "x": 314,
-                "y": 196,
-                "width": 560,
-                "height": 370
-              }
+            "layout": {
+              "x": 102,
+              "y": 64,
+              "width": 182,
+              "height": 120
             },
-            "styles": {
-              "mobile": {
-                "fontSize": 24,
-                "fontWeight": 430,
-                "lineHeight": 1.15,
-                "textAlign": "left",
-                "color": "#f5f5f5"
-              },
-              "desktop": {
-                "fontSize": 36,
-                "fontWeight": 430,
-                "lineHeight": 1.15,
-                "textAlign": "left",
-                "color": "#f5f5f5"
-              }
+            "style": {
+              "fontSize": 11.700000000000001,
+              "fontWeight": 430,
+              "lineHeight": 1.15,
+              "textAlign": "left",
+              "color": "#f5f5f5"
             }
           },
           {
@@ -276,35 +238,18 @@ export const publishedAdminContent = {
             "src": "/api/assets?pathname=admin-assets%2F1792179284654-kakaotalk-photo-2026-02-03-23-53-26-13-1RoNxqKXjJ6Ve5DyYp9T2T4i0mFhMA.jpeg",
             "alt": "KakaoTalk Photo 2026 02 03 23 53 26 13",
             "objectPosition": "center",
-            "layouts": {
-              "mobile": {
-                "x": 20,
-                "y": 20,
-                "width": 350,
-                "height": 230
-              },
-              "desktop": {
-                "x": 86,
-                "y": 1502,
-                "width": 560,
-                "height": 370
-              }
+            "layout": {
+              "x": 28,
+              "y": 488,
+              "width": 182,
+              "height": 120
             },
-            "styles": {
-              "mobile": {
-                "fontSize": 24,
-                "fontWeight": 430,
-                "lineHeight": 1.15,
-                "textAlign": "left",
-                "color": "#f5f5f5"
-              },
-              "desktop": {
-                "fontSize": 36,
-                "fontWeight": 430,
-                "lineHeight": 1.15,
-                "textAlign": "left",
-                "color": "#f5f5f5"
-              }
+            "style": {
+              "fontSize": 11.700000000000001,
+              "fontWeight": 430,
+              "lineHeight": 1.15,
+              "textAlign": "left",
+              "color": "#f5f5f5"
             }
           },
           {
@@ -314,35 +259,18 @@ export const publishedAdminContent = {
             "src": "/api/assets?pathname=admin-assets%2F1792179306104-kakaotalk-photo-2026-02-03-23-53-26-15-XRxFnaGV5V8BwqPv5ZvHuEDinNxtrY.jpeg",
             "alt": "KakaoTalk Photo 2026 02 03 23 53 26 15",
             "objectPosition": "center",
-            "layouts": {
-              "mobile": {
-                "x": 20,
-                "y": 20,
-                "width": 350,
-                "height": 230
-              },
-              "desktop": {
-                "x": 536,
-                "y": 1843,
-                "width": 560,
-                "height": 370
-              }
+            "layout": {
+              "x": 174,
+              "y": 599,
+              "width": 182,
+              "height": 120
             },
-            "styles": {
-              "mobile": {
-                "fontSize": 24,
-                "fontWeight": 430,
-                "lineHeight": 1.15,
-                "textAlign": "left",
-                "color": "#f5f5f5"
-              },
-              "desktop": {
-                "fontSize": 36,
-                "fontWeight": 430,
-                "lineHeight": 1.15,
-                "textAlign": "left",
-                "color": "#f5f5f5"
-              }
+            "style": {
+              "fontSize": 11.700000000000001,
+              "fontWeight": 430,
+              "lineHeight": 1.15,
+              "textAlign": "left",
+              "color": "#f5f5f5"
             }
           },
           {
@@ -352,38 +280,22 @@ export const publishedAdminContent = {
             "src": "/api/assets?pathname=admin-assets%2F1792179372852-kakaotalk-photo-2026-02-03-23-53-26-20-JywGUHE2em2l856lfjAszxWpotiOur.png",
             "alt": "KakaoTalk Photo 2026 02 03 23 53 26 20",
             "objectPosition": "center",
-            "layouts": {
-              "mobile": {
-                "x": 20,
-                "y": 20,
-                "width": 350,
-                "height": 230
-              },
-              "desktop": {
-                "x": 0,
-                "y": 2564,
-                "width": 1200,
-                "height": 780
-              }
+            "layout": {
+              "x": 0,
+              "y": 833,
+              "width": 390,
+              "height": 254
             },
-            "styles": {
-              "mobile": {
-                "fontSize": 24,
-                "fontWeight": 430,
-                "lineHeight": 1.15,
-                "textAlign": "left",
-                "color": "#f5f5f5"
-              },
-              "desktop": {
-                "fontSize": 36,
-                "fontWeight": 430,
-                "lineHeight": 1.15,
-                "textAlign": "left",
-                "color": "#f5f5f5"
-              }
+            "style": {
+              "fontSize": 11.700000000000001,
+              "fontWeight": 430,
+              "lineHeight": 1.15,
+              "textAlign": "left",
+              "color": "#f5f5f5"
             }
           }
-        ]
+        ],
+        "height": 1170
       },
       "id": "release-loose-archive",
       "title": "Envelope",

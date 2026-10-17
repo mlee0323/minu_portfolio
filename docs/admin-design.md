@@ -564,19 +564,24 @@ The section below is retained as a future database-migration option, not the cur
 Do not migrate the public site immediately. Build the admin against Supabase, seed the current content, and verify that a non-developer can create a realistic Main Work draft. Once that flow feels good, switch the public Works section to Supabase behind a feature flag.
 ## Archive detail content editing
 
-`/admin/archive` provides a **Detail design** canvas for images and text below
-**Track list**. The upper cover, title, artist, description and playback controls
-retain the original fixed responsive layout. Their content remains editable in
-**Release settings & tracks**.
+`/admin/archive` edits images and text below **Track list**. The header remains fixed.
+Like Works, both Mobile and Web use a single 390-unit canvas, one height, one
+layout and one text style per element. A change in either preview applies to both
+previews and the public page. Existing separate layouts migrate from the saved
+Web composition, scaling 1200-unit geometry and typography to 390 units without
+discarding images. Existing content remains in Git history; older browser drafts
+are migrated on load.
 
-Select a release, add **Text** or **Add detail image**, then drag or resize items.
-The inspector edits position, dimensions, image cropping, font size, weight,
-color, alignment and line height. Arrow keys move an item; Shift + arrow moves it
-ten units. **Mobile** and **Web** keep separate geometry, typography and canvas
-heights. Layer controls manage overlapping content.
+Production admin loads the latest saved repository content through authenticated
+`GET /api/admin/content`. An old browser draft cannot silently replace it; a
+separate recovery banner offers restoring that draft, which is also retained in
+`minu-admin-content-recovery:v1`. **Reload published** reads current server content.
+Local development continues to use the local draft store.
 
-Existing gallery images become editable canvas elements on the first detail edit;
-releases without a custom detail design retain their original gallery. Removing
-all elements explicitly hides the detail content. **Save draft** uses the normal
-validation and production publishing flow. Private image uploads keep the
-existing authenticated preview and published-image allowlist.
+**Save & publish** validates fields, preserves a local draft when storage permits,
+and posts the content with its original Git file SHA. A stale SHA returns 409
+rather than overwriting another save. A GitHub save and an active website deployment
+have separate messages. The editor polls the deployed content hash and reports
+**Website updated** only when the public deployment contains that exact content.
+A pending or failed deployment check never reports the save itself as lost.
+Private image authentication and published-image delivery are unchanged.

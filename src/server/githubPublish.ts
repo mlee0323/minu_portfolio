@@ -3,9 +3,12 @@ import { z } from "zod"
 
 const githubContentResponseSchema = z.object({
   sha: z.string().min(1),
+  content: z.string(),
+  encoding: z.literal("base64"),
 })
 
 const githubCommitResponseSchema = z.object({
+  content: z.object({ sha: z.string().min(1) }),
   commit: z.object({
     sha: z.string().min(1),
     html_url: z.string().min(1),
@@ -24,6 +27,7 @@ export type GitHubPublishConfig = GitHubRepository & {
 }
 
 export type GitHubPublishResult = {
+  readonly contentSha: string
   readonly commitSha: string
   readonly commitUrl: string
   readonly path: string
@@ -31,6 +35,10 @@ export type GitHubPublishResult = {
 
 export class GitHubPublishConfigError extends Error {
   readonly name = "GitHubPublishConfigError"
+}
+
+export class GitHubPublishConflictError extends Error {
+  readonly name = "GitHubPublishConflictError"
 }
 
 function requiredEnv(name: string, env: Record<string, string | undefined>): string {
@@ -74,9 +82,9 @@ function createGitHubClient(config: GitHubPublishConfig): typeof ky {
       "X-GitHub-Api-Version": "2022-11-28",
     },
     retry: {
-      limit: 2,
+      limit: 0,
     },
-    timeout: 15_000,
+    timeout: 10_000,
   })
 }
 
@@ -87,12 +95,18 @@ function encodeBase64(content: string): string {
 export async function publishFileToGitHub(
   config: GitHubPublishConfig,
   source: string,
+  expectedSha: string,
 ): Promise<GitHubPublishResult> {
   const client = createGitHubClient(config)
   const route = `repos/${config.owner}/${config.repo}/contents/${config.path}`
   const currentFile = githubContentResponseSchema.parse(
     await client.get(route, { searchParams: { ref: config.branch } }).json(),
   )
+  if (currentFile.sha !== expectedSha) {
+    throw new GitHubPublishConflictError(
+      "The published content changed. Reload published content before saving; your local draft is preserved.",
+    )
+  }
   const response = githubCommitResponseSchema.parse(
     await client
       .put(route, {
@@ -107,8 +121,22 @@ export async function publishFileToGitHub(
   )
 
   return {
+    contentSha: response.content.sha,
     commitSha: response.commit.sha,
     commitUrl: response.commit.html_url,
     path: config.path,
   }
+}
+
+export async function readFileFromGitHub(
+  config: GitHubPublishConfig,
+): Promise<{ sha: string; source: string }> {
+  const file = githubContentResponseSchema.parse(
+    await createGitHubClient(config)
+      .get(`repos/${config.owner}/${config.repo}/contents/${config.path}`, {
+        searchParams: { ref: config.branch },
+      })
+      .json(),
+  )
+  return { sha: file.sha, source: Buffer.from(file.content, "base64").toString("utf8") }
 }

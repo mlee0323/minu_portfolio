@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node"
+import { HTTPError } from "ky"
 import { z } from "zod"
 import { AdminContentSchema } from "../../src/admin/adminSchema.ts"
 import {
@@ -8,16 +9,19 @@ import {
 } from "../../src/server/adminRequestAuth.ts"
 import {
   GitHubPublishConfigError,
+  GitHubPublishConflictError,
   publishFileToGitHub,
   readGitHubPublishConfig,
 } from "../../src/server/githubPublish.ts"
 import {
   formatPublishedContentModule,
   publishedContentFilePath,
+  publishedContentHash,
 } from "../../src/server/publishedContentSource.ts"
 
 const publishRequestSchema = z.object({
   content: AdminContentSchema,
+  baseSha: z.string().min(1),
 })
 
 function sendJson(response: VercelResponse, status: number, body: Record<string, unknown>): void {
@@ -38,18 +42,40 @@ export default async function handler(request: VercelRequest, response: VercelRe
     const result = await publishFileToGitHub(
       readGitHubPublishConfig(process.env, publishedContentFilePath),
       formatPublishedContentModule(body.content),
+      body.baseSha,
     )
 
+    console.info("[admin-publish] saved", {
+      commitSha: result.commitSha,
+      contentHash: publishedContentHash(body.content),
+    })
     sendJson(response, 200, {
       ok: true,
       email: session.email,
+      sha: result.contentSha,
       commitSha: result.commitSha,
       commitUrl: result.commitUrl,
       path: result.path,
+      contentHash: publishedContentHash(body.content),
     })
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
-      sendJson(response, 400, { ok: false, error: "Published content is invalid" })
+      sendJson(response, 400, {
+        ok: false,
+        error: `Content validation failed at ${error.issues[0]?.path.join(".") || "request"}: ${error.issues[0]?.message ?? "Invalid content"}`,
+      })
+      return
+    }
+
+    if (
+      error instanceof GitHubPublishConflictError ||
+      (error instanceof HTTPError && [409, 422].includes(error.response.status))
+    ) {
+      sendJson(response, 409, {
+        ok: false,
+        error:
+          "The published content changed. Reload published content before saving; your local draft is preserved.",
+      })
       return
     }
 
@@ -65,6 +91,13 @@ export default async function handler(request: VercelRequest, response: VercelRe
       return
     }
 
-    throw error
+    console.error("[admin-publish] failed", {
+      name: error instanceof Error ? error.name : "UnknownError",
+    })
+    sendJson(response, 502, {
+      ok: false,
+      error:
+        "Could not save to GitHub. Your local draft is preserved. Reload published content before retrying.",
+    })
   }
 }

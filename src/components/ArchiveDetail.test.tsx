@@ -66,7 +66,7 @@ describe("ArchiveDetail", () => {
                 objectPosition: "center",
               },
             ],
-            detail: { heights: { mobile: 720, desktop: 900 }, elements: [] },
+            detail: { height: 720, elements: [] },
           }}
         />
       </AudioManagerProvider>,

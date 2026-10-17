@@ -3,6 +3,8 @@ import {
   AdminContentStorageError,
   adminContentStorageKey,
   loadAdminContent,
+  markAdminContentPublished,
+  recoverableAdminContent,
   resetAdminContent,
   saveAdminContent,
 } from "./adminStore"
@@ -201,5 +203,91 @@ describe("adminStore", () => {
 
     expect(() => saveAdminContent(invalidContent)).toThrow()
     expect(() => saveAdminContent(invalidContent)).not.toThrow(AdminContentStorageError)
+  })
+})
+
+describe("published content and browser draft recovery", () => {
+  beforeEach(() => {
+    Object.defineProperty(window, "localStorage", {
+      configurable: true,
+      value: createTestStorage(),
+    })
+  })
+  it("preserves an old draft for explicit recovery instead of treating it as current published data", () => {
+    const current = createSeedAdminContent()
+    const old = {
+      ...current,
+      works: [
+        { ...requireFirstWork(current), title: "Old browser draft" },
+        ...current.works.slice(1),
+      ],
+    }
+    saveAdminContent(old)
+    expect(recoverableAdminContent(current)?.works[0]?.title).toBe("Old browser draft")
+    expect(current.works[0]?.title).not.toBe("Old browser draft")
+    expect(window.localStorage.getItem("minu-admin-content-recovery:v1")).toContain(
+      "Old browser draft",
+    )
+  })
+  it("does not offer a successfully published old snapshot as an unpublished draft", () => {
+    const old = createSeedAdminContent()
+    saveAdminContent(old)
+    markAdminContentPublished(old)
+    const current = {
+      ...old,
+      works: [{ ...requireFirstWork(old), title: "Newer server version" }, ...old.works.slice(1)],
+    }
+    expect(recoverableAdminContent(current)).toBeNull()
+  })
+  it("migrates an existing Web archive composition into a shared layout without dropping images", () => {
+    const seed = createSeedAdminContent()
+    const legacy = {
+      ...seed,
+      archiveReleases: [
+        {
+          ...seed.archiveReleases[0],
+          detail: {
+            heights: { mobile: 720, desktop: 3600 },
+            elements: [
+              {
+                id: "saved-image",
+                kind: "image",
+                src: "/saved.jpg",
+                alt: "Saved photo",
+                text: "",
+                objectPosition: "center",
+                layouts: {
+                  mobile: { x: 20, y: 20, width: 350, height: 230 },
+                  desktop: { x: 314, y: 196, width: 560, height: 370 },
+                },
+                styles: {
+                  mobile: {
+                    fontSize: 24,
+                    fontWeight: 430,
+                    lineHeight: 1.15,
+                    textAlign: "left",
+                    color: "#f5f5f5",
+                  },
+                  desktop: {
+                    fontSize: 36,
+                    fontWeight: 430,
+                    lineHeight: 1.15,
+                    textAlign: "left",
+                    color: "#f5f5f5",
+                  },
+                },
+              },
+            ],
+          },
+        },
+      ],
+    }
+    window.localStorage.setItem(adminContentStorageKey, JSON.stringify(legacy))
+    const detail = loadAdminContent().archiveReleases[0]?.detail
+    expect(detail?.height).toBe(1170)
+    expect(detail?.elements[0]?.layout).toEqual({ x: 102, y: 64, width: 182, height: 120 })
+    expect(detail?.elements[0]?.src).toBe("/saved.jpg")
+    expect(detail?.elements[0]?.style.fontSize).toBeCloseTo(11.7)
+    expect(detail?.elements[0]).not.toHaveProperty("layouts")
   })
 })

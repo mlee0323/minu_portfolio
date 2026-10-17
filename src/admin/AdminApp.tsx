@@ -1,5 +1,5 @@
 import { ArrowLeft, Database, RotateCcw, Save } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { AdminArchivePanel } from "./AdminArchivePanel"
 import { AdminDashboard } from "./AdminDashboard"
 import { AdminIndexPanel } from "./AdminIndexPanel"
@@ -9,9 +9,20 @@ import {
   loadAdminAccessSession,
   shouldVerifyAdminAccess,
 } from "./adminAccessClient"
-import { publishAdminContent } from "./adminPublishClient"
+import {
+  loadPublishedAdminContent,
+  publishAdminContent,
+  waitForPublishedDeployment,
+} from "./adminPublishClient"
 import { AdminContentSchema } from "./adminSchema"
-import { loadAdminContent, resetAdminContent, saveAdminContent } from "./adminStore"
+import { createSeedAdminContent } from "./adminSeed"
+import {
+  loadAdminContent,
+  markAdminContentPublished,
+  recoverableAdminContent,
+  resetAdminContent,
+  saveAdminContent,
+} from "./adminStore"
 import type { AdminContent } from "./adminTypes"
 import "../styles/admin.css"
 import "../styles/adminPremium.css"
@@ -66,14 +77,72 @@ function routeLabel(route: AdminRoute): string {
   }
 }
 
+function contentSnapshot(content: AdminContent): string {
+  const result = AdminContentSchema.safeParse(content)
+  return JSON.stringify(result.success ? result.data : content)
+}
+
 export function AdminApp() {
   const [accessSession, setAccessSession] = useState<AdminAccessSession | null>(() =>
     shouldVerifyAdminAccess() ? null : { status: "allowed", email: "local" },
   )
-  const [content, setContent] = useState<AdminContent>(() => loadAdminContent())
+  const [content, setContent] = useState<AdminContent>(() =>
+    shouldVerifyAdminAccess() ? createSeedAdminContent() : loadAdminContent(),
+  )
   const [route, setRoute] = useState<AdminRoute>(() => routeFromPath(window.location.pathname))
   const [message, setMessage] = useState("Local draft is ready.")
   const [isSaving, setIsSaving] = useState(false)
+  const [baseSha, setBaseSha] = useState<string | null>(null)
+  const [loadingContent, setLoadingContent] = useState(shouldVerifyAdminAccess())
+  const [loadError, setLoadError] = useState("")
+  const [recoveryDraft, setRecoveryDraft] = useState<AdminContent | null>(null)
+  const contentRef = useRef(content)
+  contentRef.current = content
+  const savedSnapshot = useRef(contentSnapshot(content))
+  const publishing = useRef(false)
+  const deploymentCheck = useRef<AbortController | null>(null)
+
+  const loadPublished = useCallback(async () => {
+    setLoadingContent(true)
+    setLoadError("")
+    try {
+      // Keep local changes recoverable when explicitly reloading current published content.
+      if (contentSnapshot(contentRef.current) !== savedSnapshot.current) {
+        try {
+          saveAdminContent(contentRef.current)
+        } catch {
+          /* Do not block loading current server content. */
+        }
+      }
+      const current = await loadPublishedAdminContent()
+      setRecoveryDraft(recoverableAdminContent(current.content))
+      setContent(current.content)
+      savedSnapshot.current = contentSnapshot(current.content)
+      setBaseSha(current.sha)
+      setMessage(
+        current.contentHash === current.deployedContentHash
+          ? "Current published content loaded. Website is up to date."
+          : "Latest saved content loaded. Website deployment is still updating.",
+      )
+    } catch (error) {
+      setLoadError(error instanceof Error ? error.message : "Could not load published content.")
+      setBaseSha(null)
+    } finally {
+      setLoadingContent(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (shouldVerifyAdminAccess() && accessSession?.status === "allowed") void loadPublished()
+    return () => {
+      deploymentCheck.current?.abort()
+    }
+  }, [accessSession, loadPublished])
+
+  const updateContent = (next: AdminContent) => {
+    setContent(next)
+    if (!publishing.current) setMessage("Unsaved changes. Save & publish to update the website.")
+  }
 
   useEffect(() => {
     if (!shouldVerifyAdminAccess()) {
@@ -112,38 +181,70 @@ export function AdminApp() {
     window.history.pushState(null, "", pathForRoute(nextRoute))
     setRoute(nextRoute)
   }
-  const saveDraft = () => {
+  const saveDraft = async () => {
+    if (publishing.current) return
     const result = AdminContentSchema.safeParse(content)
     if (!result.success) {
-      setMessage(result.error.issues[0]?.message ?? "Draft validation failed.")
+      const issue = result.error.issues[0]
+      setMessage(
+        `${issue?.path.join(".") || "Content"}: ${issue?.message ?? "Draft validation failed."}`,
+      )
       return
     }
-
+    let localSaved = false
     try {
       saveAdminContent(result.data)
-      if (!shouldVerifyAdminAccess()) {
-        setMessage("Draft saved locally. Production publish runs after Cloudflare login.")
-        return
+      localSaved = true
+    } catch {
+      /* Server save can still succeed if browser storage is full. */
+    }
+    if (!shouldVerifyAdminAccess()) {
+      setMessage(
+        localSaved
+          ? "Draft saved locally. Production publish runs after Cloudflare login."
+          : "Could not save the local draft. Browser storage is unavailable.",
+      )
+      return
+    }
+    if (baseSha === null) {
+      setMessage("Load current published content before publishing. Your draft is preserved.")
+      return
+    }
+    publishing.current = true
+    setIsSaving(true)
+    setMessage("Saving content to the server…")
+    let savedCommit = ""
+    try {
+      const published = await publishAdminContent(result.data, baseSha)
+      savedCommit = published.commitSha.slice(0, 7)
+      setBaseSha(published.sha)
+      savedSnapshot.current = contentSnapshot(result.data)
+      try {
+        markAdminContentPublished(result.data)
+      } catch {
+        /* Publishing already succeeded. */
       }
-
-      setIsSaving(true)
-      setMessage("Publishing content...")
-      void publishAdminContent(result.data)
-        .then((publishResult) => {
-          setMessage(`Published ${publishResult.path} at ${publishResult.commitSha.slice(0, 7)}.`)
-        })
-        .catch((error: unknown) => {
-          setMessage(error instanceof Error ? error.message : "Publish failed.")
-        })
-        .finally(() => {
-          setIsSaving(false)
-        })
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setMessage(error.message)
-        return
-      }
-      throw error
+      setMessage(`Saved ${savedCommit}. Updating the website…`)
+      const check = new AbortController()
+      deploymentCheck.current = check
+      const ready = await waitForPublishedDeployment(published.contentHash, check.signal)
+      if (check.signal.aborted) return
+      const dirty = contentSnapshot(contentRef.current) !== savedSnapshot.current
+      setMessage(
+        ready
+          ? `Saved ${savedCommit}. Website updated.${dirty ? " New edits remain unsaved." : ""}`
+          : `Saved ${savedCommit}. Deployment is still pending. Your content is saved; refresh later to check the website.`,
+      )
+      setRecoveryDraft(null)
+    } catch (error) {
+      setMessage(
+        savedCommit
+          ? `Saved ${savedCommit}, but deployment verification failed. ${error instanceof Error ? error.message : "Check the website later."}`
+          : `${error instanceof Error ? error.message : "Publish failed."}${localSaved ? " Your local draft is saved." : " Keep this page open to preserve your edits."}`,
+      )
+    } finally {
+      publishing.current = false
+      setIsSaving(false)
     }
   }
   const resetDraft = () => {
@@ -188,18 +289,27 @@ export function AdminApp() {
           <strong>{routeLabel(route)}</strong>
         </div>
         <div className="admin-actions">
-          <button className="pill-button" type="button" onClick={resetDraft}>
+          <button
+            className="pill-button"
+            type="button"
+            disabled={isSaving || loadingContent}
+            onClick={shouldVerifyAdminAccess() ? () => void loadPublished() : resetDraft}
+          >
             <RotateCcw size={15} />
-            Reset
+            {shouldVerifyAdminAccess() ? "Reload published" : "Reset"}
           </button>
           <button
             className="pill-button pill-button--accent"
             type="button"
-            disabled={isSaving}
+            disabled={isSaving || loadingContent || (shouldVerifyAdminAccess() && baseSha === null)}
             onClick={saveDraft}
           >
             <Save size={15} />
-            {isSaving ? "Publishing" : "Save draft"}
+            {isSaving
+              ? "Saving / updating site…"
+              : shouldVerifyAdminAccess()
+                ? "Save & publish"
+                : "Save draft"}
           </button>
         </div>
       </header>
@@ -223,14 +333,47 @@ export function AdminApp() {
             <Database size={15} />
             {message}
           </p>
-          {route === "dashboard" ? <AdminDashboard content={content} /> : null}
-          {route === "works" ? <AdminWorksPanel content={content} onChange={setContent} /> : null}
-          {route === "archive" ? (
-            <AdminArchivePanel content={content} onChange={setContent} />
+          {recoveryDraft !== null ? (
+            <div className="admin-recovery" role="status">
+              <p>
+                A different browser draft is preserved. The editor shows current published content.
+              </p>
+              <button
+                className="pill-button"
+                type="button"
+                disabled={isSaving}
+                onClick={() => {
+                  updateContent(recoveryDraft)
+                  setRecoveryDraft(null)
+                }}
+              >
+                Restore browser draft
+              </button>
+            </div>
           ) : null}
-          {route === "index-contact" ? (
-            <AdminIndexPanel content={content} onChange={setContent} />
-          ) : null}
+          {loadingContent ? (
+            <p>Loading current published content…</p>
+          ) : loadError ? (
+            <div className="admin-recovery" role="alert">
+              <p>{loadError}</p>
+              <button className="pill-button" type="button" onClick={() => void loadPublished()}>
+                Retry loading published content
+              </button>
+            </div>
+          ) : (
+            <>
+              {route === "dashboard" ? <AdminDashboard content={content} /> : null}
+              {route === "works" ? (
+                <AdminWorksPanel content={content} onChange={updateContent} />
+              ) : null}
+              {route === "archive" ? (
+                <AdminArchivePanel content={content} onChange={updateContent} />
+              ) : null}
+              {route === "index-contact" ? (
+                <AdminIndexPanel content={content} onChange={updateContent} />
+              ) : null}
+            </>
+          )}
         </div>
       </div>
     </main>

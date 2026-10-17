@@ -10,7 +10,6 @@ describe("archiveTracks", () => {
       expect(release.title.trim()).not.toHaveLength(0)
       expect(release.artist.trim()).not.toHaveLength(0)
       expect(release.artworkUrl.trim()).not.toHaveLength(0)
-      expect(release.tracks.length).toBeGreaterThan(0)
 
       if (release.soundCloudPlaylistUrl !== undefined) {
         expect(isAllowedSoundCloudTrackUrl(release.soundCloudPlaylistUrl)).toBe(true)
@@ -31,6 +30,9 @@ describe("archiveTracks", () => {
   })
 
   it("contains SoundCloud tracks with safe UI fallbacks", () => {
+    expect(archiveTracks.map((track) => track.id)).toEqual(
+      archiveReleases.flatMap((release) => release.tracks.map((track) => track.id)),
+    )
     expect(archiveTracks.length).toBeGreaterThan(0)
 
     for (const track of archiveTracks) {

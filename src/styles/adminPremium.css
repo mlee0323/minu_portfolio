@@ -572,3 +572,18 @@
   font-size: 24px;
   text-align: center;
 }
+
+.admin-recovery {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  border: 1px solid var(--color-line);
+  border-radius: 10px;
+}
+.admin-recovery p {
+  flex: 1 1 300px;
+  margin: 0;
+}
