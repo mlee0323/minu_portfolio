@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowUpRight, Disc3, Play, Radio } from "lucide-react"
 import { useState } from "react"
 import { useAudioManager, useAudioPlayback } from "../audio/AudioManagerProvider"
 import type { AudioRelease, AudioTrack } from "../audio/types"
+import { createDefaultArchiveDetailCanvas } from "../data/archiveDetailCanvas"
 import { navigateWithinPublicApp } from "../lib/navigation"
 import { ArchiveTrackRows } from "./Archive"
 import { ArchiveDetailCanvas } from "./ArchiveDetailCanvas"
@@ -17,6 +18,7 @@ export function ArchiveDetail({ release }: ArchiveDetailProps) {
   const manager = useAudioManager()
   const playback = useAudioPlayback()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const detail = release.detail ?? createDefaultArchiveDetailCanvas(release)
   const firstTrack = release.tracks[0]
   const isCurrentRelease =
     playback.currentTrack?.releaseId === release.id ||
@@ -124,27 +126,9 @@ export function ArchiveDetail({ release }: ArchiveDetailProps) {
         />
       </div>
 
-      {release.detail !== undefined ? (
-        release.detail.elements.length > 0 ? (
-          <section className="archive-detail__body" aria-label={`${release.title} detail content`}>
-            <ArchiveDetailCanvas design={release.detail} />
-          </section>
-        ) : null
-      ) : release.images.length > 0 ? (
-        <section className="archive-detail__media" aria-label={`${release.title} release images`}>
-          {release.images.map((image) => (
-            <figure className="archive-detail__media-item" key={image.id}>
-              <img
-                src={image.src}
-                alt={image.alt}
-                width={image.width}
-                height={image.height}
-                loading="lazy"
-                decoding="async"
-                style={{ objectPosition: image.objectPosition }}
-              />
-            </figure>
-          ))}
+      {detail.elements.length > 0 ? (
+        <section className="archive-detail__body" aria-label={`${release.title} detail content`}>
+          <ArchiveDetailCanvas design={detail} />
         </section>
       ) : null}
 
