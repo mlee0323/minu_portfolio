@@ -188,6 +188,7 @@ export const publishedAdminContent = {
     },
     {
       "detail": {
+        "height": 1170,
         "elements": [
           {
             "id": "archive-image-93e7d701-e7b0-43c3-8fec-eec01afd6343",
@@ -216,7 +217,7 @@ export const publishedAdminContent = {
             "text": "",
             "src": "/api/assets?pathname=admin-assets%2F1792179234221-kakaotalk-photo-2026-02-03-23-53-26-14-TRSkHBHOjmhMHie2sSVrOa1G1fgeG6.jpeg",
             "alt": "KakaoTalk Photo 2026 02 03 23 53 26 14",
-            "objectPosition": "center",
+            "objectPosition": "50% 50%",
             "layout": {
               "x": 102,
               "y": 64,
@@ -294,8 +295,7 @@ export const publishedAdminContent = {
               "color": "#f5f5f5"
             }
           }
-        ],
-        "height": 1170
+        ]
       },
       "id": "release-loose-archive",
       "title": "Envelope",
