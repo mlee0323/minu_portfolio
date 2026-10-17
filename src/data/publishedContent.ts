@@ -188,7 +188,7 @@ export const publishedAdminContent = {
     },
     {
       "detail": {
-        "height": 1170,
+        "height": 2400,
         "elements": [
           {
             "id": "archive-image-93e7d701-e7b0-43c3-8fec-eec01afd6343",
@@ -199,7 +199,7 @@ export const publishedAdminContent = {
             "objectPosition": "center",
             "layout": {
               "x": 0,
-              "y": 205,
+              "y": 258,
               "width": 390,
               "height": 316
             },
@@ -219,10 +219,10 @@ export const publishedAdminContent = {
             "alt": "KakaoTalk Photo 2026 02 03 23 53 26 14",
             "objectPosition": "50% 50%",
             "layout": {
-              "x": 102,
-              "y": 64,
-              "width": 182,
-              "height": 120
+              "x": 0,
+              "y": 1604,
+              "width": 390,
+              "height": 313
             },
             "style": {
               "fontSize": 11.700000000000001,
@@ -240,8 +240,8 @@ export const publishedAdminContent = {
             "alt": "KakaoTalk Photo 2026 02 03 23 53 26 13",
             "objectPosition": "center",
             "layout": {
-              "x": 28,
-              "y": 488,
+              "x": 62,
+              "y": 565,
               "width": 182,
               "height": 120
             },
@@ -261,8 +261,8 @@ export const publishedAdminContent = {
             "alt": "KakaoTalk Photo 2026 02 03 23 53 26 15",
             "objectPosition": "center",
             "layout": {
-              "x": 174,
-              "y": 599,
+              "x": 149,
+              "y": 679,
               "width": 182,
               "height": 120
             },
@@ -283,7 +283,7 @@ export const publishedAdminContent = {
             "objectPosition": "center",
             "layout": {
               "x": 0,
-              "y": 833,
+              "y": 0,
               "width": 390,
               "height": 254
             },
@@ -293,6 +293,48 @@ export const publishedAdminContent = {
               "lineHeight": 1.15,
               "textAlign": "left",
               "color": "#f5f5f5"
+            }
+          },
+          {
+            "id": "detail-text-d56ce1f1-66bd-4407-bf75-e2d1465e514b",
+            "kind": "text",
+            "text": "COLUMBARIUM 153",
+            "src": "",
+            "alt": "Image",
+            "objectPosition": "center",
+            "layout": {
+              "x": 3,
+              "y": 208,
+              "width": 288,
+              "height": 54
+            },
+            "style": {
+              "fontSize": 29,
+              "fontWeight": 430,
+              "lineHeight": 1.15,
+              "textAlign": "left",
+              "color": "#5f5f35"
+            }
+          },
+          {
+            "id": "detail-text-1b57818a-1230-40d1-9645-fcfc15a3cf6c",
+            "kind": "text",
+            "text": "TAEHAN KIN\nMARC6000\nSWITCHBOX _ ROSS ANDERSON",
+            "src": "",
+            "alt": "Image",
+            "objectPosition": "center",
+            "layout": {
+              "x": 254,
+              "y": 184,
+              "width": 130,
+              "height": 100
+            },
+            "style": {
+              "fontSize": 8,
+              "fontWeight": 300,
+              "lineHeight": 1.15,
+              "textAlign": "right",
+              "color": "#868786"
             }
           }
         ]
