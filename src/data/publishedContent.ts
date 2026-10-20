@@ -306,7 +306,7 @@ export const publishedAdminContent = {
               "x": 3,
               "y": 224,
               "width": 263,
-              "height": 28
+              "height": 34
             },
             "style": {
               "fontSize": 29,
