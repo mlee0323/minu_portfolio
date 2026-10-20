@@ -1,3 +1,5 @@
+import { canvasTextDefaults } from "./canvasTypography"
+
 export type ArchiveDetailCanvasViewport = "mobile" | "desktop"
 export type ArchiveDetailCanvasElementKind = "image" | "text"
 export type ArchiveDetailCanvasRect = {
@@ -45,11 +47,8 @@ export function createArchiveDetailCanvasElement(
   id: string,
 ): ArchiveDetailCanvasElement {
   const style = {
-    fontSize: 24,
-    fontWeight: 430,
-    lineHeight: 1.15,
+    ...canvasTextDefaults,
     textAlign: "left",
-    color: "#f5f5f5",
   } as const
   return {
     id,

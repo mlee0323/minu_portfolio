@@ -1,9 +1,10 @@
 import { Move } from "lucide-react"
-import type { CSSProperties, KeyboardEvent } from "react"
+import type { KeyboardEvent } from "react"
 import { Rnd } from "react-rnd"
+import { workTextStyle } from "../data/canvasTypography"
 import type { SelectedCanvasElement } from "./AdminWorksEditorTypes"
 import { getViewportRectForLayout, updateCanvasLayout } from "./adminCanvas"
-import type { AdminCanvasViewport, AdminTextWeight, AdminWorkTextElement } from "./adminTypes"
+import type { AdminCanvasViewport, AdminWorkTextElement } from "./adminTypes"
 
 type CanvasDimensions = {
   readonly width: number
@@ -23,25 +24,6 @@ type CanvasTextElementProps = {
   ) => void
 }
 
-function assertNever(value: never): never {
-  throw new Error(`Unhandled text weight: ${value}`)
-}
-
-function fontWeightFor(weight: AdminTextWeight): number {
-  switch (weight) {
-    case "light":
-      return 300
-    case "regular":
-      return 500
-    case "bold":
-      return 760
-    case "black":
-      return 900
-    default:
-      return assertNever(weight)
-  }
-}
-
 function handleSelectableKey(
   event: KeyboardEvent,
   element: SelectedCanvasElement,
@@ -55,16 +37,6 @@ function handleSelectableKey(
   onSelectElement(element)
 }
 
-function textStyleFor(textElement: AdminWorkTextElement): CSSProperties {
-  return {
-    color: textElement.color,
-    fontSize: textElement.fontSize,
-    fontWeight: fontWeightFor(textElement.fontWeight),
-    lineHeight: textElement.lineHeight,
-    textAlign: textElement.textAlign,
-  }
-}
-
 export function AdminCanvasTextElement({
   canvasScale,
   dimensions,
@@ -75,8 +47,14 @@ export function AdminCanvasTextElement({
   viewport,
 }: CanvasTextElementProps) {
   const element = { kind: "text", id: textElement.id } as const
-  const rect = getViewportRectForLayout(textElement.layout, viewport, dimensions)
-  const textStyle = textStyleFor(textElement)
+  const baseRect = getViewportRectForLayout(textElement.layout, viewport, dimensions)
+  const rect = {
+    x: baseRect.x * canvasScale,
+    y: baseRect.y * canvasScale,
+    width: baseRect.width * canvasScale,
+    height: baseRect.height * canvasScale,
+  }
+  const textStyle = workTextStyle(textElement, canvasScale)
 
   return (
     <Rnd
@@ -89,7 +67,6 @@ export function AdminCanvasTextElement({
       }
       {...(selected ? { dragHandleClassName: "admin-canvas-drag-handle" } : {})}
       position={{ x: rect.x, y: rect.y }}
-      scale={canvasScale}
       size={{ width: rect.width, height: rect.height }}
       onDragStop={(event, data) => {
         event.stopPropagation()
@@ -97,9 +74,9 @@ export function AdminCanvasTextElement({
           layout: updateCanvasLayout(
             viewport,
             {
-              ...rect,
-              x: data.x,
-              y: data.y,
+              ...baseRect,
+              x: data.x / canvasScale,
+              y: data.y / canvasScale,
             },
             dimensions,
           ),
@@ -114,10 +91,10 @@ export function AdminCanvasTextElement({
           layout: updateCanvasLayout(
             viewport,
             {
-              x: position.x,
-              y: position.y,
-              width: ref.offsetWidth,
-              height: ref.offsetHeight,
+              x: position.x / canvasScale,
+              y: position.y / canvasScale,
+              width: ref.getBoundingClientRect().width / canvasScale,
+              height: ref.getBoundingClientRect().height / canvasScale,
             },
             dimensions,
           ),
@@ -128,7 +105,7 @@ export function AdminCanvasTextElement({
         <>
           <textarea
             aria-label="Edit canvas text"
-            className="admin-canvas-copy admin-canvas-copy-input"
+            className="admin-canvas-copy admin-canvas-copy-input canvas-text"
             spellCheck={false}
             style={textStyle}
             value={textElement.text}
@@ -142,13 +119,13 @@ export function AdminCanvasTextElement({
         </>
       ) : (
         <button
-          className="admin-canvas-copy"
+          className="admin-canvas-copy canvas-text"
           type="button"
           tabIndex={0}
           style={textStyle}
           onKeyDown={(event) => handleSelectableKey(event, element, onSelectElement)}
         >
-          {textElement.text}
+          <span className="canvas-text">{textElement.text}</span>
         </button>
       )}
     </Rnd>

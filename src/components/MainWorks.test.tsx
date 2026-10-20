@@ -7,7 +7,7 @@ import {
 import { MainWorks } from "./MainWorks"
 
 describe("MainWorks", () => {
-  it("renders the Admin Mobile canvas as an image-only public sequence", () => {
+  it("renders published images and text with the same responsive canvas geometry", () => {
     const publishedWorks = [
       {
         ...createBlankWork(0),
@@ -23,7 +23,7 @@ describe("MainWorks", () => {
             layout: { x: 24, y: 64, width: 300, height: 200 },
           },
         ],
-        textElements: [{ ...createBlankWorkTextElement(0), text: "Editor-only text fixture" }],
+        textElements: [{ ...createBlankWorkTextElement(0), text: "Published text fixture" }],
       },
     ]
     render(<MainWorks works={publishedWorks} />)
@@ -50,7 +50,11 @@ describe("MainWorks", () => {
     expect(firstCanvas).toHaveStyle({ aspectRatio: "390 / 720" })
     expect(firstImage).toHaveClass("work-canvas-image")
     expect(screen.queryByText("Current Work")).not.toBeInTheDocument()
-    expect(screen.queryByText("Editor-only text fixture")).not.toBeInTheDocument()
+    expect(screen.getByText("Published text fixture")).toHaveClass("canvas-text")
+    expect(screen.getByText("Published text fixture")).toHaveStyle({
+      fontWeight: "500",
+      fontSize: "calc(24 / 390 * 100cqw)",
+    })
     expect(document.querySelector("figcaption")).not.toBeInTheDocument()
     expect(document.querySelector(".is-current")).not.toBeInTheDocument()
   })

@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react"
 import { AdminCanvasImageElement } from "./AdminCanvasImageElement"
 import { AdminCanvasTextElement } from "./AdminCanvasTextElement"
 import type { SelectedCanvasElement } from "./AdminWorksEditorTypes"
@@ -9,6 +8,7 @@ import type {
   AdminWorkImage,
   AdminWorkTextElement,
 } from "./adminTypes"
+import { useCanvasPreview } from "./useCanvasPreview"
 
 type WorksCanvasProps = {
   readonly work: AdminWork
@@ -38,80 +38,62 @@ export function AdminWorksCanvas({
   work,
 }: WorksCanvasProps) {
   const dimensions = getWorkCanvasDimensions(work, viewport)
-  const frameRef = useRef<HTMLDivElement>(null)
-  const [availableWidth, setAvailableWidth] = useState(dimensions.width)
-  const canvasScale = Math.min(1, Math.max(0.45, availableWidth / dimensions.width))
-
-  useEffect(() => {
-    const frame = frameRef.current
-
-    if (frame === null) {
-      return
-    }
-
-    const updateAvailableWidth = () => setAvailableWidth(frame.clientWidth)
-    updateAvailableWidth()
-
-    if (typeof ResizeObserver === "undefined") {
-      window.addEventListener("resize", updateAvailableWidth)
-      return () => window.removeEventListener("resize", updateAvailableWidth)
-    }
-
-    const observer = new ResizeObserver(updateAvailableWidth)
-    observer.observe(frame)
-
-    return () => observer.disconnect()
-  }, [])
+  const { frameRef, width, scale: canvasScale, targetWidth } = useCanvasPreview(viewport, 720)
 
   return (
-    <div className="admin-canvas-frame" ref={frameRef}>
-      <div
-        className="admin-canvas-stage"
-        style={{
-          width: dimensions.width * canvasScale,
-          height: dimensions.height * canvasScale,
-        }}
-      >
+    <div className="admin-canvas-preview">
+      <p className="admin-canvas-scale">
+        {viewport === "mobile" ? "Mobile" : "Web"} · {targetWidth}px · Preview{" "}
+        {Math.round((width / targetWidth) * 100)}% · Font sizes use a 390px canvas
+      </p>
+      <div className="admin-canvas-frame" ref={frameRef}>
         <div
-          className={`admin-canvas admin-canvas--${viewport}`}
+          className="admin-canvas-stage"
           style={{
-            width: dimensions.width,
-            height: dimensions.height,
-            transform: `scale(${canvasScale})`,
+            width: dimensions.width * canvasScale,
+            height: dimensions.height * canvasScale,
           }}
         >
-          {work.images.map((image) => (
-            <AdminCanvasImageElement
-              canvasScale={canvasScale}
-              dimensions={dimensions}
-              image={image}
-              key={image.id}
-              selected={isSelected(selectedElement, { kind: "image", id: image.id })}
-              viewport={viewport}
-              onSelectElement={onSelectElement}
-              onUpdateImage={onUpdateImage}
-            />
-          ))}
+          <div
+            className={`admin-canvas admin-canvas--${viewport}`}
+            style={{
+              width,
+              height: dimensions.height * canvasScale,
+            }}
+          >
+            {work.images.map((image) => (
+              <AdminCanvasImageElement
+                canvasScale={canvasScale}
+                dimensions={dimensions}
+                image={image}
+                key={image.id}
+                selected={isSelected(selectedElement, { kind: "image", id: image.id })}
+                viewport={viewport}
+                onSelectElement={onSelectElement}
+                onUpdateImage={onUpdateImage}
+              />
+            ))}
 
-          {work.textElements.map((textElement) => (
-            <AdminCanvasTextElement
-              canvasScale={canvasScale}
-              dimensions={dimensions}
-              key={textElement.id}
-              selected={isSelected(selectedElement, { kind: "text", id: textElement.id })}
-              textElement={textElement}
-              viewport={viewport}
-              onSelectElement={onSelectElement}
-              onUpdateTextElement={onUpdateTextElement}
-            />
-          ))}
+            {work.textElements.map((textElement) => (
+              <AdminCanvasTextElement
+                canvasScale={canvasScale}
+                dimensions={dimensions}
+                key={textElement.id}
+                selected={isSelected(selectedElement, { kind: "text", id: textElement.id })}
+                textElement={textElement}
+                viewport={viewport}
+                onSelectElement={onSelectElement}
+                onUpdateTextElement={onUpdateTextElement}
+              />
+            ))}
 
-          {work.images.length === 0 && work.textElements.length === 0 ? (
-            <div className="admin-canvas-empty">
-              <strong>No elements yet</strong>
-              <span>Add an image or text block from the left panel.</span>
-            </div>
-          ) : null}
+            {work.images.length === 0 && work.textElements.length === 0 ? (
+              <div className="admin-canvas-empty">
+                <strong>No elements yet</strong>
+                <span>Add an image or text block from the left panel.</span>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>

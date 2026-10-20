@@ -1,0 +1,16 @@
+/* The editor and published canvases must wrap and rasterize the same text. */
+.canvas-text {
+  display: block;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-family: var(--font-sans);
+  color: inherit;
+  letter-spacing: -0.025em;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  text-indent: 0;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}

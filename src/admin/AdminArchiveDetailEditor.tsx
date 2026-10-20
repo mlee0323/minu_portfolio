@@ -18,6 +18,8 @@ import {
   createArchiveDetailCanvasElement,
   createDefaultArchiveDetailCanvas,
 } from "../data/archiveDetailCanvas"
+import { AdminCanvasImageInfo } from "./AdminCanvasImageInfo"
+import { AdminCanvasTextFit } from "./AdminCanvasTextFit"
 import { AdminSelectField, AdminTextareaField, AdminTextField } from "./AdminFields"
 import { AdminImageUploadField } from "./AdminImageUploadField"
 import { AdminPreviewToolbar } from "./AdminPreviewToolbar"
@@ -25,6 +27,7 @@ import { uploadAdminImageAsset } from "./adminBlobUpload"
 import { createAdminId } from "./adminFactories"
 import { adminImageInputAccept } from "./adminImageUploadConfig"
 import type { AdminArchiveRelease } from "./adminTypes"
+import { useCanvasPreview } from "./useCanvasPreview"
 
 type Props = {
   readonly release: AdminArchiveRelease
@@ -38,10 +41,15 @@ function fitNewElement(
   element: ArchiveDetailCanvasElement,
   design: ArchiveDetailCanvasDesign,
 ): ArchiveDetailCanvasElement {
+  const ratio = element.kind === "image" ? Math.min(1, design.height / element.layout.height) : 1
   return {
     ...element,
     layout: clampArchiveDetailCanvasRect(
-      element.layout,
+      {
+        ...element.layout,
+        width: element.layout.width * ratio,
+        height: element.layout.height * ratio,
+      },
       archiveDetailCanvasWidths.mobile,
       design.height,
     ),
@@ -65,14 +73,12 @@ export function AdminArchiveDetailEditor({
   )
   const [progress, setProgress] = useState<number | null>(null)
   const uploadTarget = useRef(release.id)
-  const frameRef = useRef<HTMLDivElement>(null)
-  const [availableWidth, setAvailableWidth] = useState(600)
   const latestDesign = useRef(design)
   latestDesign.current = design
   const selected = design.elements.find((element) => element.id === selectedId)
   const width = archiveDetailCanvasWidths[viewport]
   const height = design.height
-  const scale = Math.min(1, availableWidth / width)
+  const { frameRef, width: previewWidth, scale, targetWidth } = useCanvasPreview(viewport, 1024)
 
   useEffect(() => {
     uploadTarget.current = release.id
@@ -80,20 +86,6 @@ export function AdminArchiveDetailEditor({
       uploadTarget.current = ""
     }
   }, [release.id])
-
-  useEffect(() => {
-    const frame = frameRef.current
-    if (frame === null) return
-    const measure = () => setAvailableWidth(Math.max(120, frame.clientWidth - 36))
-    measure()
-    if (typeof ResizeObserver === "undefined") {
-      window.addEventListener("resize", measure)
-      return () => window.removeEventListener("resize", measure)
-    }
-    const observer = new ResizeObserver(measure)
-    observer.observe(frame)
-    return () => observer.disconnect()
-  }, [])
 
   const save = (detail: ArchiveDetailCanvasDesign) => latestChange.current({ detail })
   const update = (patch: Partial<ArchiveDetailCanvasElement>) => {
@@ -154,6 +146,12 @@ export function AdminArchiveDetailEditor({
           ...createArchiveDetailCanvasElement("image", createAdminId("detail-image")),
           src: image.src,
           alt: image.alt,
+          layout: {
+            x: 20,
+            y: 20,
+            width: 350,
+            height: Math.max(24, Math.round((350 * image.height) / image.width)),
+          },
         },
         latestDesign.current,
       )
@@ -265,6 +263,10 @@ export function AdminArchiveDetailEditor({
             viewport={viewport}
             onViewportChange={setViewport}
           />
+          <p className="admin-canvas-scale">
+            {viewport === "mobile" ? "Mobile" : "Web"} · {targetWidth}px · Preview{" "}
+            {Math.round((previewWidth / targetWidth) * 100)}% · Font sizes use a 390px canvas
+          </p>
           <div className="admin-canvas-frame" ref={frameRef}>
             <div
               className="admin-canvas-stage"
@@ -272,7 +274,7 @@ export function AdminArchiveDetailEditor({
             >
               <fieldset
                 className={`admin-canvas admin-archive-detail-canvas admin-canvas--${viewport}`}
-                style={{ width, height, transform: `scale(${scale})` }}
+                style={{ width: previewWidth, height: height * scale }}
                 aria-label={`${viewport === "desktop" ? "Web" : "Mobile"} archive detail canvas`}
               >
                 {design.elements.length === 0 ? (
@@ -286,18 +288,21 @@ export function AdminArchiveDetailEditor({
                     <Rnd
                       key={element.id}
                       bounds="parent"
-                      scale={scale}
-                      position={{ x: rect.x, y: rect.y }}
-                      size={{ width: rect.width, height: rect.height }}
+                      position={{ x: rect.x * scale, y: rect.y * scale }}
+                      size={{ width: rect.width * scale, height: rect.height * scale }}
                       enableResizing={selectedId === element.id}
+                      lockAspectRatio={element.kind === "image"}
                       className={`admin-canvas-element${selectedId === element.id ? " is-selected" : ""}`}
                       onMouseDown={() => setSelectedId(element.id)}
-                      onDragStop={(_, data) => move(element, { ...rect, x: data.x, y: data.y })}
+                      onDragStop={(_, data) =>
+                        move(element, { ...rect, x: data.x / scale, y: data.y / scale })
+                      }
                       onResizeStop={(_, _direction, ref, _delta, position) =>
                         move(element, {
-                          ...position,
-                          width: ref.offsetWidth,
-                          height: ref.offsetHeight,
+                          x: position.x / scale,
+                          y: position.y / scale,
+                          width: ref.getBoundingClientRect().width / scale,
+                          height: ref.getBoundingClientRect().height / scale,
                         })
                       }
                     >
@@ -306,7 +311,7 @@ export function AdminArchiveDetailEditor({
                         type="button"
                         tabIndex={0}
                         aria-label={`Select ${element.kind === "text" ? element.text : element.kind === "image" ? element.alt : archiveDetailCanvasLabels[element.kind]}`}
-                        style={archiveDetailCanvasElementStyle(element)}
+                        style={archiveDetailCanvasElementStyle(element, scale)}
                         onClick={() => setSelectedId(element.id)}
                         onKeyDown={(event) => {
                           if (event.key === "Enter" || event.key === " ") {
@@ -396,6 +401,21 @@ export function AdminArchiveDetailEditor({
                     alt={selected.alt}
                     onUpload={({ src, alt }) => update({ src, alt })}
                   />
+                  <AdminCanvasImageInfo
+                    src={selected.src}
+                    width={selected.layout.width}
+                    height={selected.layout.height}
+                    desktopWidth={1024}
+                    onRestoreRatio={(naturalWidth, naturalHeight) => {
+                      const imageHeight = (selected.layout.width * naturalHeight) / naturalWidth
+                      const factor = Math.min(1, height / imageHeight)
+                      move(selected, {
+                        ...selected.layout,
+                        width: selected.layout.width * factor,
+                        height: imageHeight * factor,
+                      })
+                    }}
+                  />
                   <AdminTextField
                     label="Image description"
                     value={selected.alt}
@@ -452,6 +472,16 @@ export function AdminArchiveDetailEditor({
                       changeStyle({
                         lineHeight: numeric(value, selected.style.lineHeight, 0.75, 3),
                       })
+                    }
+                  />
+                  <AdminCanvasTextFit
+                    text={selected.text}
+                    style={archiveDetailCanvasElementStyle(selected)}
+                    width={selected.layout.width}
+                    height={selected.layout.height}
+                    maxHeight={height - selected.layout.y}
+                    onFit={(nextHeight) =>
+                      move(selected, { ...selected.layout, height: nextHeight })
                     }
                   />
                 </>

@@ -188,13 +188,15 @@ export function createDefaultImageLayout({
 }): AdminCanvasLayout {
   const imageWidth = widthForScale(scale)
   const imageHeight = heightFromAspectRatio(imageWidth, width, height)
+  const fit = Math.min(1, adminCanvasDimensions.mobile.height / imageHeight)
+  const fittedWidth = Math.round(imageWidth * fit)
 
   return clampCanvasRect(
     {
-      x: xForAlign(align, adminCanvasLayoutBaseWidth, imageWidth),
+      x: xForAlign(align, adminCanvasLayoutBaseWidth, fittedWidth),
       y: 56 + sortOrder * 132,
-      width: imageWidth,
-      height: imageHeight,
+      width: fittedWidth,
+      height: Math.round(imageHeight * fit),
     },
     "mobile",
   )

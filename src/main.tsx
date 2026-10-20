@@ -6,6 +6,7 @@ import { App } from "./App"
 import "./styles/index.css"
 import "./styles/audioSurfaces.css"
 import "./styles/publicPremium.css"
+import "./styles/canvasTypography.css"
 
 const enableReactDevTools =
   import.meta.env.DEV && import.meta.env.VITE_ENABLE_REACT_DEVTOOLS === "1"

@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react"
 import { getViewportRectForLayout, getWorkCanvasDimensions } from "../admin/adminCanvas"
 import type { AdminWork, AdminWorkImage } from "../admin/adminTypes"
+import { workTextStyle } from "../data/canvasTypography"
 
 type MainWorksProps = {
   readonly works: readonly AdminWork[]
@@ -64,6 +65,28 @@ export function MainWorks({ works }: MainWorksProps) {
                   />
                 </figure>
               ))}
+            {[...work.textElements]
+              .sort((left, right) => left.sortOrder - right.sortOrder)
+              .map((text) => {
+                const dimensions = getWorkCanvasDimensions(work, "mobile")
+                const rect = getViewportRectForLayout(text.layout, "mobile", dimensions)
+                return (
+                  <div
+                    key={text.id}
+                    data-text-id={text.id}
+                    className="public-work-text canvas-text"
+                    style={{
+                      top: percentage(rect.y, dimensions.height),
+                      left: percentage(rect.x, dimensions.width),
+                      width: percentage(rect.width, dimensions.width),
+                      height: percentage(rect.height, dimensions.height),
+                      ...workTextStyle(text, "responsive"),
+                    }}
+                  >
+                    {text.text}
+                  </div>
+                )
+              })}
           </article>
         ))}
       </div>

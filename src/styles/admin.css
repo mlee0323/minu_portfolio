@@ -550,12 +550,8 @@
 .admin-canvas-copy {
   display: block;
   overflow: hidden;
-  padding: 8px;
+  padding: 0;
   white-space: pre-wrap;
-}
-
-.admin-canvas-text.is-selected .admin-canvas-copy {
-  padding-right: 42px;
 }
 
 .admin-canvas-copy-input {

@@ -21,17 +21,18 @@ export function ArchiveDetailCanvasElementContent({
       decoding="async"
     />
   ) : (
-    <span className="archive-detail-canvas__text">{element.text}</span>
+    <span className="archive-detail-canvas__text canvas-text">{element.text}</span>
   )
 }
 
 export function archiveDetailCanvasElementStyle(
   element: ArchiveDetailCanvasElement,
+  scale = 1,
 ): CSSProperties {
   const style = element.style
   return {
     color: style.color,
-    fontSize: style.fontSize,
+    fontSize: style.fontSize * scale,
     fontWeight: style.fontWeight,
     lineHeight: style.lineHeight,
     textAlign: style.textAlign,

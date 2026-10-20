@@ -448,9 +448,45 @@
 }
 
 .admin-canvas-drag-handle {
+  top: -28px;
+  right: 0;
   border: 0;
   border-radius: 6px;
   box-shadow: 0 0 0 1px rgb(25 25 22 / 70%);
+}
+
+.admin-canvas-scale {
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--color-muted);
+}
+
+.admin-canvas-preview {
+  min-width: 0;
+}
+
+.admin-canvas-text-fit,
+.admin-canvas-image-info {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.admin-text-measure {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: auto;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Native buttons center their contents vertically unless the content fills them. */
+.admin-canvas-copy > .canvas-text,
+.admin-detail-selectable > .canvas-text {
+  width: 100%;
+  height: 100%;
 }
 
 @media (min-width: 760px) {

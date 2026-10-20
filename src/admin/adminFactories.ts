@@ -1,3 +1,4 @@
+import { canvasTextDefaults } from "../data/canvasTypography"
 import {
   createDefaultImageLayout,
   createDefaultTextLayout,
@@ -117,11 +118,11 @@ export function createBlankWorkTextElement(sortOrder: number): AdminWorkTextElem
   return {
     id: createAdminId("text"),
     text: "New text",
-    fontSize: 34,
-    fontWeight: "bold",
-    lineHeight: 1.05,
+    fontSize: canvasTextDefaults.fontSize,
+    fontWeight: "regular",
+    lineHeight: canvasTextDefaults.lineHeight,
     textAlign: "left",
-    color: "#f5f5f5",
+    color: canvasTextDefaults.color,
     sortOrder,
     layout: createDefaultTextLayout(sortOrder),
   }

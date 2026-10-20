@@ -1,10 +1,17 @@
 import { Trash2 } from "lucide-react"
+import { workTextStyle } from "../data/canvasTypography"
+import { AdminCanvasImageInfo } from "./AdminCanvasImageInfo"
 import { AdminCanvasRectFields } from "./AdminCanvasRectFields"
+import { AdminCanvasTextFit } from "./AdminCanvasTextFit"
 import { AdminSelectField, AdminTextareaField, AdminTextField } from "./AdminFields"
 import { AdminImageUploadField } from "./AdminImageUploadField"
 import { AdminWorkSettingsInspector } from "./AdminWorkSettingsInspector"
 import type { SelectedCanvasElement } from "./AdminWorksEditorTypes"
-import { getViewportRectForLayout, getWorkCanvasDimensions } from "./adminCanvas"
+import {
+  getViewportRectForLayout,
+  getWorkCanvasDimensions,
+  updateCanvasLayout,
+} from "./adminCanvas"
 import type {
   AdminArchiveTrack,
   AdminCanvasViewport,
@@ -122,6 +129,23 @@ export function AdminWorksInspector({
             value={image.alt}
             onChange={(alt) => onUpdateImage(image.id, { alt })}
           />
+          <AdminCanvasImageInfo
+            src={image.src}
+            width={rect.width}
+            height={rect.height}
+            desktopWidth={720}
+            onRestoreRatio={(naturalWidth, naturalHeight) => {
+              const height = (rect.width * naturalHeight) / naturalWidth
+              const factor = Math.min(1, dimensions.height / height)
+              onUpdateImage(image.id, {
+                layout: updateCanvasLayout(
+                  viewport,
+                  { ...rect, width: rect.width * factor, height: height * factor },
+                  dimensions,
+                ),
+              })
+            }}
+          />
           <AdminSelectField
             label="Scale"
             value={image.scale}
@@ -190,6 +214,18 @@ export function AdminWorksInspector({
             value={textElement.fontWeight}
             options={textWeightOptions}
             onChange={(fontWeight) => onUpdateTextElement(textElement.id, { fontWeight })}
+          />
+          <AdminCanvasTextFit
+            text={textElement.text}
+            style={workTextStyle(textElement)}
+            width={rect.width}
+            height={rect.height}
+            maxHeight={dimensions.height - rect.y}
+            onFit={(height) =>
+              onUpdateTextElement(textElement.id, {
+                layout: updateCanvasLayout(viewport, { ...rect, height }, dimensions),
+              })
+            }
           />
           <AdminSelectField
             label="Align"

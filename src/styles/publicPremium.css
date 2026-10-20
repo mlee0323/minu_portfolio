@@ -172,11 +172,17 @@ select {
 }
 
 .public-work-canvas {
+  container-type: inline-size;
   position: relative;
   width: min(390px, 100%);
   overflow: hidden;
   margin: 0 auto;
   background: var(--color-panel);
+}
+
+.public-work-text {
+  position: absolute;
+  overflow: hidden;
 }
 
 .public-work-image {

@@ -229,7 +229,7 @@ Contact fields:
 
 The public site should preserve the current component contract:
 
-- `MainWorks` receives published Admin work records and renders only their images on the 390px mobile canvas.
+- `MainWorks` receives published Admin work records and renders both images and text using the shared 390-unit composition.
 - `Archive` still receives a list of release records with nested tracks.
 - `NowPlayingBar` still uses the provider-based audio interface.
 - SoundCloud playback still uses Widget API.
@@ -605,3 +605,26 @@ After a save, **배포 상태 보기** opens this history. Save completion now v
 both the deployed content hash and that exact commit's Vercel success status, so
 saving unchanged content cannot prematurely report the new deployment complete.
 A real build failure preserves the successful save and reports deployment failure.
+
+## Canvas typography and image fidelity
+
+Works and archive detail use the same Geist font, letter spacing, wrapping and
+top alignment for editable and published text. Newly added text starts at 24
+design units, weight 500 and line height 1.2 in both editors. Existing saved
+styles are retained. Public text scales with the same 390-unit geometry as
+images. Works text is included in the public renderer.
+
+Previews render at their displayed pixel dimensions without a CSS transform.
+Web targets the public maximum content width (Works 720px, archive 1024px);
+Mobile targets 390px. Smaller editor panels fit both to available space and
+show the preview percentage. Dragging and resizing convert displayed pixels
+back to shared design units before saving. Selecting text does not change
+padding or wrapping. **Fit text height** measures the actual font after loading
+and adjusts an explicitly selected text box; it reports clipping beforehand.
+
+New image placement uses source aspect ratio, including tall images that must
+fit the canvas height. Original uploaded bytes are retained. The inspector
+shows decoded source dimensions and the maximum Web display dimensions, with
+a 2× pixel-density guideline and **Restore original ratio** for existing crops.
+Image resize handles preserve the current aspect ratio; numerical dimensions
+remain available for intentional cropping.

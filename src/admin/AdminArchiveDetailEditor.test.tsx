@@ -131,8 +131,8 @@ describe("archive detail editing", () => {
     finish({
       src: "/api/assets?pathname=admin-assets%2F123-detail.jpg",
       alt: "Detail photo",
-      width: 1200,
-      height: 800,
+      width: 1000,
+      height: 4000,
     })
     await waitFor(() =>
       expect(
@@ -142,6 +142,11 @@ describe("archive detail editing", () => {
     expect(
       state.current().detail?.elements.some((element) => element.text === "Written during upload"),
     ).toBe(true)
+    const uploaded = state
+      .current()
+      .detail?.elements.find((element) => element.alt === "Detail photo")
+    expect(uploaded?.layout).toMatchObject({ width: 180, height: 720 })
+    expect(uploaded?.src).toContain("admin-assets%2F123-detail.jpg")
     expect(screen.queryByRole("progressbar")).not.toBeInTheDocument()
     const draft = { ...createSeedAdminContent(), archiveReleases: [state.current()] }
     expect(publishedImageAssetPaths(draft).has("admin-assets/123-detail.jpg")).toBe(false)

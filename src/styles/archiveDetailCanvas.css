@@ -33,16 +33,6 @@
   object-fit: cover;
 }
 
-.archive-detail-canvas__text {
-  display: block;
-  margin: 0;
-  font: inherit;
-  color: inherit;
-  letter-spacing: -0.025em;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
 .archive-detail__body {
   margin-top: 56px;
   border-top: 1px solid rgb(245 245 245 / 30%);

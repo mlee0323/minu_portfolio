@@ -42,7 +42,13 @@ export function AdminCanvasImageElement({
   viewport,
 }: CanvasImageElementProps) {
   const element = { kind: "image", id: image.id } as const
-  const rect = getViewportRectForLayout(image.layout, viewport, dimensions)
+  const baseRect = getViewportRectForLayout(image.layout, viewport, dimensions)
+  const rect = {
+    x: baseRect.x * canvasScale,
+    y: baseRect.y * canvasScale,
+    width: baseRect.width * canvasScale,
+    height: baseRect.height * canvasScale,
+  }
 
   return (
     <Rnd
@@ -50,7 +56,6 @@ export function AdminCanvasImageElement({
       className={selected ? "admin-canvas-element is-selected" : "admin-canvas-element"}
       lockAspectRatio={true}
       position={{ x: rect.x, y: rect.y }}
-      scale={canvasScale}
       size={{ width: rect.width, height: rect.height }}
       onDragStop={(event, data) => {
         event.stopPropagation()
@@ -58,9 +63,9 @@ export function AdminCanvasImageElement({
           layout: updateCanvasLayout(
             viewport,
             {
-              ...rect,
-              x: data.x,
-              y: data.y,
+              ...baseRect,
+              x: data.x / canvasScale,
+              y: data.y / canvasScale,
             },
             dimensions,
           ),
@@ -75,10 +80,10 @@ export function AdminCanvasImageElement({
           layout: updateCanvasLayout(
             viewport,
             {
-              x: position.x,
-              y: position.y,
-              width: ref.offsetWidth,
-              height: ref.offsetHeight,
+              x: position.x / canvasScale,
+              y: position.y / canvasScale,
+              width: ref.getBoundingClientRect().width / canvasScale,
+              height: ref.getBoundingClientRect().height / canvasScale,
             },
             dimensions,
           ),

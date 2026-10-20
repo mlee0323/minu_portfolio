@@ -1,3 +1,5 @@
+import { createArchiveDetailCanvasElement } from "../data/archiveDetailCanvas"
+import { workFontWeights } from "../data/canvasTypography"
 import {
   clampCanvasHeight,
   clampCanvasRect,
@@ -91,10 +93,26 @@ describe("adminCanvas", () => {
     expect(clampCanvasHeight(9999)).toBe(2800)
   })
 
+  it("fits tall new images without changing their source aspect ratio", () => {
+    const rect = createDefaultImageLayout({
+      align: "center",
+      height: 4000,
+      width: 1000,
+      scale: "large",
+      sortOrder: 0,
+    })
+    expect(rect.height / rect.width).toBeCloseTo(4, 1)
+    expect(rect.y + rect.height).toBeLessThanOrEqual(720)
+  })
+
   it("creates editable text blocks with typography defaults", () => {
     const textElement = createBlankWorkTextElement(0)
 
-    expect(textElement.fontWeight).toBe("bold")
+    const detailText = createArchiveDetailCanvasElement("text", "new-detail-text")
+    expect(textElement.fontSize).toBe(detailText.style.fontSize)
+    expect(workFontWeights[textElement.fontWeight]).toBe(detailText.style.fontWeight)
+    expect(textElement.lineHeight).toBe(detailText.style.lineHeight)
+    expect(textElement.fontWeight).toBe("regular")
     expect(textElement.textAlign).toBe("left")
     expect(textElement.lineHeight).toBeGreaterThan(0)
     expect(textElement.color).toBe("#f5f5f5")
