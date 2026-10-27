@@ -3,6 +3,7 @@ import { useAudioManager } from "../audio/AudioManagerProvider"
 import type { AudioTrack } from "../audio/types"
 import { introContent } from "../data/siteContent"
 import { mountBreathingDot } from "../lib/breathing-dot"
+import { rememberIntroEntry } from "../lib/introSession"
 
 type IntroOverlayProps = {
   readonly introTrack: AudioTrack | undefined
@@ -52,6 +53,9 @@ export function IntroOverlay({ introTrack, onComplete }: IntroOverlayProps) {
     if (phase === "confirming") {
       return
     }
+
+    // Record entry before the exit animation so a quick navigation cannot replay it.
+    rememberIntroEntry()
 
     for (const timer of timersRef.current) {
       window.clearTimeout(timer)

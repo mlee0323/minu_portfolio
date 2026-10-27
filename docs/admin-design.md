@@ -628,3 +628,14 @@ shows decoded source dimensions and the maximum Web display dimensions, with
 a 2× pixel-density guideline and **Restore original ratio** for existing crops.
 Image resize handles preserve the current aspect ratio; numerical dimensions
 remain available for intentional cropping.
+
+## First-visit intro
+
+The intro completes once per tab visit, using `sessionStorage` key
+`minu-intro-completed:v1`. Clicking the intro records completion immediately
+before its confirmation animation. Reloading, returning from an archive detail,
+and browser Back/Forward keep it dismissed in that session. A new tab session
+starts fresh; there is no arbitrary timer or permanent browser-wide dismissal.
+Direct entry to an archive detail also counts as entering the site, so returning
+to Works does not interrupt navigation. Skipping the intro never autoplays audio.
+Storage errors are caught so browser restrictions cannot block entry.

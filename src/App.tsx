@@ -10,6 +10,7 @@ import { NowPlayingBar } from "./components/NowPlayingBar"
 import { SiteNav } from "./components/SiteNav"
 import { SoundCloudPlayer } from "./components/SoundCloudPlayer"
 import { useRuntimeSiteContent } from "./data/runtimeSiteContent"
+import { hasCompletedIntro, rememberIntroEntry } from "./lib/introSession"
 import { getSoundCloudPlaybackUrl } from "./lib/soundcloud"
 
 const AdminApp = lazy(async () => {
@@ -25,7 +26,9 @@ function PublicSite() {
     (release) => release.id === archiveReleaseId,
   )
   const isArchiveDetail = archiveRelease !== undefined
-  const [experienceStarted, setExperienceStarted] = useState(isArchiveDetail)
+  const [experienceStarted, setExperienceStarted] = useState(
+    () => isArchiveDetail || hasCompletedIntro(),
+  )
   const initialSoundCloudTrack = siteContent.archiveTracks.find(
     (track) => getSoundCloudPlaybackUrl(track) !== null,
   )
@@ -38,9 +41,13 @@ function PublicSite() {
   }, [])
 
   useEffect(() => {
-    setExperienceStarted(isArchiveDetail)
+    if (isArchiveDetail) {
+      rememberIntroEntry()
+      setExperienceStarted(true)
+    }
   }, [isArchiveDetail])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: switching between releases must also reset scroll
   useEffect(() => {
     if (isArchiveDetail) {
       window.scrollTo({ top: 0, left: 0, behavior: "auto" })
